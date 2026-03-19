@@ -3,9 +3,6 @@ name: TaskFlow Frontend CI/CD
 on:
   push:
     branches: [ main, develop ]
-    paths:
-      - '**'
-      - '!.github/workflows/**'
   pull_request:
     branches: [ main ]
   workflow_dispatch:  # 允许手动触发

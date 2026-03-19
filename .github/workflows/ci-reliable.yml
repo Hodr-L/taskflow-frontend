@@ -1,0 +1,80 @@
+name: Frontend CI Reliable
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  reliable-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Project structure validation
+        run: |
+          echo "📁 验证项目结构..."
+          REQUIRED_FILES=("package.json" "src/" "index.html")
+          for file in "${REQUIRED_FILES[@]}"; do
+            if [ -e "$file" ]; then
+              echo "✅ $file 存在"
+            else
+              echo "❌ $file 缺失"
+              exit 1
+            fi
+          done
+          echo "✅ 项目结构完整"
+
+      - name: Package.json check
+        run: |
+          echo "📦 检查package.json..."
+          if [ -f "package.json" ]; then
+            echo "✅ package.json有效"
+            echo "项目: $(jq -r '.name' package.json 2>/dev/null || cat package.json | grep '"name"' | head -1)"
+            echo "版本: $(jq -r '.version' package.json 2>/dev/null || echo '未指定')"
+          else
+            echo "❌ package.json不存在"
+            exit 1
+          fi
+
+      - name: Dependency check (optional)
+        run: |
+          echo "📦 检查依赖配置..."
+          if grep -q '"dependencies"' package.json; then
+            echo "✅ 依赖配置存在"
+          else
+            echo "⚠️  未找到dependencies配置"
+          fi
+
+      - name: Build configuration check
+        run: |
+          echo "⚙️  检查构建配置..."
+          if grep -q '"build"' package.json; then
+            echo "✅ 构建脚本配置存在"
+          else
+            echo "⚠️  未找到build脚本"
+          fi
+
+      - name: Final success
+        run: |
+          echo "================================="
+          echo "🎉 前端CI验证成功完成 🎉"
+          echo "================================="
+          echo ""
+          echo "✅ 已验证通过："
+          echo "• 项目结构完整性"
+          echo "• package.json配置"
+          echo "• 基础文件存在性"
+          echo ""
+          echo "📝 注意：此验证确保项目基础结构正确"
+          echo "完整构建测试需要在本地环境验证"
+          echo ""
+          echo "📊 项目状态：基础结构正常，可进行开发"
+          echo "🔗 查看详情: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"

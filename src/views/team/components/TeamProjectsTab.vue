@@ -67,7 +67,7 @@
               <h4 class="project-name">{{ project.name }}</h4>
               <p class="project-description">{{ project.description }}</p>
             </div>
-            <el-dropdown @command="(command) => handleProjectCommand(command, project)">
+            <el-dropdown @command="(command: string) => handleProjectCommand(command, project)">
               <el-icon class="project-menu"><More /></el-icon>
               <template #dropdown>
                 <el-dropdown-menu>
@@ -724,3 +724,4 @@ const resetCreateForm = () => {
     font-size: 13px;
   }
 }
+</style>

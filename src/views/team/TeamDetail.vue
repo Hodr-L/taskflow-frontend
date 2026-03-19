@@ -219,13 +219,14 @@ import TeamMembersTab from './components/TeamMembersTab.vue'
 import TeamProjectsTab from './components/TeamProjectsTab.vue'
 import TeamSettingsTab from './components/TeamSettingsTab.vue'
 import TeamActivityTab from './components/TeamActivityTab.vue'
+import type { Team } from '../../types/team'
 
 const route = useRoute()
 const router = useRouter()
 const teamId = ref(Number(route.params.id))
 
 // 团队数据
-const team = ref({
+const team = ref<Team>({
   id: teamId.value,
   name: '前端开发团队',
   description: '负责前端界面开发和用户体验优化',
@@ -238,7 +239,7 @@ const team = ref({
 })
 
 // 用户角色（当前用户在团队中的角色）
-const userRole = ref('owner') // owner|admin|member
+const userRole = ref<'owner' | 'admin' | 'member'>('owner') // owner|admin|member
 
 // 成员数据
 const members = ref([

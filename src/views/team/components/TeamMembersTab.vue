@@ -81,7 +81,7 @@
             <div class="member-actions">
               <el-dropdown 
                 v-if="row.role !== 'owner' && (userRole === 'owner' || (userRole === 'admin' && row.role !== 'admin'))"
-                @command="(command) => handleMemberCommand(command, row)"
+                @command="(command: string) => handleMemberCommand(command, row)"
               >
                 <el-button type="text" size="small">
                   管理

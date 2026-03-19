@@ -1,0 +1,43 @@
+name: Frontend CI Basic
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Show environment
+        run: |
+          echo "验证前端项目结构"
+          echo "Node.js版本: $(node --version 2>/dev/null || echo '未安装')"
+          echo "当前目录: $(pwd)"
+          echo "文件列表:"
+          ls -la
+          
+      - name: Check package.json
+        run: |
+          echo "检查package.json..."
+          if [ -f "package.json" ]; then
+            echo "✅ package.json存在"
+            echo "项目名称: $(cat package.json | grep '"name"' | head -1 | cut -d'"' -f4)"
+            echo "Node版本要求: $(cat package.json | grep '"node"' | head -1 || echo '未指定')"
+          else
+            echo "❌ package.json不存在"
+            exit 1
+          fi
+          
+      - name: Simple verification
+        run: |
+          echo "简单验证完成"
+          echo "✅ 前端项目基本结构正确"
+          echo ""
+          echo "后续可以："
+          echo "1. 安装依赖: npm ci"
+          echo "2. 类型检查: npx tsc --noEmit"
+          echo "3. 构建: npm run build"

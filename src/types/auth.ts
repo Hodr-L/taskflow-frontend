@@ -2,10 +2,12 @@
 export interface User {
   id: number
   username: string
+  fullname?: string
+  bio?: string
   email: string
   avatar_url?: string
   role: 'user' | 'admin' | 'super_admin'
-  status: 'active' | 'inactive' | 'suspended'
+  status: 'active' | 'inactive' | 'banned'
   email_verified: boolean
   last_login_at?: string
   created_at: string

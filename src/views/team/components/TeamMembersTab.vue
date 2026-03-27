@@ -6,7 +6,7 @@
         <h3>团队成员</h3>
         <p class="member-count">共 {{ members.length }} 名成员</p>
       </div>
-      
+
       <div class="header-right" v-if="userRole === 'owner' || userRole === 'admin'">
         <el-button type="primary" @click="$emit('invite')">
           <el-icon><Plus /></el-icon>
@@ -27,13 +27,8 @@
           <el-icon><Search /></el-icon>
         </template>
       </el-input>
-      
-      <el-select
-        v-model="filterRole"
-        placeholder="筛选角色"
-        class="role-filter"
-        clearable
-      >
+
+      <el-select v-model="filterRole" placeholder="筛选角色" class="role-filter" clearable>
         <el-option label="全部" value="" />
         <el-option label="创建者" value="owner" />
         <el-option label="管理员" value="admin" />
@@ -43,11 +38,7 @@
 
     <!-- 成员列表 -->
     <div class="members-list">
-      <el-table
-        :data="filteredMembers"
-        style="width: 100%"
-        empty-text="暂无成员"
-      >
+      <el-table :data="filteredMembers" style="width: 100%" empty-text="暂无成员">
         <el-table-column label="成员" width="300">
           <template #default="{ row }">
             <div class="member-info">
@@ -76,11 +67,18 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="操作" width="200" v-if="userRole === 'owner' || userRole === 'admin'">
+        <el-table-column
+          label="操作"
+          width="200"
+          v-if="userRole === 'owner' || userRole === 'admin'"
+        >
           <template #default="{ row }">
             <div class="member-actions">
-              <el-dropdown 
-                v-if="row.role !== 'owner' && (userRole === 'owner' || (userRole === 'admin' && row.role !== 'admin'))"
+              <el-dropdown
+                v-if="
+                  row.role !== 'owner' &&
+                  (userRole === 'owner' || (userRole === 'admin' && row.role !== 'admin'))
+                "
                 @command="(command: string) => handleMemberCommand(command, row)"
               >
                 <el-button type="text" size="small">
@@ -102,11 +100,7 @@
     </div>
 
     <!-- 更改角色对话框 -->
-    <el-dialog
-      v-model="showRoleDialog"
-      title="更改成员角色"
-      width="400px"
-    >
+    <el-dialog v-model="showRoleDialog" title="更改成员角色" width="400px">
       <div class="role-dialog-content">
         <div class="member-info">
           <el-avatar :size="48" :src="selectedMember?.avatar_url">
@@ -132,11 +126,7 @@
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="showRoleDialog = false">取消</el-button>
-          <el-button
-            type="primary"
-            :loading="changingRole"
-            @click="handleChangeRole"
-          >
+          <el-button type="primary" :loading="changingRole" @click="handleChangeRole">
             确认更改
           </el-button>
         </span>
@@ -149,16 +139,7 @@
 import { ref, computed } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus, Search, ArrowDown } from '@element-plus/icons-vue'
-
-interface Member {
-  id: number
-  username: string
-  email: string
-  full_name: string
-  avatar_url: string
-  role: string
-  joined_at: string
-}
+import type { Member } from '@/types/member'
 
 interface Props {
   teamId: number
@@ -175,20 +156,21 @@ const filterRole = ref('')
 const showRoleDialog = ref(false)
 const changingRole = ref(false)
 const selectedMember = ref<Member | null>(null)
-const newRole = ref('member')
+const newRole = ref<'admin' | 'member'>('member')
 
 // 过滤后的成员列表
 const filteredMembers = computed(() => {
-  return props.members.filter(member => {
+  return props.members.filter((member) => {
     // 搜索过滤
     const keyword = searchKeyword.value.toLowerCase()
-    const matchesSearch = !keyword || 
-      member.full_name.toLowerCase().includes(keyword) ||
+    const matchesSearch =
+      !keyword ||
+      member.full_name?.toLowerCase().includes(keyword) ||
       member.email.toLowerCase().includes(keyword)
-    
+
     // 角色过滤
     const matchesRole = !filterRole.value || member.role === filterRole.value
-    
+
     return matchesSearch && matchesRole
   })
 })
@@ -196,18 +178,24 @@ const filteredMembers = computed(() => {
 // 获取角色标签类型
 const getRoleTagType = (role: string) => {
   switch (role) {
-    case 'owner': return 'danger'
-    case 'admin': return 'warning'
-    default: return 'success'
+    case 'owner':
+      return 'danger'
+    case 'admin':
+      return 'warning'
+    default:
+      return 'success'
   }
 }
 
 // 获取角色文本
 const getRoleText = (role: string) => {
   switch (role) {
-    case 'owner': return '创建者'
-    case 'admin': return '管理员'
-    default: return '成员'
+    case 'owner':
+      return '创建者'
+    case 'admin':
+      return '管理员'
+    default:
+      return '成员'
   }
 }
 
@@ -232,7 +220,7 @@ const formatDate = (dateString: string) => {
 // 处理成员命令
 const handleMemberCommand = (command: string, member: Member) => {
   selectedMember.value = member
-  
+
   switch (command) {
     case 'change-role':
       newRole.value = member.role === 'admin' ? 'member' : 'admin'
@@ -247,19 +235,19 @@ const handleMemberCommand = (command: string, member: Member) => {
 // 更改成员角色
 const handleChangeRole = async () => {
   if (!selectedMember.value) return
-  
+
   changingRole.value = true
-  
+
   try {
     // TODO: 调用API更改成员角色
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+
     // 更新本地数据
-    const memberIndex = props.members.findIndex(m => m.id === selectedMember.value!.id)
+    const memberIndex = props.members.findIndex((m) => m.id === selectedMember.value!.id)
     if (memberIndex !== -1) {
-      props.members[memberIndex].role = newRole.value
+      props.members[memberIndex].role = newRole.value as 'admin' | 'member' | 'owner'
     }
-    
+
     ElMessage.success('角色更改成功')
     showRoleDialog.value = false
     emit('refresh')
@@ -273,25 +261,21 @@ const handleChangeRole = async () => {
 // 移除成员
 const handleRemoveMember = async (member: Member) => {
   try {
-    await ElMessageBox.confirm(
-      `确定要将 ${member.full_name} 从团队中移除吗？`,
-      '确认移除',
-      {
-        confirmButtonText: '确定移除',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }
-    )
-    
+    await ElMessageBox.confirm(`确定要将 ${member.full_name} 从团队中移除吗？`, '确认移除', {
+      confirmButtonText: '确定移除',
+      cancelButtonText: '取消',
+      type: 'warning',
+    })
+
     // TODO: 调用API移除成员
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+
     // 更新本地数据
-    const memberIndex = props.members.findIndex(m => m.id === member.id)
+    const memberIndex = props.members.findIndex((m) => m.id === member.id)
     if (memberIndex !== -1) {
       props.members.splice(memberIndex, 1)
     }
-    
+
     ElMessage.success('成员移除成功')
     emit('refresh')
   } catch {
@@ -419,15 +403,15 @@ const handleRemoveMember = async (member: Member) => {
   .members-filter {
     flex-direction: column;
   }
-  
+
   .search-input {
     max-width: 100%;
   }
-  
+
   .role-filter {
     width: 100%;
   }
-  
+
   .member-info {
     flex-direction: column;
     align-items: flex-start;
@@ -441,11 +425,11 @@ const handleRemoveMember = async (member: Member) => {
     align-items: flex-start;
     gap: 16px;
   }
-  
+
   .header-right {
     width: 100%;
   }
-  
+
   .header-right .el-button {
     width: 100%;
   }

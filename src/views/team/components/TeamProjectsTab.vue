@@ -6,7 +6,7 @@
         <h3>团队项目</h3>
         <p class="project-count">共 {{ projects.length }} 个项目</p>
       </div>
-      
+
       <div class="header-right" v-if="userRole === 'owner' || userRole === 'admin'">
         <el-button type="primary" @click="showCreateDialog = true">
           <el-icon><Plus /></el-icon>
@@ -49,9 +49,7 @@
     <div class="projects-list">
       <div v-if="projects.length === 0" class="empty-projects">
         <el-empty description="暂无项目">
-          <el-button type="primary" @click="showCreateDialog = true">
-            创建第一个项目
-          </el-button>
+          <el-button type="primary" @click="showCreateDialog = true"> 创建第一个项目 </el-button>
         </el-empty>
       </div>
 
@@ -74,8 +72,12 @@
                   <el-dropdown-item command="edit">编辑项目</el-dropdown-item>
                   <el-dropdown-item command="tasks">查看任务</el-dropdown-item>
                   <el-dropdown-item command="members">管理成员</el-dropdown-item>
-                  <el-dropdown-item divided command="archive" v-if="project.status === 'active'">归档项目</el-dropdown-item>
-                  <el-dropdown-item command="activate" v-if="project.status === 'archived'">激活项目</el-dropdown-item>
+                  <el-dropdown-item divided command="archive" v-if="project.status === 'active'"
+                    >归档项目</el-dropdown-item
+                  >
+                  <el-dropdown-item command="activate" v-if="project.status === 'archived'"
+                    >激活项目</el-dropdown-item
+                  >
                   <el-dropdown-item command="delete">删除项目</el-dropdown-item>
                 </el-dropdown-menu>
               </template>
@@ -87,8 +89,8 @@
               <span class="progress-label">项目进度</span>
               <span class="progress-value">{{ project.progress }}%</span>
             </div>
-            <el-progress 
-              :percentage="project.progress" 
+            <el-progress
+              :percentage="project.progress"
               :stroke-width="6"
               :color="getProgressColor(project.progress)"
             />
@@ -127,17 +129,8 @@
     </div>
 
     <!-- 创建项目对话框 -->
-    <el-dialog
-      v-model="showCreateDialog"
-      title="新建项目"
-      width="500px"
-    >
-      <el-form
-        ref="createFormRef"
-        :model="createForm"
-        :rules="createRules"
-        label-width="80px"
-      >
+    <el-dialog v-model="showCreateDialog" title="新建项目" width="500px">
+      <el-form ref="createFormRef" :model="createForm" :rules="createRules" label-width="80px">
         <el-form-item label="项目名称" prop="name">
           <el-input
             v-model="createForm.name"
@@ -188,11 +181,7 @@
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="showCreateDialog = false">取消</el-button>
-          <el-button
-            type="primary"
-            :loading="creating"
-            @click="handleCreateProject"
-          >
+          <el-button type="primary" :loading="creating" @click="handleCreateProject">
             创建项目
           </el-button>
         </span>
@@ -205,14 +194,7 @@
 import { ref, reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { 
-  Plus, 
-  More, 
-  List, 
-  Check, 
-  Calendar, 
-  Clock 
-} from '@element-plus/icons-vue'
+import { Plus, More, List, Check, Calendar, Clock } from '@element-plus/icons-vue'
 
 interface Project {
   id: number
@@ -245,24 +227,20 @@ const createForm = reactive({
   description: '',
   start_date: '',
   end_date: '',
-  status: 'active'
+  status: 'active',
 })
 
 const createRules = {
   name: [
     { required: true, message: '请输入项目名称', trigger: 'blur' },
-    { min: 2, max: 100, message: '项目名称长度在2到100个字符之间', trigger: 'blur' }
+    { min: 2, max: 100, message: '项目名称长度在2到100个字符之间', trigger: 'blur' },
   ],
   description: [
     { required: true, message: '请输入项目描述', trigger: 'blur' },
-    { max: 500, message: '项目描述不能超过500个字符', trigger: 'blur' }
+    { max: 500, message: '项目描述不能超过500个字符', trigger: 'blur' },
   ],
-  start_date: [
-    { required: true, message: '请选择开始日期', trigger: 'change' }
-  ],
-  end_date: [
-    { required: true, message: '请选择结束日期', trigger: 'change' }
-  ]
+  start_date: [{ required: true, message: '请选择开始日期', trigger: 'change' }],
+  end_date: [{ required: true, message: '请选择结束日期', trigger: 'change' }],
 }
 
 // 计算属性
@@ -275,7 +253,7 @@ const completedTasks = computed(() => {
 })
 
 const activeProjects = computed(() => {
-  return props.projects.filter(project => project.status === 'active').length
+  return props.projects.filter((project) => project.status === 'active').length
 })
 
 const averageProgress = computed(() => {
@@ -294,20 +272,28 @@ const getProgressColor = (progress: number) => {
 // 获取状态类型
 const getStatusType = (status: string) => {
   switch (status) {
-    case 'active': return 'success'
-    case 'planning': return 'info'
-    case 'archived': return 'warning'
-    default: return 'default'
+    case 'active':
+      return 'success'
+    case 'planning':
+      return 'info'
+    case 'archived':
+      return 'warning'
+    default:
+      return 'default'
   }
 }
 
 // 获取状态文本
 const getStatusText = (status: string) => {
   switch (status) {
-    case 'active': return '进行中'
-    case 'planning': return '规划中'
-    case 'archived': return '已归档'
-    default: return status
+    case 'active':
+      return '进行中'
+    case 'planning':
+      return '规划中'
+    case 'archived':
+      return '已归档'
+    default:
+      return status
   }
 }
 
@@ -380,13 +366,13 @@ const archiveProject = async (project: Project) => {
       {
         confirmButtonText: '确定归档',
         cancelButtonText: '取消',
-        type: 'warning'
-      }
+        type: 'warning',
+      },
     )
-    
+
     // TODO: 调用API归档项目
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+
     project.status = 'archived'
     ElMessage.success('项目已归档')
   } catch {
@@ -397,19 +383,15 @@ const archiveProject = async (project: Project) => {
 // 激活项目
 const activateProject = async (project: Project) => {
   try {
-    await ElMessageBox.confirm(
-      `确定要激活项目 "${project.name}" 吗？`,
-      '确认激活',
-      {
-        confirmButtonText: '确定激活',
-        cancelButtonText: '取消',
-        type: 'info'
-      }
-    )
-    
+    await ElMessageBox.confirm(`确定要激活项目 "${project.name}" 吗？`, '确认激活', {
+      confirmButtonText: '确定激活',
+      cancelButtonText: '取消',
+      type: 'info',
+    })
+
     // TODO: 调用API激活项目
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+
     project.status = 'active'
     ElMessage.success('项目已激活')
   } catch {
@@ -426,18 +408,18 @@ const deleteProject = async (project: Project) => {
       {
         confirmButtonText: '确定删除',
         cancelButtonText: '取消',
-        type: 'error'
-      }
+        type: 'error',
+      },
     )
-    
+
     // TODO: 调用API删除项目
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
-    const projectIndex = props.projects.findIndex(p => p.id === project.id)
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+
+    const projectIndex = props.projects.findIndex((p) => p.id === project.id)
     if (projectIndex !== -1) {
       props.projects.splice(projectIndex, 1)
     }
-    
+
     ElMessage.success('项目删除成功')
   } catch {
     // 用户取消
@@ -447,11 +429,11 @@ const deleteProject = async (project: Project) => {
 // 创建项目
 const handleCreateProject = async () => {
   creating.value = true
-  
+
   try {
     // TODO: 调用API创建项目
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+
     const newProject: Project = {
       id: props.projects.length + 1,
       name: createForm.name,
@@ -461,9 +443,9 @@ const handleCreateProject = async () => {
       completed_tasks: 0,
       progress: 0,
       start_date: createForm.start_date,
-      end_date: createForm.end_date
+      end_date: createForm.end_date,
     }
-    
+
     props.projects.unshift(newProject)
     ElMessage.success('项目创建成功')
     showCreateDialog.value = false
@@ -680,18 +662,18 @@ const resetCreateForm = () => {
   .project-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .project-stats {
     flex-direction: column;
     gap: 12px;
   }
-  
+
   .project-footer {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
   }
-  
+
   .project-dates {
     width: 100%;
   }
@@ -703,23 +685,23 @@ const resetCreateForm = () => {
     align-items: flex-start;
     gap: 16px;
   }
-  
+
   .header-right {
     width: 100%;
   }
-  
+
   .header-right .el-button {
     width: 100%;
   }
-  
+
   .project-card {
     padding: 16px;
   }
-  
+
   .project-name {
     font-size: 16px;
   }
-  
+
   .project-description {
     font-size: 13px;
   }

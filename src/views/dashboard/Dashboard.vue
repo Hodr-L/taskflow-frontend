@@ -18,7 +18,7 @@
     <div class="stats-grid">
       <el-card class="stat-card" shadow="hover">
         <div class="stat-content">
-          <div class="stat-icon" style="background: #e6f7ff;">
+          <div class="stat-icon" style="background: #e6f7ff">
             <el-icon color="#1890ff"><User /></el-icon>
           </div>
           <div class="stat-info">
@@ -30,7 +30,7 @@
 
       <el-card class="stat-card" shadow="hover">
         <div class="stat-content">
-          <div class="stat-icon" style="background: #f6ffed;">
+          <div class="stat-icon" style="background: #f6ffed">
             <el-icon color="#52c41a"><Folder /></el-icon>
           </div>
           <div class="stat-info">
@@ -42,7 +42,7 @@
 
       <el-card class="stat-card" shadow="hover">
         <div class="stat-content">
-          <div class="stat-icon" style="background: #fff7e6;">
+          <div class="stat-icon" style="background: #fff7e6">
             <el-icon color="#fa8c16"><List /></el-icon>
           </div>
           <div class="stat-info">
@@ -54,7 +54,7 @@
 
       <el-card class="stat-card" shadow="hover">
         <div class="stat-content">
-          <div class="stat-icon" style="background: #f9f0ff;">
+          <div class="stat-icon" style="background: #f9f0ff">
             <el-icon color="#722ed1"><Bell /></el-icon>
           </div>
           <div class="stat-info">
@@ -75,7 +75,7 @@
             <el-button type="text" @click="goToTasks">查看全部</el-button>
           </div>
         </template>
-        
+
         <div v-if="recentTasks.length > 0">
           <div
             v-for="task in recentTasks"
@@ -110,7 +110,7 @@
             <h3 class="card-title">最近活动</h3>
           </div>
         </template>
-        
+
         <el-timeline>
           <el-timeline-item
             v-for="activity in recentActivities"
@@ -125,7 +125,7 @@
             </div>
           </el-timeline-item>
         </el-timeline>
-        
+
         <div v-if="recentActivities.length === 0" class="empty-state">
           <el-empty description="暂无活动记录" />
         </div>
@@ -137,31 +137,31 @@
       <template #header>
         <h3 class="card-title">快速操作</h3>
       </template>
-      
+
       <div class="actions-grid">
         <div class="action-item" @click="goToTeams">
-          <div class="action-icon" style="background: #e6f7ff;">
+          <div class="action-icon" style="background: #e6f7ff">
             <el-icon color="#1890ff"><User /></el-icon>
           </div>
           <div class="action-text">创建团队</div>
         </div>
-        
+
         <div class="action-item" @click="goToProjects">
-          <div class="action-icon" style="background: #f6ffed;">
+          <div class="action-icon" style="background: #f6ffed">
             <el-icon color="#52c41a"><Folder /></el-icon>
           </div>
           <div class="action-text">新建项目</div>
         </div>
-        
+
         <div class="action-item" @click="goToTasks">
-          <div class="action-icon" style="background: #fff7e6;">
+          <div class="action-icon" style="background: #fff7e6">
             <el-icon color="#fa8c16"><List /></el-icon>
           </div>
           <div class="action-text">分配任务</div>
         </div>
-        
+
         <div class="action-item" @click="goToProfile">
-          <div class="action-icon" style="background: #f9f0ff;">
+          <div class="action-icon" style="background: #f9f0ff">
             <el-icon color="#722ed1"><Setting /></el-icon>
           </div>
           <div class="action-text">个人设置</div>
@@ -185,7 +185,7 @@ import {
   Check,
   Edit,
   Message,
-  Setting
+  Setting,
 } from '@element-plus/icons-vue'
 
 const router = useRouter()
@@ -201,7 +201,7 @@ const currentDate = computed(() => {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
-    weekday: 'long'
+    weekday: 'long',
   })
 })
 
@@ -210,7 +210,7 @@ const stats = ref({
   teams: 0,
   projects: 0,
   tasks: 0,
-  notifications: 0
+  notifications: 0,
 })
 
 // 最近任务
@@ -220,22 +220,22 @@ const recentTasks = ref([
     title: '设计用户界面原型',
     project_name: 'TaskFlow 项目',
     due_date: '明天',
-    status: '进行中'
+    status: '进行中',
   },
   {
     id: 2,
     title: '编写API文档',
     project_name: '后端开发',
     due_date: '3天后',
-    status: '待开始'
+    status: '待开始',
   },
   {
     id: 3,
     title: '测试用户认证流程',
     project_name: '质量保证',
     due_date: '已完成',
-    status: '已完成'
-  }
+    status: '已完成',
+  },
 ])
 
 // 最近活动
@@ -245,41 +245,49 @@ const recentActivities = ref([
     type: 'success',
     time: '10分钟前',
     text: '完成了"设计用户界面原型"任务',
-    user: '张三'
+    user: '张三',
   },
   {
     id: 2,
     type: 'primary',
     time: '1小时前',
     text: '创建了新项目"后端开发"',
-    user: '李四'
+    user: '李四',
   },
   {
     id: 3,
     type: 'warning',
     time: '2小时前',
     text: '评论了"API设计讨论"',
-    user: '王五'
-  }
+    user: '王五',
+  },
 ])
 
 // 获取状态类型
 const getStatusType = (status: string) => {
   switch (status) {
-    case '已完成': return 'success'
-    case '进行中': return 'primary'
-    case '待开始': return 'warning'
-    default: return 'info'
+    case '已完成':
+      return 'success'
+    case '进行中':
+      return 'primary'
+    case '待开始':
+      return 'warning'
+    default:
+      return 'info'
   }
 }
 
 // 获取活动图标
 const getActivityIcon = (type: string) => {
   switch (type) {
-    case 'success': return Check
-    case 'primary': return Edit
-    case 'warning': return Message
-    default: return Check
+    case 'success':
+      return Check
+    case 'primary':
+      return Edit
+    case 'warning':
+      return Message
+    default:
+      return Check
   }
 }
 
@@ -317,7 +325,7 @@ onMounted(() => {
       teams: 3,
       projects: 8,
       tasks: 12,
-      notifications: 5
+      notifications: 5,
     }
   }, 500)
 })
@@ -545,15 +553,15 @@ onMounted(() => {
     align-items: flex-start;
     gap: 16px;
   }
-  
+
   .welcome-title {
     font-size: 24px;
   }
-  
+
   .stats-grid {
     grid-template-columns: 1fr 1fr;
   }
-  
+
   .actions-grid {
     grid-template-columns: 1fr 1fr;
   }
@@ -563,7 +571,7 @@ onMounted(() => {
   .stats-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .actions-grid {
     grid-template-columns: 1fr;
   }

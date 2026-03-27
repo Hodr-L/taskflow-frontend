@@ -3,7 +3,7 @@
     <div class="team-header">
       <h2 class="team-title">团队管理</h2>
       <p class="team-subtitle">创建和管理您的协作团队</p>
-      
+
       <div class="team-actions">
         <el-button type="primary" size="large" @click="showCreateDialog = true">
           <el-icon><Plus /></el-icon>
@@ -14,12 +14,7 @@
 
     <!-- 团队列表 -->
     <div class="team-grid">
-      <div
-        v-for="team in teams"
-        :key="team.id"
-        class="team-card"
-        @click="viewTeam(team.id)"
-      >
+      <div v-for="team in teams" :key="team.id" class="team-card" @click="viewTeam(team.id)">
         <div class="team-card-header">
           <div class="team-avatar">
             <el-avatar :size="48" :src="team.avatar_url">
@@ -74,9 +69,7 @@
       <!-- 空状态 -->
       <div v-if="teams.length === 0" class="empty-state">
         <el-empty description="暂无团队">
-          <el-button type="primary" @click="showCreateDialog = true">
-            创建第一个团队
-          </el-button>
+          <el-button type="primary" @click="showCreateDialog = true"> 创建第一个团队 </el-button>
         </el-empty>
       </div>
     </div>
@@ -88,12 +81,7 @@
       width="500px"
       :before-close="handleDialogClose"
     >
-      <el-form
-        ref="createFormRef"
-        :model="createForm"
-        :rules="createRules"
-        label-width="80px"
-      >
+      <el-form ref="createFormRef" :model="createForm" :rules="createRules" label-width="80px">
         <el-form-item label="团队名称" prop="name">
           <el-input
             v-model="createForm.name"
@@ -134,11 +122,7 @@
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="showCreateDialog = false">取消</el-button>
-          <el-button
-            type="primary"
-            :loading="creating"
-            @click="handleCreateTeam"
-          >
+          <el-button type="primary" :loading="creating" @click="handleCreateTeam">
             创建团队
           </el-button>
         </span>
@@ -170,7 +154,7 @@ const teams = ref([
     user_role: 'owner',
     type: 'project',
     privacy: 'private',
-    created_at: '2026-01-15'
+    created_at: '2026-01-15',
   },
   {
     id: 2,
@@ -185,7 +169,7 @@ const teams = ref([
     user_role: 'admin',
     type: 'department',
     privacy: 'public',
-    created_at: '2026-02-10'
+    created_at: '2026-02-10',
   },
   {
     id: 3,
@@ -200,8 +184,8 @@ const teams = ref([
     user_role: 'member',
     type: 'interest',
     privacy: 'private',
-    created_at: '2026-03-01'
-  }
+    created_at: '2026-03-01',
+  },
 ])
 
 // 创建团队表单
@@ -211,38 +195,42 @@ const createForm = reactive({
   name: '',
   description: '',
   type: 'project',
-  privacy: 'private'
+  privacy: 'private',
 })
 
 const createRules = {
   name: [
     { required: true, message: '请输入团队名称', trigger: 'blur' },
-    { min: 2, max: 50, message: '团队名称长度在2到50个字符之间', trigger: 'blur' }
+    { min: 2, max: 50, message: '团队名称长度在2到50个字符之间', trigger: 'blur' },
   ],
   description: [
     { required: true, message: '请输入团队描述', trigger: 'blur' },
-    { max: 200, message: '团队描述不能超过200个字符', trigger: 'blur' }
+    { max: 200, message: '团队描述不能超过200个字符', trigger: 'blur' },
   ],
-  type: [
-    { required: true, message: '请选择团队类型', trigger: 'change' }
-  ]
+  type: [{ required: true, message: '请选择团队类型', trigger: 'change' }],
 }
 
 // 获取角色标签类型
 const getRoleTagType = (role: string) => {
   switch (role) {
-    case 'owner': return 'danger'
-    case 'admin': return 'warning'
-    default: return 'success'
+    case 'owner':
+      return 'danger'
+    case 'admin':
+      return 'warning'
+    default:
+      return 'success'
   }
 }
 
 // 获取角色文本
 const getRoleText = (role: string) => {
   switch (role) {
-    case 'owner': return '创建者'
-    case 'admin': return '管理员'
-    default: return '成员'
+    case 'owner':
+      return '创建者'
+    case 'admin':
+      return '管理员'
+    default:
+      return '成员'
   }
 }
 
@@ -290,11 +278,11 @@ const deleteTeam = async (teamId: number) => {
     await ElMessageBox.confirm('确定要删除这个团队吗？此操作不可恢复。', '警告', {
       confirmButtonText: '确定删除',
       cancelButtonText: '取消',
-      type: 'warning'
+      type: 'warning',
     })
-    
+
     // TODO: 调用删除团队的API
-    teams.value = teams.value.filter(team => team.id !== teamId)
+    teams.value = teams.value.filter((team) => team.id !== teamId)
     ElMessage.success('团队删除成功')
   } catch {
     // 用户取消
@@ -304,11 +292,11 @@ const deleteTeam = async (teamId: number) => {
 // 创建团队
 const handleCreateTeam = async () => {
   creating.value = true
-  
+
   try {
     // TODO: 调用创建团队的API
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+
     const newTeam = {
       id: teams.value.length + 1,
       name: createForm.name,
@@ -322,9 +310,9 @@ const handleCreateTeam = async () => {
       user_role: 'owner',
       type: createForm.type,
       privacy: createForm.privacy,
-      created_at: new Date().toISOString().split('T')[0]
+      created_at: new Date().toISOString().split('T')[0],
     }
-    
+
     teams.value.unshift(newTeam)
     ElMessage.success('团队创建成功')
     showCreateDialog.value = false
@@ -506,12 +494,12 @@ const handleDialogClose = (done: () => void) => {
   .team-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .team-card-header {
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   .team-menu {
     position: absolute;
     top: 20px;
@@ -523,7 +511,7 @@ const handleDialogClose = (done: () => void) => {
   .team-list-container {
     padding: 16px;
   }
-  
+
   .team-title {
     font-size: 20px;
   }

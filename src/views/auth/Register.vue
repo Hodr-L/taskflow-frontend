@@ -82,9 +82,7 @@
         <div class="register-footer">
           <p class="login-link">
             已有账户？
-            <router-link to="/login" class="login-button">
-              立即登录
-            </router-link>
+            <router-link to="/login" class="login-button"> 立即登录 </router-link>
           </p>
         </div>
       </el-form>
@@ -138,7 +136,7 @@ const registerForm = reactive({
   username: '',
   email: '',
   password: '',
-  confirmPassword: ''
+  confirmPassword: '',
 })
 
 const agreeTerms = ref(false)
@@ -180,19 +178,13 @@ const validateConfirmPassword = (_rule: any, value: string, callback: any) => {
 }
 
 const registerRules = {
-  username: [
-    { required: true, validator: validateUsername, trigger: 'blur' }
-  ],
+  username: [{ required: true, validator: validateUsername, trigger: 'blur' }],
   email: [
     { required: true, message: '请输入邮箱地址', trigger: 'blur' },
-    { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' }
+    { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' },
   ],
-  password: [
-    { required: true, validator: validatePassword, trigger: 'blur' }
-  ],
-  confirmPassword: [
-    { required: true, validator: validateConfirmPassword, trigger: 'blur' }
-  ]
+  password: [{ required: true, validator: validatePassword, trigger: 'blur' }],
+  confirmPassword: [{ required: true, validator: validateConfirmPassword, trigger: 'blur' }],
 }
 
 // 处理注册
@@ -203,22 +195,22 @@ const handleRegister = async () => {
   }
 
   if (loading.value) return
-  
+
   loading.value = true
   errorMessage.value = ''
   successMessage.value = ''
-  
+
   try {
     const result = await authStore.userRegister(
       registerForm.username,
       registerForm.email,
-      registerForm.password
+      registerForm.password,
     )
-    
+
     if (result.success) {
       successMessage.value = '注册成功！正在跳转到仪表板...'
       ElMessage.success('注册成功')
-      
+
       // 延迟跳转，让用户看到成功消息
       setTimeout(() => {
         router.push('/dashboard')
@@ -355,7 +347,7 @@ const handleRegister = async () => {
   .register-card {
     padding: 30px 20px;
   }
-  
+
   .register-title {
     font-size: 24px;
   }

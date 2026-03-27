@@ -1,0 +1,48 @@
+name: Frontend CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  check-and-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type check
+        run: npx vue-tsc --noEmit
+        continue-on-error: false
+
+      - name: Lint check
+        run: npm run lint
+        continue-on-error: false
+
+      - name: Build
+        run: npm run build
+        continue-on-error: false
+
+      - name: Success summary
+        run: |
+          echo "✅ 前端CI检查全部通过"
+          echo "✓ 类型检查完成"
+          echo "✓ 代码规范检查完成"
+          echo "✓ 构建完成"
+          echo ""
+          echo "项目状态：正常"
+          echo "可安全部署"

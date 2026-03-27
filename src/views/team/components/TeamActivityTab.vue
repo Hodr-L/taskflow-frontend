@@ -8,30 +8,20 @@
 
     <!-- 活动筛选 -->
     <div class="activity-filter">
-      <el-input
-        v-model="searchKeyword"
-        placeholder="搜索活动内容"
-        class="search-input"
-        clearable
-      >
+      <el-input v-model="searchKeyword" placeholder="搜索活动内容" class="search-input" clearable>
         <template #prefix>
           <el-icon><Search /></el-icon>
         </template>
       </el-input>
-      
-      <el-select
-        v-model="filterType"
-        placeholder="筛选活动类型"
-        class="type-filter"
-        clearable
-      >
+
+      <el-select v-model="filterType" placeholder="筛选活动类型" class="type-filter" clearable>
         <el-option label="全部" value="" />
         <el-option label="成员管理" value="member" />
         <el-option label="项目管理" value="project" />
         <el-option label="团队设置" value="team" />
         <el-option label="任务操作" value="task" />
       </el-select>
-      
+
       <el-date-picker
         v-model="dateRange"
         type="daterange"
@@ -59,34 +49,31 @@
                   {{ activity.user?.name?.substring(0, 1) || 'U' }}
                 </el-avatar>
               </div>
-              
+
               <div class="activity-details">
                 <div class="activity-header">
                   <h4 class="activity-title">{{ activity.title }}</h4>
-                  <el-tag
-                    :type="getActivityTagType(activity.type)"
-                    size="small"
-                  >
+                  <el-tag :type="getActivityTagType(activity.type)" size="small">
                     {{ getActivityTypeLabel(activity.type) }}
                   </el-tag>
                 </div>
-                
+
                 <p class="activity-description">
                   <span class="user-name">{{ activity.user?.name }}</span>
                   {{ activity.description }}
                 </p>
-                
+
                 <div class="activity-meta" v-if="activity.details">
                   <div class="meta-item" v-if="activity.details.project_name">
                     <el-icon><Folder /></el-icon>
                     <span>{{ activity.details.project_name }}</span>
                   </div>
-                  
+
                   <div class="meta-item" v-if="activity.details.member_name">
                     <el-icon><User /></el-icon>
                     <span>{{ activity.details.member_name }}</span>
                   </div>
-                  
+
                   <div class="meta-item" v-if="activity.details.task_title">
                     <el-icon><Document /></el-icon>
                     <span>{{ activity.details.task_title }}</span>
@@ -105,11 +92,7 @@
 
       <!-- 加载更多 -->
       <div class="load-more" v-if="hasMoreActivities">
-        <el-button
-          type="text"
-          :loading="loadingMore"
-          @click="loadMoreActivities"
-        >
+        <el-button type="text" :loading="loadingMore" @click="loadMoreActivities">
           加载更多活动记录
         </el-button>
       </div>
@@ -163,11 +146,11 @@ const activities = ref<Activity[]>([
     user: {
       id: 3,
       name: '王五',
-      avatar_url: ''
+      avatar_url: '',
     },
     details: {
-      member_name: '王五'
-    }
+      member_name: '王五',
+    },
   },
   {
     id: 2,
@@ -178,11 +161,11 @@ const activities = ref<Activity[]>([
     user: {
       id: 2,
       name: '李四',
-      avatar_url: ''
+      avatar_url: '',
     },
     details: {
-      project_name: '用户中心重构'
-    }
+      project_name: '用户中心重构',
+    },
   },
   {
     id: 3,
@@ -193,12 +176,12 @@ const activities = ref<Activity[]>([
     user: {
       id: 1,
       name: '张三',
-      avatar_url: ''
+      avatar_url: '',
     },
     details: {
       old_value: '前端开发团队',
-      new_value: '负责前端界面开发和用户体验优化'
-    }
+      new_value: '负责前端界面开发和用户体验优化',
+    },
   },
   {
     id: 4,
@@ -209,12 +192,12 @@ const activities = ref<Activity[]>([
     user: {
       id: 3,
       name: '王五',
-      avatar_url: ''
+      avatar_url: '',
     },
     details: {
       task_title: '设计用户中心界面',
-      project_name: '用户中心重构'
-    }
+      project_name: '用户中心重构',
+    },
   },
   {
     id: 5,
@@ -225,13 +208,13 @@ const activities = ref<Activity[]>([
     user: {
       id: 2,
       name: '李四',
-      avatar_url: ''
+      avatar_url: '',
     },
     details: {
       member_name: '李四',
       old_value: '成员',
-      new_value: '管理员'
-    }
+      new_value: '管理员',
+    },
   },
   {
     id: 6,
@@ -242,14 +225,14 @@ const activities = ref<Activity[]>([
     user: {
       id: 1,
       name: '张三',
-      avatar_url: ''
+      avatar_url: '',
     },
     details: {
       project_name: 'TaskFlow 前端开发',
       old_value: '进行中',
-      new_value: '已完成'
-    }
-  }
+      new_value: '已完成',
+    },
+  },
 ])
 
 // 分页
@@ -261,31 +244,32 @@ const hasMoreActivities = ref(true)
 // 计算属性：筛选后的活动
 const filteredActivities = computed(() => {
   let filtered = activities.value
-  
+
   // 按类型筛选
   if (filterType.value) {
-    filtered = filtered.filter(activity => activity.type === filterType.value)
+    filtered = filtered.filter((activity) => activity.type === filterType.value)
   }
-  
+
   // 按搜索关键词筛选
   if (searchKeyword.value) {
     const keyword = searchKeyword.value.toLowerCase()
-    filtered = filtered.filter(activity => 
-      activity.title.toLowerCase().includes(keyword) ||
-      activity.description.toLowerCase().includes(keyword) ||
-      activity.user.name.toLowerCase().includes(keyword)
+    filtered = filtered.filter(
+      (activity) =>
+        activity.title.toLowerCase().includes(keyword) ||
+        activity.description.toLowerCase().includes(keyword) ||
+        activity.user.name.toLowerCase().includes(keyword),
     )
   }
-  
+
   // 按日期范围筛选
   if (dateRange.value) {
     const [start, end] = dateRange.value
-    filtered = filtered.filter(activity => {
+    filtered = filtered.filter((activity) => {
       const activityDate = new Date(activity.timestamp)
       return activityDate >= start && activityDate <= end
     })
   }
-  
+
   // 分页
   return filtered.slice(0, pageSize * currentPage.value)
 })
@@ -308,11 +292,11 @@ const loadActivities = async () => {
 // 加载更多活动
 const loadMoreActivities = async () => {
   loadingMore.value = true
-  
+
   try {
     // TODO: 调用API加载更多活动数据
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+
     // 模拟添加更多数据
     const newActivities: Activity[] = [
       {
@@ -324,12 +308,12 @@ const loadMoreActivities = async () => {
         user: {
           id: 3,
           name: '王五',
-          avatar_url: ''
+          avatar_url: '',
         },
         details: {
           task_title: '优化页面加载性能',
-          project_name: 'TaskFlow 前端开发'
-        }
+          project_name: 'TaskFlow 前端开发',
+        },
       },
       {
         id: activities.value.length + 2,
@@ -340,17 +324,17 @@ const loadMoreActivities = async () => {
         user: {
           id: 4,
           name: '赵六',
-          avatar_url: ''
+          avatar_url: '',
         },
         details: {
-          member_name: '赵六'
-        }
-      }
+          member_name: '赵六',
+        },
+      },
     ]
-    
+
     activities.value.push(...newActivities)
     currentPage.value += 1
-    
+
     // 检查是否还有更多数据
     hasMoreActivities.value = activities.value.length < 50 // 假设总共有50条数据
   } catch (error) {
@@ -365,25 +349,25 @@ const formatTime = (timestamp: string) => {
   const date = new Date(timestamp)
   const now = new Date()
   const diffMs = now.getTime() - date.getTime()
-  
+
   // 如果是今天
   if (date.toDateString() === now.toDateString()) {
     return date.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })
   }
-  
+
   // 如果是昨天
   const yesterday = new Date(now)
   yesterday.setDate(yesterday.getDate() - 1)
   if (date.toDateString() === yesterday.toDateString()) {
     return '昨天 ' + date.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })
   }
-  
+
   // 一周内
   if (diffMs < 7 * 24 * 60 * 60 * 1000) {
     const days = Math.floor(diffMs / (24 * 60 * 60 * 1000))
     return `${days}天前`
   }
-  
+
   // 更早的时间
   return date.toLocaleDateString('zh-CN')
 }
@@ -391,33 +375,48 @@ const formatTime = (timestamp: string) => {
 // 获取活动类型（用于Timeline样式）
 const getActivityType = (type: Activity['type']) => {
   switch (type) {
-    case 'member': return 'primary'
-    case 'project': return 'success'
-    case 'team': return 'warning'
-    case 'task': return 'info'
-    default: return 'default'
+    case 'member':
+      return 'primary'
+    case 'project':
+      return 'success'
+    case 'team':
+      return 'warning'
+    case 'task':
+      return 'info'
+    default:
+      return 'default'
   }
 }
 
 // 获取活动标签类型
 const getActivityTagType = (type: Activity['type']) => {
   switch (type) {
-    case 'member': return 'primary'
-    case 'project': return 'success'
-    case 'team': return 'warning'
-    case 'task': return 'info'
-    default: return ''
+    case 'member':
+      return 'primary'
+    case 'project':
+      return 'success'
+    case 'team':
+      return 'warning'
+    case 'task':
+      return 'info'
+    default:
+      return ''
   }
 }
 
 // 获取活动类型标签
 const getActivityTypeLabel = (type: Activity['type']) => {
   switch (type) {
-    case 'member': return '成员管理'
-    case 'project': return '项目管理'
-    case 'team': return '团队设置'
-    case 'task': return '任务操作'
-    default: return '其他'
+    case 'member':
+      return '成员管理'
+    case 'project':
+      return '项目管理'
+    case 'team':
+      return '团队设置'
+    case 'task':
+      return '任务操作'
+    default:
+      return '其他'
   }
 }
 </script>
@@ -548,23 +547,23 @@ const getActivityTypeLabel = (type: Activity['type']) => {
   .activity-filter {
     flex-direction: column;
   }
-  
+
   .search-input,
   .type-filter,
   .date-filter {
     width: 100%;
   }
-  
+
   .activity-content {
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   .activity-header {
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   .activity-meta {
     flex-direction: column;
     gap: 8px;
@@ -575,7 +574,7 @@ const getActivityTypeLabel = (type: Activity['type']) => {
   .activity-list {
     padding: 16px;
   }
-  
+
   .activity-card {
     padding: 12px;
   }

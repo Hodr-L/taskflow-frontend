@@ -6,47 +6,29 @@
         <h2 class="app-title">{{ appName }}</h2>
         <p class="app-version">v{{ appVersion }}</p>
       </div>
-      
-      <el-menu
-        :default-active="activeMenu"
-        class="sidebar-menu"
-        :collapse="isCollapse"
-        router
-      >
-        <el-menu-item index="/dashboard">
-          <el-icon><House /></el-icon>
-          <span>仪表板</span>
-        </el-menu-item>
-        
-        <el-menu-item index="/teams">
-          <el-icon><User /></el-icon>
-          <span>团队管理</span>
-        </el-menu-item>
-        
-        <el-menu-item index="/projects">
-          <el-icon><Folder /></el-icon>
-          <span>项目管理</span>
-        </el-menu-item>
-        
-        <el-menu-item index="/tasks">
-          <el-icon><List /></el-icon>
-          <span>任务管理</span>
-        </el-menu-item>
-        
-        <el-divider />
-        
+
+      <el-menu :default-active="activeMenu" class="sidebar-menu" :collapse="isCollapse" router>
+        <!-- 动态生成菜单项 -->
+        <template v-for="item in menuItems" :key="item.path">
+          <el-menu-item :index="item.path">
+            <el-icon>
+              <component :is="item.icon" />
+            </el-icon>
+            <span>{{ item.title }}</span>
+          </el-menu-item>
+        </template>
+
+        <el-divider v-if="menuItems.length > 0" />
+
+        <!-- 个人资料菜单项（始终显示） -->
         <el-menu-item index="/profile">
           <el-icon><UserFilled /></el-icon>
           <span>个人资料</span>
         </el-menu-item>
       </el-menu>
-      
+
       <div class="sidebar-footer">
-        <el-button
-          type="text"
-          @click="toggleSidebar"
-          class="collapse-button"
-        >
+        <el-button type="text" @click="toggleSidebar" class="collapse-button">
           <el-icon v-if="isCollapse"><Expand /></el-icon>
           <el-icon v-else><Fold /></el-icon>
           <span v-if="!isCollapse">收起菜单</span>
@@ -66,7 +48,7 @@
             </el-breadcrumb-item>
           </el-breadcrumb>
         </div>
-        
+
         <div class="navbar-right">
           <el-dropdown @command="handleCommand">
             <div class="user-info">
@@ -120,7 +102,7 @@ import {
   Fold,
   ArrowDown,
   Setting,
-  SwitchButton
+  SwitchButton,
 } from '@element-plus/icons-vue'
 
 const route = useRoute()
@@ -137,18 +119,62 @@ const isCollapse = ref(false)
 // 用户信息
 const username = computed(() => authStore.username || '用户')
 const userAvatar = computed(() => authStore.user?.avatar_url || '')
+const userRole = computed(() => authStore.role)
 
 // 当前激活的菜单
 const activeMenu = computed(() => route.path)
 
 // 面包屑导航
 const breadcrumbs = computed(() => {
-  const matched = route.matched.filter(item => item.meta && item.meta.title)
-  return matched.map(item => ({
+  const matched = route.matched.filter((item) => item.meta && item.meta.title)
+  return matched.map((item) => ({
     path: item.path,
-    title: item.meta.title as string
+    title: item.meta.title as string,
   }))
 })
+
+// 菜单项
+const menuItems = computed(() => {
+  const routes = router.getRoutes()
+  const rootRoute = routes.find(route => route.path === '/')
+  
+  if (!rootRoute || !rootRoute.children) {
+    return []
+  }
+  
+  // 过滤出需要显示在菜单中的路由
+  return rootRoute.children
+    .filter(child => {
+      const meta = child.meta || {}
+      // 隐藏菜单项
+      if (meta.hidden === true) {
+        return false
+      }
+      
+      // 检查是否需要管理员权限
+      if (meta.requiresAdmin === true) {
+        const isAdmin = userRole.value === 'admin' || userRole.value === 'super_admin'
+        return isAdmin
+      }
+      
+      return true
+    })
+    .map(child => ({
+      // 构造完整路径（相对于根路由）
+      path: child.path.startsWith('/') ? child.path : `/${child.path}`,
+      title: (child.meta?.title as string) || child.name?.toString() || '',
+      icon: (child.meta?.icon as string) || 'Menu'
+    }))
+    .filter(item => item.title && item.path !== '/profile') // 排除个人资料，单独显示
+    .sort((a, b) => {
+      // 简单排序：仪表板在最前面，其他按字母顺序
+      if (a.path === '/dashboard') return -1
+      if (b.path === '/dashboard') return 1
+      return a.title.localeCompare(b.title)
+    })
+})
+
+
 
 // 切换侧边栏
 const toggleSidebar = () => {
@@ -346,15 +372,15 @@ const handleLogout = async () => {
     bottom: 0;
     z-index: 1001;
   }
-  
+
   .main-content {
     margin-left: 0;
   }
-  
+
   .navbar {
     padding: 0 16px;
   }
-  
+
   .content {
     padding: 16px;
   }

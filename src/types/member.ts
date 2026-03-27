@@ -2,7 +2,8 @@ export interface Member {
   id: number
   username: string
   email: string
-  full_name?: string
+  fullname?: string
+  bio?: string
   avatar_url?: string
   role: 'owner' | 'admin' | 'member'
   joined_at: string

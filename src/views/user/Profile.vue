@@ -11,7 +11,7 @@
       <div class="profile-content">
         <div class="profile-section">
           <h3>基本信息</h3>
-          
+
           <div class="avatar-section">
             <el-avatar :size="80" :src="user.avatar_url">
               {{ usernameInitials }}
@@ -37,29 +37,27 @@
 
         <div class="profile-section">
           <h3>账户安全</h3>
-          
+
           <div class="security-items">
             <div class="security-item">
               <div class="security-info">
                 <div class="security-title">密码</div>
                 <div class="security-description">定期更改密码以确保账户安全</div>
               </div>
-              <el-button type="primary" @click="showPasswordDialog = true">
-                更改密码
-              </el-button>
+              <el-button type="primary" @click="showPasswordDialog = true"> 更改密码 </el-button>
             </div>
           </div>
         </div>
 
         <div class="profile-section">
           <h3>账户信息</h3>
-          
+
           <div class="info-grid">
             <div class="info-item">
               <div class="info-label">用户ID</div>
               <div class="info-value">{{ user.id }}</div>
             </div>
-            
+
             <div class="info-item">
               <div class="info-label">注册时间</div>
               <div class="info-value">{{ formatDate(user.created_at) }}</div>
@@ -79,14 +77,18 @@ import type { User } from '@/types/auth'
 const authStore = useAuthStore()
 
 // 用户信息
-const user = computed(() => authStore.user || {
-  id: 1,
-  username: 'testuser',
-  email: 'test@example.com',
-  avatar_url: '',
-  role: 'user',
-  created_at: new Date().toISOString()
-} as User)
+const user = computed(
+  () =>
+    authStore.user ||
+    ({
+      id: 1,
+      username: 'testuser',
+      email: 'test@example.com',
+      avatar_url: '',
+      role: 'user',
+      created_at: new Date().toISOString(),
+    } as User),
+)
 
 // 用户名首字母
 const usernameInitials = computed(() => {
@@ -100,18 +102,24 @@ const showPasswordDialog = ref(false)
 // 获取角色类型
 const getRoleType = (role: string) => {
   switch (role) {
-    case 'super_admin': return 'danger'
-    case 'admin': return 'warning'
-    default: return 'success'
+    case 'super_admin':
+      return 'danger'
+    case 'admin':
+      return 'warning'
+    default:
+      return 'success'
   }
 }
 
 // 获取角色文本
 const getRoleText = (role: string) => {
   switch (role) {
-    case 'super_admin': return '超级管理员'
-    case 'admin': return '管理员'
-    default: return '普通用户'
+    case 'super_admin':
+      return '超级管理员'
+    case 'admin':
+      return '管理员'
+    default:
+      return '普通用户'
   }
 }
 
@@ -237,13 +245,13 @@ const formatDate = (dateString?: string) => {
   .info-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .security-item {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
   }
-  
+
   .security-item .el-button {
     align-self: flex-end;
   }
@@ -253,11 +261,11 @@ const formatDate = (dateString?: string) => {
   .profile-container {
     padding: 16px;
   }
-  
+
   .profile-form :deep(.el-form-item__label) {
     width: 80px !important;
   }
-  
+
   .profile-form :deep(.el-form-item__content) {
     margin-left: 80px !important;
   }

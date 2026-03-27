@@ -14,7 +14,7 @@
           <div class="setting-section">
             <h4 class="section-title">团队信息</h4>
             <p class="section-description">更新团队的基本信息和描述</p>
-            
+
             <el-form
               ref="basicFormRef"
               :model="basicForm"
@@ -51,7 +51,11 @@
                     :on-change="handleAvatarChange"
                     :auto-upload="false"
                   >
-                    <el-avatar v-if="basicForm.avatar_url" :size="100" :src="basicForm.avatar_url" />
+                    <el-avatar
+                      v-if="basicForm.avatar_url"
+                      :size="100"
+                      :src="basicForm.avatar_url"
+                    />
                     <el-icon v-else class="avatar-uploader-icon">
                       <Plus />
                     </el-icon>
@@ -64,11 +68,7 @@
               </el-form-item>
 
               <el-form-item>
-                <el-button
-                  type="primary"
-                  :loading="updatingBasic"
-                  @click="handleUpdateBasic"
-                >
+                <el-button type="primary" :loading="updatingBasic" @click="handleUpdateBasic">
                   保存修改
                 </el-button>
               </el-form-item>
@@ -81,7 +81,7 @@
           <div class="setting-section">
             <h4 class="section-title">团队可见性</h4>
             <p class="section-description">控制谁可以查看和加入你的团队</p>
-            
+
             <div class="privacy-options">
               <el-radio-group v-model="privacyForm.privacy">
                 <div class="privacy-option">
@@ -93,7 +93,7 @@
                     </div>
                   </div>
                 </div>
-                
+
                 <div class="privacy-option">
                   <div class="privacy-option-header">
                     <el-radio label="private" />
@@ -107,11 +107,7 @@
             </div>
 
             <div class="setting-actions">
-              <el-button
-                type="primary"
-                :loading="updatingPrivacy"
-                @click="handleUpdatePrivacy"
-              >
+              <el-button type="primary" :loading="updatingPrivacy" @click="handleUpdatePrivacy">
                 更新隐私设置
               </el-button>
             </div>
@@ -123,7 +119,7 @@
           <div class="setting-section">
             <h4 class="section-title">成员权限设置</h4>
             <p class="section-description">配置团队成员可以执行的操作</p>
-            
+
             <div class="permission-settings">
               <div class="permission-item">
                 <div class="permission-info">
@@ -191,17 +187,14 @@
           <div class="setting-section danger-section">
             <h4 class="section-title danger-title">⚠️ 危险操作</h4>
             <p class="section-description">这些操作可能无法撤销，请谨慎操作</p>
-            
+
             <div class="danger-actions">
               <div class="danger-action">
                 <div class="danger-action-info">
                   <h5>转让团队所有权</h5>
                   <p>将团队所有权转让给其他成员。转让后你将变为管理员角色。</p>
                 </div>
-                <el-button
-                  type="warning"
-                  @click="showTransferDialog = true"
-                >
+                <el-button type="warning" @click="showTransferDialog = true">
                   转让所有权
                 </el-button>
               </div>
@@ -211,12 +204,7 @@
                   <h5>解散团队</h5>
                   <p>永久删除团队及其所有数据。此操作不可撤销。</p>
                 </div>
-                <el-button
-                  type="danger"
-                  @click="handleDeleteTeam"
-                >
-                  解散团队
-                </el-button>
+                <el-button type="danger" @click="handleDeleteTeam"> 解散团队 </el-button>
               </div>
             </div>
           </div>
@@ -225,11 +213,7 @@
     </div>
 
     <!-- 转让所有权对话框 -->
-    <el-dialog
-      v-model="showTransferDialog"
-      title="转让团队所有权"
-      width="500px"
-    >
+    <el-dialog v-model="showTransferDialog" title="转让团队所有权" width="500px">
       <el-form
         ref="transferFormRef"
         :model="transferForm"
@@ -248,12 +232,12 @@
               :label="member.full_name || member.username"
               :value="member.id"
             >
-              <div style="display: flex; align-items: center;">
-                <el-avatar :size="24" :src="member.avatar_url" style="margin-right: 8px;">
+              <div style="display: flex; align-items: center">
+                <el-avatar :size="24" :src="member.avatar_url" style="margin-right: 8px">
                   {{ member.full_name?.substring(0, 1) || member.username.substring(0, 1) }}
                 </el-avatar>
                 <span>{{ member.full_name || member.username }}</span>
-                <el-tag size="small" style="margin-left: 8px;">
+                <el-tag size="small" style="margin-left: 8px">
                   {{ member.role === 'admin' ? '管理员' : '成员' }}
                 </el-tag>
               </div>
@@ -271,11 +255,7 @@
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="showTransferDialog = false">取消</el-button>
-          <el-button
-            type="warning"
-            :loading="transferring"
-            @click="handleTransferOwnership"
-          >
+          <el-button type="warning" :loading="transferring" @click="handleTransferOwnership">
             确认转让
           </el-button>
         </span>
@@ -310,18 +290,18 @@ const activeSetting = ref('basic')
 const basicForm = reactive({
   name: props.team.name,
   description: props.team.description,
-  avatar_url: props.team.avatar_url
+  avatar_url: props.team.avatar_url,
 })
 
 const basicRules = {
   name: [
     { required: true, message: '请输入团队名称', trigger: 'blur' },
-    { min: 2, max: 50, message: '团队名称长度在2到50个字符之间', trigger: 'blur' }
+    { min: 2, max: 50, message: '团队名称长度在2到50个字符之间', trigger: 'blur' },
   ],
   description: [
     { required: true, message: '请输入团队描述', trigger: 'blur' },
-    { max: 200, message: '团队描述不能超过200个字符', trigger: 'blur' }
-  ]
+    { max: 200, message: '团队描述不能超过200个字符', trigger: 'blur' },
+  ],
 }
 
 const basicFormRef = ref()
@@ -329,7 +309,7 @@ const updatingBasic = ref(false)
 
 // 隐私设置表单
 const privacyForm = reactive({
-  privacy: props.team.privacy || 'private'
+  privacy: props.team.privacy || 'private',
 })
 
 const updatingPrivacy = ref(false)
@@ -339,7 +319,7 @@ const permissionForm = reactive({
   can_create_project: true,
   can_invite_member: true,
   can_delete_project: false,
-  can_edit_team: false
+  can_edit_team: false,
 })
 
 const updatingPermissions = ref(false)
@@ -348,15 +328,13 @@ const updatingPermissions = ref(false)
 const showTransferDialog = ref(false)
 const transferForm = reactive({
   new_owner_id: '',
-  confirm: false
+  confirm: false,
 })
 
 const transferRules = {
-  new_owner_id: [
-    { required: true, message: '请选择新所有者', trigger: 'change' }
-  ],
+  new_owner_id: [{ required: true, message: '请选择新所有者', trigger: 'change' }],
   confirm: [
-    { 
+    {
       validator: (_rule: any, value: boolean, callback: any) => {
         if (!value) {
           callback(new Error('请确认转让操作'))
@@ -364,9 +342,9 @@ const transferRules = {
           callback()
         }
       },
-      trigger: 'change'
-    }
-  ]
+      trigger: 'change',
+    },
+  ],
 }
 
 const transferring = ref(false)
@@ -377,29 +355,32 @@ const members = ref<Member[]>([
     id: 1,
     username: 'zhangsan',
     email: 'zhangsan@example.com',
-    full_name: '张三',
+    fullname: '张三',
+    bio: '团队负责人',
     avatar_url: '',
     role: 'owner',
-    joined_at: '2026-01-15T10:30:00Z'
+    joined_at: '2026-01-15T10:30:00Z',
   },
   {
     id: 2,
     username: 'lisi',
     email: 'lisi@example.com',
-    full_name: '李四',
+    fullname: '李四',
+    bio: '管理员',
     avatar_url: '',
     role: 'admin',
-    joined_at: '2026-01-20T14:15:00Z'
+    joined_at: '2026-01-20T14:15:00Z',
   },
   {
     id: 3,
     username: 'wangwu',
     email: 'wangwu@example.com',
-    full_name: '王五',
+    fullname: '王五',
+    bio: '开发工程师',
     avatar_url: '',
     role: 'member',
-    joined_at: '2026-02-01T09:00:00Z'
-  }
+    joined_at: '2026-02-01T09:00:00Z',
+  },
 ])
 
 // 计算符合条件的成员（排除当前所有者）
@@ -442,18 +423,18 @@ const handleAvatarChange = (file: any) => {
 const handleUpdateBasic = async () => {
   try {
     await basicFormRef.value?.validate()
-    
+
     updatingBasic.value = true
-    
+
     // TODO: 调用更新团队的API
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+
     emit('update-team', {
       name: basicForm.name,
       description: basicForm.description,
-      avatar_url: basicForm.avatar_url
+      avatar_url: basicForm.avatar_url,
     })
-    
+
     ElMessage.success('团队信息更新成功')
   } catch (error) {
     console.error('更新失败:', error)
@@ -466,13 +447,13 @@ const handleUpdateBasic = async () => {
 // 更新隐私设置
 const handleUpdatePrivacy = async () => {
   updatingPrivacy.value = true
-  
+
   try {
     // TODO: 调用更新隐私设置的API
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+
     emit('update-team', { privacy: privacyForm.privacy })
-    
+
     ElMessage.success('隐私设置更新成功')
   } catch (error) {
     console.error('更新失败:', error)
@@ -485,11 +466,11 @@ const handleUpdatePrivacy = async () => {
 // 更新权限设置
 const handleUpdatePermissions = async () => {
   updatingPermissions.value = true
-  
+
   try {
     // TODO: 调用更新权限设置的API
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+
     ElMessage.success('权限设置更新成功')
   } catch (error) {
     console.error('更新失败:', error)
@@ -502,16 +483,16 @@ const handleUpdatePermissions = async () => {
 // 转让所有权
 const handleTransferOwnership = async () => {
   transferring.value = true
-  
+
   try {
     // TODO: 调用转让所有权的API
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+
     ElMessage.success('团队所有权转让成功')
     showTransferDialog.value = false
     transferForm.new_owner_id = ''
     transferForm.confirm = false
-    
+
     // 更新本地数据
     // 在实际应用中，这里可能需要重新加载页面或更新用户角色
   } catch (error) {
@@ -532,13 +513,13 @@ const handleDeleteTeam = async () => {
         confirmButtonText: '确定解散',
         cancelButtonText: '取消',
         type: 'error',
-        confirmButtonClass: 'el-button--danger'
-      }
+        confirmButtonClass: 'el-button--danger',
+      },
     )
-    
+
     // TODO: 调用解散团队的API
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+
     ElMessage.success('团队已解散')
     // 在实际应用中，这里可能需要跳转到团队列表页面
   } catch {
@@ -745,28 +726,28 @@ const handleDeleteTeam = async () => {
   .settings-tabs {
     padding: 16px;
   }
-  
+
   .setting-section {
     padding: 16px 0;
   }
-  
+
   .avatar-upload {
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   .permission-item {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
   }
-  
+
   .danger-action {
     flex-direction: column;
     align-items: flex-start;
     gap: 16px;
   }
-  
+
   .danger-action-info p {
     max-width: 100%;
   }

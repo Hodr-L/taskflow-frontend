@@ -21,11 +21,11 @@
             </el-button>
           </div>
         </div>
-        
+
         <div class="team-info">
           <h1 class="team-name">{{ team.name }}</h1>
           <p class="team-description">{{ team.description }}</p>
-          
+
           <div class="team-meta">
             <div class="meta-item">
               <el-icon><User /></el-icon>
@@ -41,7 +41,7 @@
             </div>
           </div>
         </div>
-        
+
         <div class="team-actions">
           <el-dropdown @command="handleTeamAction">
             <el-button type="primary">
@@ -53,8 +53,12 @@
                 <el-dropdown-item command="edit">编辑团队信息</el-dropdown-item>
                 <el-dropdown-item command="invite">邀请成员</el-dropdown-item>
                 <el-dropdown-item command="settings">团队设置</el-dropdown-item>
-                <el-dropdown-item divided command="leave" v-if="userRole !== 'owner'">退出团队</el-dropdown-item>
-                <el-dropdown-item command="delete" v-if="userRole === 'owner'">解散团队</el-dropdown-item>
+                <el-dropdown-item divided command="leave" v-if="userRole !== 'owner'"
+                  >退出团队</el-dropdown-item
+                >
+                <el-dropdown-item command="delete" v-if="userRole === 'owner'"
+                  >解散团队</el-dropdown-item
+                >
               </el-dropdown-menu>
             </template>
           </el-dropdown>
@@ -65,47 +69,30 @@
     <!-- 标签页 -->
     <el-tabs v-model="activeTab" class="team-tabs">
       <el-tab-pane label="成员管理" name="members">
-        <TeamMembersTab 
+        <TeamMembersTab
           :team-id="teamId"
           :members="members"
           :user-role="userRole"
           @refresh="loadTeamData"
         />
       </el-tab-pane>
-      
+
       <el-tab-pane label="项目管理" name="projects">
-        <TeamProjectsTab 
-          :team-id="teamId"
-          :projects="projects"
-          :user-role="userRole"
-        />
+        <TeamProjectsTab :team-id="teamId" :projects="projects" :user-role="userRole" />
       </el-tab-pane>
-      
+
       <el-tab-pane label="团队设置" name="settings">
-        <TeamSettingsTab 
-          :team="team"
-          :user-role="userRole"
-          @update-team="handleTeamUpdate"
-        />
+        <TeamSettingsTab :team="team" :user-role="userRole" @update-team="handleTeamUpdate" />
       </el-tab-pane>
-      
+
       <el-tab-pane label="活动日志" name="activity">
         <TeamActivityTab :team-id="teamId" />
       </el-tab-pane>
     </el-tabs>
 
     <!-- 编辑团队对话框 -->
-    <el-dialog
-      v-model="showEditDialog"
-      title="编辑团队信息"
-      width="500px"
-    >
-      <el-form
-        ref="editFormRef"
-        :model="editForm"
-        :rules="editRules"
-        label-width="80px"
-      >
+    <el-dialog v-model="showEditDialog" title="编辑团队信息" width="500px">
+      <el-form ref="editFormRef" :model="editForm" :rules="editRules" label-width="80px">
         <el-form-item label="团队名称" prop="name">
           <el-input
             v-model="editForm.name"
@@ -137,11 +124,7 @@
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="showEditDialog = false">取消</el-button>
-          <el-button
-            type="primary"
-            :loading="updating"
-            @click="handleUpdateTeam"
-          >
+          <el-button type="primary" :loading="updating" @click="handleUpdateTeam">
             保存修改
           </el-button>
         </span>
@@ -149,22 +132,10 @@
     </el-dialog>
 
     <!-- 邀请成员对话框 -->
-    <el-dialog
-      v-model="showInviteDialog"
-      title="邀请成员"
-      width="500px"
-    >
-      <el-form
-        ref="inviteFormRef"
-        :model="inviteForm"
-        :rules="inviteRules"
-        label-width="80px"
-      >
+    <el-dialog v-model="showInviteDialog" title="邀请成员" width="500px">
+      <el-form ref="inviteFormRef" :model="inviteForm" :rules="inviteRules" label-width="80px">
         <el-form-item label="邮箱地址" prop="email">
-          <el-input
-            v-model="inviteForm.email"
-            placeholder="请输入要邀请的成员邮箱"
-          />
+          <el-input v-model="inviteForm.email" placeholder="请输入要邀请的成员邮箱" />
         </el-form-item>
 
         <el-form-item label="成员角色" prop="role">
@@ -189,11 +160,7 @@
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="showInviteDialog = false">取消</el-button>
-          <el-button
-            type="primary"
-            :loading="inviting"
-            @click="handleInviteMember"
-          >
+          <el-button type="primary" :loading="inviting" @click="handleInviteMember">
             发送邀请
           </el-button>
         </span>
@@ -206,13 +173,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { 
-  ArrowLeft, 
-  ArrowDown, 
-  User, 
-  Folder, 
-  Calendar 
-} from '@element-plus/icons-vue'
+import { ArrowLeft, ArrowDown, User, Folder, Calendar } from '@element-plus/icons-vue'
 
 // 导入子组件
 import TeamMembersTab from './components/TeamMembersTab.vue'
@@ -220,6 +181,7 @@ import TeamProjectsTab from './components/TeamProjectsTab.vue'
 import TeamSettingsTab from './components/TeamSettingsTab.vue'
 import TeamActivityTab from './components/TeamActivityTab.vue'
 import type { Team } from '../../types/team'
+import type { Member } from '../../types/member'
 
 const route = useRoute()
 const router = useRouter()
@@ -235,41 +197,44 @@ const team = ref<Team>({
   project_count: 3,
   owner_id: 1,
   privacy: 'private',
-  created_at: '2026-01-15T10:30:00Z'
+  created_at: '2026-01-15T10:30:00Z',
 })
 
 // 用户角色（当前用户在团队中的角色）
 const userRole = ref<'owner' | 'admin' | 'member'>('owner') // owner|admin|member
 
 // 成员数据
-const members = ref([
+const members = ref<Member[]>([
   {
     id: 1,
     username: 'zhangsan',
     email: 'zhangsan@example.com',
-    full_name: '张三',
+    fullname: '张三',
+    bio: '团队负责人',
     avatar_url: '',
     role: 'owner',
-    joined_at: '2026-01-15T10:30:00Z'
-  },
+    joined_at: '2026-01-15T10:30:00Z',
+  } as Member,
   {
     id: 2,
     username: 'lisi',
     email: 'lisi@example.com',
-    full_name: '李四',
+    fullname: '李四',
+    bio: '管理员',
     avatar_url: '',
     role: 'admin',
-    joined_at: '2026-01-20T14:15:00Z'
-  },
+    joined_at: '2026-01-20T14:15:00Z',
+  } as Member,
   {
     id: 3,
     username: 'wangwu',
     email: 'wangwu@example.com',
-    full_name: '王五',
+    fullname: '王五',
+    bio: '开发工程师',
     avatar_url: '',
     role: 'member',
-    joined_at: '2026-02-01T09:00:00Z'
-  }
+    joined_at: '2026-02-01T09:00:00Z',
+  } as Member,
 ])
 
 // 项目数据
@@ -283,7 +248,7 @@ const projects = ref([
     completed_tasks: 12,
     progress: 50,
     start_date: '2026-01-20',
-    end_date: '2026-03-20'
+    end_date: '2026-03-20',
   },
   {
     id: 2,
@@ -294,8 +259,8 @@ const projects = ref([
     completed_tasks: 9,
     progress: 50,
     start_date: '2026-02-01',
-    end_date: '2026-03-15'
-  }
+    end_date: '2026-03-15',
+  },
 ])
 
 // 状态
@@ -310,35 +275,33 @@ const inviting = ref(false)
 const editForm = reactive({
   name: team.value.name,
   description: team.value.description,
-  privacy: team.value.privacy
+  privacy: team.value.privacy,
 })
 
 const editRules = {
   name: [
     { required: true, message: '请输入团队名称', trigger: 'blur' },
-    { min: 2, max: 50, message: '团队名称长度在2到50个字符之间', trigger: 'blur' }
+    { min: 2, max: 50, message: '团队名称长度在2到50个字符之间', trigger: 'blur' },
   ],
   description: [
     { required: true, message: '请输入团队描述', trigger: 'blur' },
-    { max: 200, message: '团队描述不能超过200个字符', trigger: 'blur' }
-  ]
+    { max: 200, message: '团队描述不能超过200个字符', trigger: 'blur' },
+  ],
 }
 
 // 邀请表单
 const inviteForm = reactive({
   email: '',
   role: 'member',
-  message: ''
+  message: '',
 })
 
 const inviteRules = {
   email: [
     { required: true, message: '请输入邮箱地址', trigger: 'blur' },
-    { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' }
+    { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' },
   ],
-  role: [
-    { required: true, message: '请选择成员角色', trigger: 'change' }
-  ]
+  role: [{ required: true, message: '请选择成员角色', trigger: 'change' }],
 }
 
 // 生命周期
@@ -355,7 +318,7 @@ const loadTeamData = async () => {
     // members.value = response.data.members
     // projects.value = response.data.projects
     // userRole.value = response.data.user_role
-    
+
     console.log('加载团队数据:', teamId.value)
   } catch (error) {
     ElMessage.error('加载团队数据失败')
@@ -391,15 +354,15 @@ const handleTeamAction = (command: string) => {
 // 更新团队信息
 const handleUpdateTeam = async () => {
   updating.value = true
-  
+
   try {
     // TODO: 调用更新团队的API
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+
     team.value.name = editForm.name
     team.value.description = editForm.description
     team.value.privacy = editForm.privacy
-    
+
     ElMessage.success('团队信息更新成功')
     showEditDialog.value = false
   } catch (error) {
@@ -412,11 +375,11 @@ const handleUpdateTeam = async () => {
 // 邀请成员
 const handleInviteMember = async () => {
   inviting.value = true
-  
+
   try {
     // TODO: 调用邀请成员的API
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+
     ElMessage.success('邀请已发送')
     showInviteDialog.value = false
     inviteForm.email = ''
@@ -434,12 +397,12 @@ const handleLeaveTeam = async () => {
     await ElMessageBox.confirm('确定要退出这个团队吗？', '确认退出', {
       confirmButtonText: '确定退出',
       cancelButtonText: '取消',
-      type: 'warning'
+      type: 'warning',
     })
-    
+
     // TODO: 调用退出团队的API
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+
     ElMessage.success('已退出团队')
     router.push('/teams')
   } catch {
@@ -456,13 +419,13 @@ const handleDeleteTeam = async () => {
       {
         confirmButtonText: '确定解散',
         cancelButtonText: '取消',
-        type: 'error'
-      }
+        type: 'error',
+      },
     )
-    
+
     // TODO: 调用解散团队的API
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+
     ElMessage.success('团队已解散')
     router.push('/teams')
   } catch {
@@ -578,26 +541,26 @@ const formatDate = (dateString?: string) => {
   .team-detail-container {
     padding: 16px;
   }
-  
+
   .team-basic-info {
     flex-direction: column;
     align-items: center;
     text-align: center;
     gap: 20px;
   }
-  
+
   .team-meta {
     justify-content: center;
   }
-  
+
   .team-actions {
     width: 100%;
   }
-  
+
   .team-actions .el-dropdown {
     width: 100%;
   }
-  
+
   .team-actions .el-button {
     width: 100%;
   }
@@ -607,11 +570,11 @@ const formatDate = (dateString?: string) => {
   .team-header {
     padding: 20px;
   }
-  
+
   .team-name {
     font-size: 24px;
   }
-  
+
   .team-description {
     font-size: 14px;
   }

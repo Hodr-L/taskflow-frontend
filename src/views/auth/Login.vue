@@ -38,9 +38,7 @@
         <el-form-item>
           <div class="login-options">
             <el-checkbox v-model="rememberMe">记住我</el-checkbox>
-            <router-link to="/forgot-password" class="forgot-password">
-              忘记密码？
-            </router-link>
+            <router-link to="/forgot-password" class="forgot-password"> 忘记密码？ </router-link>
           </div>
         </el-form-item>
 
@@ -59,9 +57,7 @@
         <div class="login-footer">
           <p class="register-link">
             还没有账户？
-            <router-link to="/register" class="register-button">
-              立即注册
-            </router-link>
+            <router-link to="/register" class="register-button"> 立即注册 </router-link>
           </p>
         </div>
       </el-form>
@@ -102,7 +98,7 @@ const appVersion = import.meta.env.VITE_APP_VERSION
 // 表单数据
 const loginForm = reactive({
   email: '',
-  password: ''
+  password: '',
 })
 
 const rememberMe = ref(false)
@@ -113,24 +109,24 @@ const errorMessage = ref('')
 const loginRules = {
   email: [
     { required: true, message: '请输入邮箱地址', trigger: 'blur' },
-    { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' }
+    { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' },
   ],
   password: [
     { required: true, message: '请输入密码', trigger: 'blur' },
-    { min: 6, message: '密码长度不能少于6个字符', trigger: 'blur' }
-  ]
+    { min: 6, message: '密码长度不能少于6个字符', trigger: 'blur' },
+  ],
 }
 
 // 处理登录
 const handleLogin = async () => {
   if (loading.value) return
-  
+
   loading.value = true
   errorMessage.value = ''
-  
+
   try {
     const result = await authStore.userLogin(loginForm.email, loginForm.password)
-    
+
     if (result.success) {
       ElMessage.success('登录成功')
       router.push('/dashboard')
@@ -149,7 +145,7 @@ const loadRememberedCredentials = () => {
   if (localStorage.getItem('rememberMe') === 'true') {
     const savedEmail = localStorage.getItem('savedEmail')
     const savedPassword = localStorage.getItem('savedPassword')
-    
+
     if (savedEmail) loginForm.email = savedEmail
     if (savedPassword) loginForm.password = savedPassword
     rememberMe.value = true
@@ -295,7 +291,7 @@ loadRememberedCredentials()
   .login-card {
     padding: 30px 20px;
   }
-  
+
   .login-title {
     font-size: 24px;
   }

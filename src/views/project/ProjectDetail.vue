@@ -1,6 +1,6 @@
-﻿<template>
+<template>
   <div class="project-detail-container">
-    <!-- 椤圭洰澶撮儴 -->
+    <!-- 项目头部 -->
     <div class="project-header">
       <div class="project-header-main">
         <div class="project-title-section">
@@ -19,19 +19,19 @@
         </div>
 
         <div class="project-actions">
-          <el-button type="primary" :icon="Edit" @click="handleEdit">缂栬緫椤圭洰</el-button>
-          <el-button :icon="Share">鍒嗕韩</el-button>
+          <el-button type="primary" :icon="Edit" @click="handleEdit">编辑项目</el-button>
+          <el-button :icon="Share">分享</el-button>
           <el-dropdown @command="handleMoreCommand">
-            <el-button :icon="More">鏇村</el-button>
+            <el-button :icon="More">更多</el-button>
             <template #dropdown>
               <el-dropdown-menu>
                 <el-dropdown-item :icon="DocumentCopy" command="duplicate"
-                  >澶嶅埗椤圭洰</el-dropdown-item
+                  >复制项目</el-dropdown-item
                 >
-                <el-dropdown-item :icon="Download" command="export">瀵煎嚭椤圭洰</el-dropdown-item>
-                <el-dropdown-item :icon="Archive" command="archive">褰掓。椤圭洰</el-dropdown-item>
+                <el-dropdown-item :icon="Download" command="export">导出项目</el-dropdown-item>
+                <el-dropdown-item :icon="Archive" command="archive">归档项目</el-dropdown-item>
                 <el-dropdown-item divided :icon="Delete" command="delete"
-                  >鍒犻櫎椤圭洰</el-dropdown-item
+                  >删除项目</el-dropdown-item
                 >
               </el-dropdown-menu>
             </template>
@@ -40,16 +40,16 @@
       </div>
 
       <div class="project-description">
-        <p>{{ project.description || '鏆傛棤椤圭洰鎻忚堪' }}</p>
+        <p>{{ project.description || '暂无项目描述' }}</p>
       </div>
     </div>
 
-    <!-- 椤圭洰杩涘害鍜岀粺璁?-->
+    <!-- 项目进度和统计 -->
     <div class="project-stats-cards">
       <el-card class="progress-card">
         <template #header>
           <div class="card-header">
-            <span class="card-title">椤圭洰杩涘害</span>
+            <span class="card-title">项目进度</span>
           </div>
         </template>
         <div class="progress-content">
@@ -61,14 +61,14 @@
           />
           <div class="progress-details">
             <div class="progress-text">
-              <span class="progress-label">宸插畬鎴?/span>
+              <span class="progress-label">已完成</span>
               <span class="progress-value"
                 >{{ project.completed_tasks_count || 0 }} / {{ project.tasks_count || 0 }}</span
               >
             </div>
             <div class="progress-text">
-              <span class="progress-label">鍓╀綑鏃堕棿</span>
-              <span class="progress-value">{{ getRemainingDays() }} 澶?/span>
+              <span class="progress-label">剩余时间</span>
+              <span class="progress-value">{{ getRemainingDays() }} 天</span>
             </div>
           </div>
         </div>
@@ -77,35 +77,35 @@
       <el-card class="stats-card">
         <template #header>
           <div class="card-header">
-            <span class="card-title">椤圭洰缁熻</span>
+            <span class="card-title">项目统计</span>
           </div>
         </template>
         <div class="stats-content">
           <div class="stat-item">
             <el-icon class="stat-icon"><User /></el-icon>
             <div class="stat-info">
-              <span class="stat-label">鎴愬憳</span>
-              <span class="stat-value">{{ project.members_count || 0 }} 浜?/span>
+              <span class="stat-label">成员</span>
+              <span class="stat-value">{{ project.members_count || 0 }} 人</span>
             </div>
           </div>
           <div class="stat-item">
             <el-icon class="stat-icon"><List /></el-icon>
             <div class="stat-info">
-              <span class="stat-label">浠诲姟鎬绘暟</span>
+              <span class="stat-label">任务总数</span>
               <span class="stat-value">{{ project.tasks_count || 0 }}</span>
             </div>
           </div>
           <div class="stat-item">
             <el-icon class="stat-icon"><Check /></el-icon>
             <div class="stat-info">
-              <span class="stat-label">宸插畬鎴?/span>
+              <span class="stat-label">已完成</span>
               <span class="stat-value">{{ project.completed_tasks_count || 0 }}</span>
             </div>
           </div>
           <div class="stat-item">
             <el-icon class="stat-icon"><Clock /></el-icon>
             <div class="stat-info">
-              <span class="stat-label">杩涜涓?/span>
+              <span class="stat-label">进行中</span>
               <span class="stat-value">{{
                 (project.tasks_count || 0) - (project.completed_tasks_count || 0)
               }}</span>
@@ -117,12 +117,12 @@
       <el-card class="info-card">
         <template #header>
           <div class="card-header">
-            <span class="card-title">椤圭洰淇℃伅</span>
+            <span class="card-title">项目信息</span>
           </div>
         </template>
         <div class="info-content">
           <div class="info-item">
-            <span class="info-label">璐熻矗浜?/span>
+            <span class="info-label">负责人</span>
             <div class="info-value">
               <el-avatar :size="24" :src="project.owner?.avatar_url" class="owner-avatar">
                 {{
@@ -131,70 +131,70 @@
                   'U'
                 }}
               </el-avatar>
-              <span>{{ project.owner?.fullname || project.owner?.username || '鏈煡鐢ㄦ埛' }}</span>
+              <span>{{ project.owner?.fullname || project.owner?.username || '未知用户' }}</span>
             </div>
           </div>
           <div class="info-item">
-            <span class="info-label">寮€濮嬫棩鏈?/span>
+            <span class="info-label">开始日期</span>
             <span class="info-value">{{ formatDate(project.start_date) }}</span>
           </div>
           <div class="info-item">
-            <span class="info-label">鎴鏃ユ湡</span>
+            <span class="info-label">截止日期</span>
             <span class="info-value" :class="{ 'deadline-warning': isDeadlineNear() }">
-              {{ formatDate(project.deadline) || '鏈缃? }}
+              {{ formatDate(project.deadline) || '未设置' }}
             </span>
           </div>
           <div class="info-item">
-            <span class="info-label">鍒涘缓鏃堕棿</span>
+            <span class="info-label">创建时间</span>
             <span class="info-value">{{ formatDate(project.created_at) }}</span>
           </div>
         </div>
       </el-card>
     </div>
 
-    <!-- 閫夐」鍗?-->
+    <!-- 选项卡 -->
     <div class="project-tabs">
       <el-tabs v-model="activeTab" class="project-detail-tabs">
-        <el-tab-pane label="姒傝" name="overview">
+        <el-tab-pane label="概览" name="overview">
           <div class="tab-content">
-            <h3>椤圭洰姒傝</h3>
-            <p>杩欓噷鏄」鐩殑姒傝淇℃伅锛屾樉绀哄叧閿寚鏍囧拰鏈€鏂板姩鎬併€?/p>
-            <!-- 杩欓噷鍙互娣诲姞鏇村姒傝鍐呭 -->
+            <h3>项目概览</h3>
+            <p>这里是项目的概览信息，显示关键指标和最新动态。</p>
+            <!-- 这里可以添加更多概览内容 -->
           </div>
         </el-tab-pane>
-        <el-tab-pane label="浠诲姟" name="tasks">
+        <el-tab-pane label="任务" name="tasks">
           <div class="tab-content">
-            <h3>浠诲姟鍒楄〃</h3>
-            <p>椤圭洰浠诲姟绠＄悊鍔熻兘寮€鍙戜腑...</p>
-            <!-- 杩欓噷鍙互娣诲姞浠诲姟鍒楄〃 -->
+            <h3>任务列表</h3>
+            <p>项目任务管理功能开发中...</p>
+            <!-- 这里可以添加任务列表 -->
           </div>
         </el-tab-pane>
-        <el-tab-pane label="鎴愬憳" name="members">
+        <el-tab-pane label="成员" name="members">
           <div class="tab-content">
-            <h3>椤圭洰鎴愬憳</h3>
-            <p>椤圭洰鎴愬憳绠＄悊鍔熻兘寮€鍙戜腑...</p>
-            <!-- 杩欓噷鍙互娣诲姞鎴愬憳鍒楄〃 -->
+            <h3>项目成员</h3>
+            <p>项目成员管理功能开发中...</p>
+            <!-- 这里可以添加成员列表 -->
           </div>
         </el-tab-pane>
-        <el-tab-pane label="閲岀▼纰? name="milestones">
+        <el-tab-pane label="里程碑" name="milestones">
           <div class="tab-content">
-            <h3>椤圭洰閲岀▼纰?/h3>
-            <p>閲岀▼纰戠鐞嗗姛鑳藉紑鍙戜腑...</p>
-            <!-- 杩欓噷鍙互娣诲姞閲岀▼纰?-->
+            <h3>项目里程碑</h3>
+            <p>里程碑管理功能开发中...</p>
+            <!-- 这里可以添加里程碑 -->
           </div>
         </el-tab-pane>
-        <el-tab-pane label="鏂囦欢" name="files">
+        <el-tab-pane label="文件" name="files">
           <div class="tab-content">
-            <h3>椤圭洰鏂囦欢</h3>
-            <p>鏂囦欢绠＄悊鍔熻兘寮€鍙戜腑...</p>
-            <!-- 杩欓噷鍙互娣诲姞鏂囦欢鍒楄〃 -->
+            <h3>项目文件</h3>
+            <p>文件管理功能开发中...</p>
+            <!-- 这里可以添加文件列表 -->
           </div>
         </el-tab-pane>
-        <el-tab-pane label="璁剧疆" name="settings">
+        <el-tab-pane label="设置" name="settings">
           <div class="tab-content">
-            <h3>椤圭洰璁剧疆</h3>
-            <p>椤圭洰璁剧疆鍔熻兘寮€鍙戜腑...</p>
-            <!-- 杩欓噷鍙互娣诲姞璁剧疆琛ㄥ崟 -->
+            <h3>项目设置</h3>
+            <p>项目设置功能开发中...</p>
+            <!-- 这里可以添加设置表单 -->
           </div>
         </el-tab-pane>
       </el-tabs>
@@ -224,11 +224,12 @@ import type { Project } from '@/types/project'
 const route = useRoute()
 const router = useRouter()
 
-// 鍝嶅簲寮忔暟鎹?const project = ref<Project>({
+// 响应式数据
+const project = ref<Project>({
   id: Number(route.params.id) || 1,
-  name: '缃戠珯閲嶆瀯椤圭洰',
+  name: '网站重构项目',
   description:
-    '瀵圭幇鏈夌綉绔欒繘琛岀幇浠ｅ寲閲嶆瀯锛屾彁鍗囩敤鎴蜂綋楠屻€傚寘鎷墠绔晫闈㈡洿鏂般€佸悗绔€ц兘浼樺寲鍜屾暟鎹簱杩佺Щ銆?,
+    '对现有网站进行现代化重构，提升用户体验。包括前端界面更新、后端性能优化和数据库迁移。',
   team_id: 1,
   owner_id: 1,
   status: 'active',
@@ -238,7 +239,7 @@ const router = useRouter()
   deadline: '2026-04-30',
   budget: 50000,
   actual_cost: 32000,
-  tags: ['鍓嶇', '鍚庣', '璁捐'],
+  tags: ['前端', '后端', '设计'],
   members_count: 8,
   tasks_count: 45,
   completed_tasks_count: 29,
@@ -246,12 +247,12 @@ const router = useRouter()
   owner: {
     id: 1,
     username: 'admin',
-    fullname: '绠＄悊鍛?,
+    fullname: '管理员',
     avatar_url: 'https://via.placeholder.com/50',
   },
   team: {
     id: 1,
-    name: '鐮斿彂閮?,
+    name: '研发部',
   },
 })
 
@@ -264,14 +265,15 @@ const progressColors = [
   { color: '#6f7ad3', percentage: 100 },
 ]
 
-// 璁＄畻灞炴€?// const isProjectManager = computed(() => {
-//   // 杩欓噷搴旇鏍规嵁鐢ㄦ埛鏉冮檺鍒ゆ柇
+// 计算属性
+// const isProjectManager = computed(() => {
+//   // 这里应该根据用户权限判断
 //   return true
 // })
 
-// 鏂规硶
+// 方法
 const handleEdit = () => {
-  ElMessage.info('缂栬緫椤圭洰鍔熻兘寮€鍙戜腑...')
+  ElMessage.info('编辑项目功能开发中...')
 }
 
 const handleMoreCommand = (command: string) => {
@@ -292,30 +294,30 @@ const handleMoreCommand = (command: string) => {
 }
 
 const duplicateProject = () => {
-  ElMessageBox.confirm('纭畾瑕佸鍒惰椤圭洰鍚楋紵', '澶嶅埗椤圭洰', { type: 'info' }).then(() => {
-    ElMessage.success('椤圭洰澶嶅埗鎴愬姛')
+  ElMessageBox.confirm('确定要复制该项目吗？', '复制项目', { type: 'info' }).then(() => {
+    ElMessage.success('项目复制成功')
   })
 }
 
 const exportProject = () => {
-  ElMessage.info('椤圭洰瀵煎嚭鍔熻兘寮€鍙戜腑...')
+  ElMessage.info('项目导出功能开发中...')
 }
 
 const archiveProject = () => {
-  ElMessageBox.confirm('纭畾瑕佸綊妗ｈ椤圭洰鍚楋紵褰掓。鍚庨」鐩皢鍙樹负鍙鐘舵€併€?, '褰掓。椤圭洰', {
+  ElMessageBox.confirm('确定要归档该项目吗？归档后项目将变为只读状态。', '归档项目', {
     type: 'warning',
   }).then(() => {
     project.value.status = 'archived'
-    ElMessage.success('椤圭洰宸插綊妗?)
+    ElMessage.success('项目已归档')
   })
 }
 
 const deleteProject = () => {
-  ElMessageBox.confirm('纭畾瑕佸垹闄よ椤圭洰鍚楋紵鍒犻櫎鍚庢暟鎹皢鏃犳硶鎭㈠銆?, '鍒犻櫎椤圭洰', {
+  ElMessageBox.confirm('确定要删除该项目吗？删除后数据将无法恢复。', '删除项目', {
     type: 'error',
-    confirmButtonText: '鍒犻櫎',
+    confirmButtonText: '删除',
   }).then(() => {
-    ElMessage.success('椤圭洰宸插垹闄?)
+    ElMessage.success('项目已删除')
     router.push('/projects')
   })
 }
@@ -333,11 +335,11 @@ const getStatusTagType = (status: string) => {
 
 const getStatusText = (status: string) => {
   const map: Record<string, string> = {
-    planning: '瑙勫垝涓?,
-    active: '杩涜涓?,
-    paused: '宸叉殏鍋?,
-    completed: '宸插畬鎴?,
-    archived: '宸插綊妗?,
+    planning: '规划中',
+    active: '进行中',
+    paused: '已暂停',
+    completed: '已完成',
+    archived: '已归档',
   }
   return map[status] || status
 }
@@ -354,16 +356,16 @@ const getPriorityTagType = (priority: string) => {
 
 const getPriorityText = (priority: string) => {
   const map: Record<string, string> = {
-    low: '浣?,
-    medium: '涓?,
-    high: '楂?,
-    urgent: '绱ф€?,
+    low: '低',
+    medium: '中',
+    high: '高',
+    urgent: '紧急',
   }
   return map[priority] || priority
 }
 
 const formatDate = (dateString?: string) => {
-  if (!dateString) return '鏈缃?
+  if (!dateString) return '未设置'
   const date = new Date(dateString)
   return date.toLocaleDateString('zh-CN')
 }
@@ -387,9 +389,9 @@ const isDeadlineNear = () => {
 }
 
 onMounted(() => {
-  // 杩欓噷搴旇鏍规嵁璺敱鍙傛暟鍔犺浇椤圭洰鏁版嵁
+  // 这里应该根据路由参数加载项目数据
   const projectId = route.params.id
-  console.log('鍔犺浇椤圭洰鏁版嵁:', projectId)
+  console.log('加载项目数据:', projectId)
 })
 </script>
 

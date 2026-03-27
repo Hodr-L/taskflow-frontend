@@ -1,7 +1,8 @@
-﻿import { http } from './api'
+import { http } from './api'
 import type { LoginRequest, RegisterRequest, User } from '@/types/auth'
 
-// 鐢ㄦ埛鐧诲綍杩斿洖鐨勬暟鎹被鍨?export interface AuthData {
+// 用户登录返回的数据类型
+export interface AuthData {
   access_token: string
   refresh_token?: string
   expires_in?: number
@@ -9,36 +10,37 @@ import type { LoginRequest, RegisterRequest, User } from '@/types/auth'
   user?: User
 }
 
-// 鐢ㄦ埛鐧诲綍
+// 用户登录
 export const login = (data: LoginRequest): Promise<AuthData> => {
   return http.post('/auth/login', data)
 }
 
-// 鐢ㄦ埛娉ㄥ唽
+// 用户注册
 export const register = (data: RegisterRequest): Promise<AuthData> => {
   return http.post('/auth/register', data)
 }
 
-// 鍒锋柊token
+// 刷新token
 export const refreshToken = (): Promise<AuthData> => {
   return http.post('/auth/refresh')
 }
 
-// 閫€鍑虹櫥褰?export const logout = (): Promise<void> => {
+// 退出登录
+export const logout = (): Promise<void> => {
   return http.post('/auth/token/logout')
 }
 
-// 鑾峰彇鐢ㄦ埛淇℃伅
+// 获取用户信息
 export const getProfile = (): Promise<User> => {
   return http.get('/users/profile')
 }
 
-// 鏇存柊鐢ㄦ埛淇℃伅
+// 更新用户信息
 export const updateProfile = (data: Partial<User>): Promise<User> => {
   return http.put('/users/profile', data)
 }
 
-// 淇敼瀵嗙爜
+// 修改密码
 export const changePassword = (data: {
   old_password: string
   new_password: string

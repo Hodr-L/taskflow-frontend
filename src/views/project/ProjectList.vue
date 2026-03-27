@@ -1,22 +1,22 @@
-﻿<template>
+<template>
   <div class="project-list-container">
     <div class="project-header">
-      <h2 class="project-title">椤圭洰绠＄悊</h2>
-      <p class="project-subtitle">鍒涘缓鍜岀鐞嗛」鐩紝璺熻釜杩涘害</p>
+      <h2 class="project-title">项目管理</h2>
+      <p class="project-subtitle">创建和管理项目，跟踪进度</p>
 
       <div class="project-actions">
         <el-button type="primary" size="large" @click="showCreateDialog = true">
           <el-icon><Plus /></el-icon>
-          鍒涘缓椤圭洰
+          创建项目
         </el-button>
       </div>
     </div>
 
-    <!-- 杩囨护鍜屾悳绱?-->
+    <!-- 过滤和搜索 -->
     <div class="project-filters">
       <el-input
         v-model="searchText"
-        placeholder="鎼滅储椤圭洰鍚嶇О鎴栨弿杩?
+        placeholder="搜索项目名称或描述"
         clearable
         class="search-input"
         @clear="handleSearch"
@@ -27,23 +27,23 @@
         </template>
       </el-input>
 
-      <el-select v-model="filterStatus" placeholder="鐘舵€? clearable @change="handleFilter">
-        <el-option label="瑙勫垝涓? value="planning" />
-        <el-option label="杩涜涓? value="active" />
-        <el-option label="宸叉殏鍋? value="paused" />
-        <el-option label="宸插畬鎴? value="completed" />
-        <el-option label="宸插綊妗? value="archived" />
+      <el-select v-model="filterStatus" placeholder="状态" clearable @change="handleFilter">
+        <el-option label="规划中" value="planning" />
+        <el-option label="进行中" value="active" />
+        <el-option label="已暂停" value="paused" />
+        <el-option label="已完成" value="completed" />
+        <el-option label="已归档" value="archived" />
       </el-select>
 
-      <el-select v-model="filterPriority" placeholder="浼樺厛绾? clearable @change="handleFilter">
-        <el-option label="浣? value="low" />
-        <el-option label="涓? value="medium" />
-        <el-option label="楂? value="high" />
-        <el-option label="绱ф€? value="urgent" />
+      <el-select v-model="filterPriority" placeholder="优先级" clearable @change="handleFilter">
+        <el-option label="低" value="low" />
+        <el-option label="中" value="medium" />
+        <el-option label="高" value="high" />
+        <el-option label="紧急" value="urgent" />
       </el-select>
     </div>
 
-    <!-- 椤圭洰鍒楄〃 -->
+    <!-- 项目列表 -->
     <div class="project-grid">
       <el-card
         v-for="project in filteredProjects"
@@ -67,11 +67,11 @@
               <el-icon class="project-menu"><More /></el-icon>
               <template #dropdown>
                 <el-dropdown-menu>
-                  <el-dropdown-item command="edit">缂栬緫椤圭洰</el-dropdown-item>
-                  <el-dropdown-item command="members">绠＄悊鎴愬憳</el-dropdown-item>
-                  <el-dropdown-item command="tasks">鏌ョ湅浠诲姟</el-dropdown-item>
-                  <el-dropdown-item divided command="archive">褰掓。椤圭洰</el-dropdown-item>
-                  <el-dropdown-item command="delete">鍒犻櫎椤圭洰</el-dropdown-item>
+                  <el-dropdown-item command="edit">编辑项目</el-dropdown-item>
+                  <el-dropdown-item command="members">管理成员</el-dropdown-item>
+                  <el-dropdown-item command="tasks">查看任务</el-dropdown-item>
+                  <el-dropdown-item divided command="archive">归档项目</el-dropdown-item>
+                  <el-dropdown-item command="delete">删除项目</el-dropdown-item>
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
@@ -79,12 +79,12 @@
         </template>
 
         <div class="project-description">
-          {{ project.description || '鏆傛棤鎻忚堪' }}
+          {{ project.description || '暂无描述' }}
         </div>
 
         <div class="project-progress">
           <div class="progress-info">
-            <span>杩涘害</span>
+            <span>进度</span>
             <span class="progress-percent">{{ project.progress }}%</span>
           </div>
           <el-progress :percentage="project.progress" :show-text="false" />
@@ -93,15 +93,15 @@
         <div class="project-stats">
           <div class="stat-item">
             <el-icon><User /></el-icon>
-            <span>{{ project.members_count || 0 }} 鎴愬憳</span>
+            <span>{{ project.members_count || 0 }} 成员</span>
           </div>
           <div class="stat-item">
             <el-icon><List /></el-icon>
-            <span>{{ project.tasks_count || 0 }} 浠诲姟</span>
+            <span>{{ project.tasks_count || 0 }} 任务</span>
           </div>
           <div class="stat-item">
             <el-icon><Check /></el-icon>
-            <span>{{ project.completed_tasks_count || 0 }} 瀹屾垚</span>
+            <span>{{ project.completed_tasks_count || 0 }} 完成</span>
           </div>
         </div>
 
@@ -115,55 +115,55 @@
               }}
             </el-avatar>
             <span class="owner-name">{{
-              project.owner?.fullname || project.owner?.username || '鏈煡鐢ㄦ埛'
+              project.owner?.fullname || project.owner?.username || '未知用户'
             }}</span>
           </div>
           <div class="project-date">
             <el-icon><Calendar /></el-icon>
-            <span v-if="project.deadline">鎴: {{ formatDate(project.deadline) }}</span>
-            <span v-else>鏃犳埅姝㈡棩鏈?/span>
+            <span v-if="project.deadline">截止: {{ formatDate(project.deadline) }}</span>
+            <span v-else>无截止日期</span>
           </div>
         </div>
       </el-card>
 
-      <!-- 绌虹姸鎬?-->
+      <!-- 空状态 -->
       <div v-if="filteredProjects.length === 0" class="empty-state">
-        <el-empty description="鏆傛棤椤圭洰">
-          <el-button type="primary" @click="showCreateDialog = true"> 鍒涘缓绗竴涓」鐩?</el-button>
+        <el-empty description="暂无项目">
+          <el-button type="primary" @click="showCreateDialog = true"> 创建第一个项目 </el-button>
         </el-empty>
       </div>
     </div>
 
-    <!-- 鍒涘缓椤圭洰瀵硅瘽妗?-->
+    <!-- 创建项目对话框 -->
     <el-dialog
       v-model="showCreateDialog"
-      title="鍒涘缓椤圭洰"
+      title="创建项目"
       width="500px"
       :before-close="handleDialogClose"
     >
       <el-form ref="createFormRef" :model="createForm" :rules="createRules" label-width="80px">
-        <el-form-item label="椤圭洰鍚嶇О" prop="name">
+        <el-form-item label="项目名称" prop="name">
           <el-input
             v-model="createForm.name"
-            placeholder="璇疯緭鍏ラ」鐩悕绉?
+            placeholder="请输入项目名称"
             maxlength="50"
             show-word-limit
           />
         </el-form-item>
 
-        <el-form-item label="椤圭洰鎻忚堪" prop="description">
+        <el-form-item label="项目描述" prop="description">
           <el-input
             v-model="createForm.description"
             type="textarea"
             :rows="3"
-            placeholder="璇疯緭鍏ラ」鐩弿杩?
+            placeholder="请输入项目描述"
             maxlength="200"
             show-word-limit
           />
         </el-form-item>
 
-        <el-form-item label="鎵€灞炲洟闃? prop="team_id">
-          <el-select v-model="createForm.team_id" placeholder="璇烽€夋嫨鍥㈤槦" style="width: 100%">
+        <el-form-item label="所属团队" prop="team_id">
+          <el-select v-model="createForm.team_id" placeholder="请选择团队" style="width: 100%">
             <el-option
               v-for="team in availableTeams"
               :key="team.id"
@@ -173,28 +173,28 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="椤圭洰鐘舵€? prop="status">
-          <el-select v-model="createForm.status" placeholder="璇烽€夋嫨鐘舵€? style="width: 100%">
-            <el-option label="瑙勫垝涓? value="planning" />
-            <el-option label="杩涜涓? value="active" />
-            <el-option label="宸叉殏鍋? value="paused" />
+        <el-form-item label="项目状态" prop="status">
+          <el-select v-model="createForm.status" placeholder="请选择状态" style="width: 100%">
+            <el-option label="规划中" value="planning" />
+            <el-option label="进行中" value="active" />
+            <el-option label="已暂停" value="paused" />
           </el-select>
         </el-form-item>
 
-        <el-form-item label="浼樺厛绾? prop="priority">
-          <el-select v-model="createForm.priority" placeholder="璇烽€夋嫨浼樺厛绾? style="width: 100%">
-            <el-option label="浣? value="low" />
-            <el-option label="涓? value="medium" />
-            <el-option label="楂? value="high" />
-            <el-option label="绱ф€? value="urgent" />
+        <el-form-item label="优先级" prop="priority">
+          <el-select v-model="createForm.priority" placeholder="请选择优先级" style="width: 100%">
+            <el-option label="低" value="low" />
+            <el-option label="中" value="medium" />
+            <el-option label="高" value="high" />
+            <el-option label="紧急" value="urgent" />
           </el-select>
         </el-form-item>
 
-        <el-form-item label="鎴鏃ユ湡" prop="deadline">
+        <el-form-item label="截止日期" prop="deadline">
           <el-date-picker
             v-model="createForm.deadline"
             type="date"
-            placeholder="閫夋嫨鎴鏃ユ湡"
+            placeholder="选择截止日期"
             style="width: 100%"
             :disabled-date="disabledDate"
           />
@@ -203,9 +203,9 @@
 
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="handleDialogClose">鍙栨秷</el-button>
+          <el-button @click="handleDialogClose">取消</el-button>
           <el-button type="primary" @click="handleCreateSubmit" :loading="creating">
-            鍒涘缓
+            创建
           </el-button>
         </span>
       </template>
@@ -224,11 +224,12 @@ import type { Team } from '@/types/team'
 
 const router = useRouter()
 
-// 鍝嶅簲寮忔暟鎹?const projects = ref<Project[]>([
+// 响应式数据
+const projects = ref<Project[]>([
   {
     id: 1,
-    name: '缃戠珯閲嶆瀯椤圭洰',
-    description: '瀵圭幇鏈夌綉绔欒繘琛岀幇浠ｅ寲閲嶆瀯锛屾彁鍗囩敤鎴蜂綋楠?,
+    name: '网站重构项目',
+    description: '对现有网站进行现代化重构，提升用户体验',
     team_id: 1,
     owner_id: 1,
     status: 'active',
@@ -238,7 +239,7 @@ const router = useRouter()
     deadline: '2026-04-30',
     budget: 50000,
     actual_cost: 32000,
-    tags: ['鍓嶇', '鍚庣', '璁捐'],
+    tags: ['前端', '后端', '设计'],
     members_count: 8,
     tasks_count: 45,
     completed_tasks_count: 29,
@@ -246,18 +247,18 @@ const router = useRouter()
     owner: {
       id: 1,
       username: 'admin',
-      fullname: '绠＄悊鍛?,
+      fullname: '管理员',
       avatar_url: 'https://via.placeholder.com/50',
     },
     team: {
       id: 1,
-      name: '鐮斿彂閮?,
+      name: '研发部',
     },
   },
   {
     id: 2,
-    name: '绉诲姩搴旂敤寮€鍙?,
-    description: '寮€鍙戝叏鏂扮殑璺ㄥ钩鍙扮Щ鍔ㄥ簲鐢?,
+    name: '移动应用开发',
+    description: '开发全新的跨平台移动应用',
     team_id: 2,
     owner_id: 2,
     status: 'planning',
@@ -267,7 +268,7 @@ const router = useRouter()
     deadline: '2026-06-30',
     budget: 80000,
     actual_cost: 15000,
-    tags: ['绉诲姩绔?, 'React Native', 'UI璁捐'],
+    tags: ['移动端', 'React Native', 'UI设计'],
     members_count: 5,
     tasks_count: 32,
     completed_tasks_count: 6,
@@ -280,13 +281,13 @@ const router = useRouter()
     },
     team: {
       id: 2,
-      name: '绉诲姩寮€鍙戠粍',
+      name: '移动开发组',
     },
   },
   {
     id: 3,
-    name: '鏁版嵁杩佺Щ椤圭洰',
-    description: '灏嗘棫绯荤粺鏁版嵁杩佺Щ鍒版柊骞冲彴',
+    name: '数据迁移项目',
+    description: '将旧系统数据迁移到新平台',
     team_id: 1,
     owner_id: 3,
     status: 'completed',
@@ -296,7 +297,7 @@ const router = useRouter()
     deadline: '2026-03-15',
     budget: 30000,
     actual_cost: 28000,
-    tags: ['鏁版嵁搴?, '杩佺Щ', 'ETL'],
+    tags: ['数据库', '迁移', 'ETL'],
     members_count: 4,
     tasks_count: 28,
     completed_tasks_count: 28,
@@ -309,7 +310,7 @@ const router = useRouter()
     },
     team: {
       id: 1,
-      name: '鐮斿彂閮?,
+      name: '研发部',
     },
   },
 ])
@@ -317,24 +318,24 @@ const router = useRouter()
 const availableTeams = ref<Team[]>([
   {
     id: 1,
-    name: '鐮斿彂閮?,
-    description: '鎶€鏈爺鍙戝洟闃?,
+    name: '研发部',
+    description: '技术研发团队',
     owner_id: 1,
     privacy: 'private',
     created_at: '2026-01-01',
   },
   {
     id: 2,
-    name: '绉诲姩寮€鍙戠粍',
-    description: '绉诲姩搴旂敤寮€鍙?,
+    name: '移动开发组',
+    description: '移动应用开发',
     owner_id: 2,
     privacy: 'private',
     created_at: '2026-01-15',
   },
   {
     id: 3,
-    name: '璁捐閮?,
-    description: 'UI/UX璁捐',
+    name: '设计部',
+    description: 'UI/UX设计',
     owner_id: 3,
     privacy: 'public',
     created_at: '2026-02-01',
@@ -359,14 +360,15 @@ const createForm = ref({
 const createFormRef = ref<FormInstance>()
 const createRules: FormRules = {
   name: [
-    { required: true, message: '璇疯緭鍏ラ」鐩悕绉?, trigger: 'blur' },
-    { min: 2, max: 50, message: '闀垮害鍦?2 鍒?50 涓瓧绗?, trigger: 'blur' },
+    { required: true, message: '请输入项目名称', trigger: 'blur' },
+    { min: 2, max: 50, message: '长度在 2 到 50 个字符', trigger: 'blur' },
   ],
-  description: [{ max: 200, message: '涓嶈兘瓒呰繃 200 涓瓧绗?, trigger: 'blur' }],
-  team_id: [{ required: true, message: '璇烽€夋嫨鎵€灞炲洟闃?, trigger: 'change' }],
+  description: [{ max: 200, message: '不能超过 200 个字符', trigger: 'blur' }],
+  team_id: [{ required: true, message: '请选择所属团队', trigger: 'change' }],
 }
 
-// 璁＄畻灞炴€?const filteredProjects = computed(() => {
+// 计算属性
+const filteredProjects = computed(() => {
   return projects.value.filter((project) => {
     const matchesSearch =
       !searchText.value ||
@@ -380,12 +382,14 @@ const createRules: FormRules = {
   })
 })
 
-// 鏂规硶
+// 方法
 const handleSearch = () => {
-  // 鎼滅储閫昏緫宸查€氳繃璁＄畻灞炴€у疄鐜?}
+  // 搜索逻辑已通过计算属性实现
+}
 
 const handleFilter = () => {
-  // 杩囨护閫昏緫宸查€氳繃璁＄畻灞炴€у疄鐜?}
+  // 过滤逻辑已通过计算属性实现
+}
 
 const viewProject = (projectId: number) => {
   router.push(`/projects/${projectId}`)
@@ -415,13 +419,13 @@ const handleProjectCommand = (command: string, projectId: number) => {
 }
 
 const editProject = (project: Project) => {
-  ElMessage.info(`缂栬緫椤圭洰: ${project.name}`)
-  // TODO: 瀹炵幇缂栬緫鍔熻兘
+  ElMessage.info(`编辑项目: ${project.name}`)
+  // TODO: 实现编辑功能
 }
 
 const manageMembers = (projectId: number) => {
-  ElMessage.info(`绠＄悊椤圭洰鎴愬憳: ${projectId}`)
-  // TODO: 瀹炵幇鎴愬憳绠＄悊
+  ElMessage.info(`管理项目成员: ${projectId}`)
+  // TODO: 实现成员管理
 }
 
 const viewTasks = (projectId: number) => {
@@ -429,24 +433,24 @@ const viewTasks = (projectId: number) => {
 }
 
 const archiveProject = (projectId: number) => {
-  ElMessageBox.confirm('纭畾瑕佸綊妗ｈ椤圭洰鍚楋紵褰掓。鍚庨」鐩皢鍙樹负鍙鐘舵€併€?, '纭褰掓。', {
+  ElMessageBox.confirm('确定要归档该项目吗？归档后项目将变为只读状态。', '确认归档', {
     type: 'warning',
   }).then(() => {
     const project = projects.value.find((p) => p.id === projectId)
     if (project) {
       project.status = 'archived'
-      ElMessage.success('椤圭洰宸插綊妗?)
+      ElMessage.success('项目已归档')
     }
   })
 }
 
 const deleteProject = (projectId: number) => {
-  ElMessageBox.confirm('纭畾瑕佸垹闄よ椤圭洰鍚楋紵鍒犻櫎鍚庢暟鎹皢鏃犳硶鎭㈠銆?, '纭鍒犻櫎', {
+  ElMessageBox.confirm('确定要删除该项目吗？删除后数据将无法恢复。', '确认删除', {
     type: 'error',
-    confirmButtonText: '鍒犻櫎',
+    confirmButtonText: '删除',
   }).then(() => {
     projects.value = projects.value.filter((p) => p.id !== projectId)
-    ElMessage.success('椤圭洰宸插垹闄?)
+    ElMessage.success('项目已删除')
   })
 }
 
@@ -462,14 +466,14 @@ const handleCreateSubmit = () => {
     if (valid) {
       creating.value = true
 
-      // 妯℃嫙API璋冪敤寤惰繜
+      // 模拟API调用延迟
       setTimeout(() => {
         const newProject: Project = {
           id: projects.value.length + 1,
           name: createForm.value.name,
           description: createForm.value.description,
           team_id: createForm.value.team_id,
-          owner_id: 1, // 褰撳墠鐢ㄦ埛ID
+          owner_id: 1, // 当前用户ID
           status: createForm.value.status as any,
           priority: createForm.value.priority as any,
           progress: 0,
@@ -479,7 +483,7 @@ const handleCreateSubmit = () => {
           owner: {
             id: 1,
             username: 'currentuser',
-            fullname: '褰撳墠鐢ㄦ埛',
+            fullname: '当前用户',
           },
           team: availableTeams.value.find((t) => t.id === createForm.value.team_id),
         }
@@ -488,14 +492,15 @@ const handleCreateSubmit = () => {
         creating.value = false
         showCreateDialog.value = false
         createFormRef.value?.resetFields()
-        ElMessage.success('椤圭洰鍒涘缓鎴愬姛')
+        ElMessage.success('项目创建成功')
       }, 1000)
     }
   })
 }
 
 const disabledDate = (time: Date) => {
-  return time.getTime() < Date.now() - 24 * 60 * 60 * 1000 // 绂佺敤浠婂ぉ涔嬪墠鐨勬棩鏈?}
+  return time.getTime() < Date.now() - 24 * 60 * 60 * 1000 // 禁用今天之前的日期
+}
 
 const getStatusTagType = (status: string) => {
   const map: Record<string, string> = {
@@ -510,11 +515,11 @@ const getStatusTagType = (status: string) => {
 
 const getStatusText = (status: string) => {
   const map: Record<string, string> = {
-    planning: '瑙勫垝涓?,
-    active: '杩涜涓?,
-    paused: '宸叉殏鍋?,
-    completed: '宸插畬鎴?,
-    archived: '宸插綊妗?,
+    planning: '规划中',
+    active: '进行中',
+    paused: '已暂停',
+    completed: '已完成',
+    archived: '已归档',
   }
   return map[status] || status
 }
@@ -531,10 +536,10 @@ const getPriorityTagType = (priority: string) => {
 
 const getPriorityText = (priority: string) => {
   const map: Record<string, string> = {
-    low: '浣?,
-    medium: '涓?,
-    high: '楂?,
-    urgent: '绱ф€?,
+    low: '低',
+    medium: '中',
+    high: '高',
+    urgent: '紧急',
   }
   return map[priority] || priority
 }
@@ -545,7 +550,8 @@ const formatDate = (dateString: string) => {
 }
 
 onMounted(() => {
-  // 鍙互鍦ㄨ繖閲屽姞杞介」鐩暟鎹?})
+  // 可以在这里加载项目数据
+})
 </script>
 
 <style scoped>

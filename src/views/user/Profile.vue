@@ -1,16 +1,16 @@
-﻿<template>
+<template>
   <div class="profile-container">
     <el-card class="profile-card">
       <template #header>
         <div class="profile-header">
-          <h2>涓汉璧勬枡</h2>
-          <p>绠＄悊鎮ㄧ殑璐︽埛淇℃伅鍜岃缃?/p>
+          <h2>个人资料</h2>
+          <p>管理您的账户信息和设置</p>
         </div>
       </template>
 
       <div class="profile-content">
         <div class="profile-section">
-          <h3>鍩烘湰淇℃伅</h3>
+          <h3>基本信息</h3>
 
           <div class="avatar-section">
             <el-avatar :size="80" :src="user.avatar_url">
@@ -19,15 +19,15 @@
           </div>
 
           <el-form label-width="100px" class="profile-form">
-            <el-form-item label="鐢ㄦ埛鍚?>
+            <el-form-item label="用户名">
               <el-input v-model="user.username" disabled />
             </el-form-item>
 
-            <el-form-item label="閭">
+            <el-form-item label="邮箱">
               <el-input v-model="user.email" disabled />
             </el-form-item>
 
-            <el-form-item label="瑙掕壊">
+            <el-form-item label="角色">
               <el-tag :type="getRoleType(user.role)">
                 {{ getRoleText(user.role) }}
               </el-tag>
@@ -36,30 +36,30 @@
         </div>
 
         <div class="profile-section">
-          <h3>璐︽埛瀹夊叏</h3>
+          <h3>账户安全</h3>
 
           <div class="security-items">
             <div class="security-item">
               <div class="security-info">
-                <div class="security-title">瀵嗙爜</div>
-                <div class="security-description">瀹氭湡鏇存敼瀵嗙爜浠ョ‘淇濊处鎴峰畨鍏?/div>
+                <div class="security-title">密码</div>
+                <div class="security-description">定期更改密码以确保账户安全</div>
               </div>
-              <el-button type="primary" @click="showPasswordDialog = true"> 鏇存敼瀵嗙爜 </el-button>
+              <el-button type="primary" @click="showPasswordDialog = true"> 更改密码 </el-button>
             </div>
           </div>
         </div>
 
         <div class="profile-section">
-          <h3>璐︽埛淇℃伅</h3>
+          <h3>账户信息</h3>
 
           <div class="info-grid">
             <div class="info-item">
-              <div class="info-label">鐢ㄦ埛ID</div>
+              <div class="info-label">用户ID</div>
               <div class="info-value">{{ user.id }}</div>
             </div>
 
             <div class="info-item">
-              <div class="info-label">娉ㄥ唽鏃堕棿</div>
+              <div class="info-label">注册时间</div>
               <div class="info-value">{{ formatDate(user.created_at) }}</div>
             </div>
           </div>
@@ -76,7 +76,7 @@ import type { User } from '@/types/auth'
 
 const authStore = useAuthStore()
 
-// 鐢ㄦ埛淇℃伅
+// 用户信息
 const user = computed(
   () =>
     authStore.user ||
@@ -90,15 +90,16 @@ const user = computed(
     } as User),
 )
 
-// 鐢ㄦ埛鍚嶉瀛楁瘝
+// 用户名首字母
 const usernameInitials = computed(() => {
   const name = user.value.username || ''
   return name.substring(0, 2).toUpperCase()
 })
 
-// 鐘舵€?const showPasswordDialog = ref(false)
+// 状态
+const showPasswordDialog = ref(false)
 
-// 鑾峰彇瑙掕壊绫诲瀷
+// 获取角色类型
 const getRoleType = (role: string) => {
   switch (role) {
     case 'super_admin':
@@ -110,19 +111,20 @@ const getRoleType = (role: string) => {
   }
 }
 
-// 鑾峰彇瑙掕壊鏂囨湰
+// 获取角色文本
 const getRoleText = (role: string) => {
   switch (role) {
     case 'super_admin':
-      return '瓒呯骇绠＄悊鍛?
+      return '超级管理员'
     case 'admin':
-      return '绠＄悊鍛?
+      return '管理员'
     default:
-      return '鏅€氱敤鎴?
+      return '普通用户'
   }
 }
 
-// 鏍煎紡鍖栨棩鏈?const formatDate = (dateString?: string) => {
+// 格式化日期
+const formatDate = (dateString?: string) => {
   if (!dateString) return ''
   const date = new Date(dateString)
   return date.toLocaleString('zh-CN')

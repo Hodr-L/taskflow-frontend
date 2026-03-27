@@ -1,4 +1,4 @@
-﻿// 鐢ㄦ埛绫诲瀷
+// 用户类型
 export interface User {
   id: number
   username: string
@@ -14,20 +14,20 @@ export interface User {
   updated_at: string
 }
 
-// 鐧诲綍璇锋眰
+// 登录请求
 export interface LoginRequest {
   email: string
   password: string
 }
 
-// 娉ㄥ唽璇锋眰
+// 注册请求
 export interface RegisterRequest {
   username: string
   email: string
   password: string
 }
 
-// 璁よ瘉鍝嶅簲
+// 认证响应
 export interface AuthResponse {
   code: number
   message: string
@@ -40,7 +40,7 @@ export interface AuthResponse {
   }
 }
 
-// API鍝嶅簲鏍煎紡
+// API响应格式
 export interface ApiResponse<T = any> {
   code: number
   message: string

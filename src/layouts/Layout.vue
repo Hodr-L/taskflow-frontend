@@ -1,6 +1,6 @@
-﻿<template>
+<template>
   <div class="layout-container">
-    <!-- 渚ц竟鏍?-->
+    <!-- 侧边栏 -->
     <aside class="sidebar">
       <div class="sidebar-header">
         <h2 class="app-title">{{ appName }}</h2>
@@ -8,7 +8,7 @@
       </div>
 
       <el-menu :default-active="activeMenu" class="sidebar-menu" :collapse="isCollapse" router>
-        <!-- 鍔ㄦ€佺敓鎴愯彍鍗曢」 -->
+        <!-- 动态生成菜单项 -->
         <template v-for="item in menuItems" :key="item.path">
           <el-menu-item :index="item.path">
             <el-icon>
@@ -20,10 +20,10 @@
 
         <el-divider v-if="menuItems.length > 0" />
 
-        <!-- 涓汉璧勬枡鑿滃崟椤癸紙濮嬬粓鏄剧ず锛?-->
+        <!-- 个人资料菜单项（始终显示） -->
         <el-menu-item index="/profile">
           <el-icon><UserFilled /></el-icon>
-          <span>涓汉璧勬枡</span>
+          <span>个人资料</span>
         </el-menu-item>
       </el-menu>
 
@@ -31,18 +31,18 @@
         <el-button type="text" @click="toggleSidebar" class="collapse-button">
           <el-icon v-if="isCollapse"><Expand /></el-icon>
           <el-icon v-else><Fold /></el-icon>
-          <span v-if="!isCollapse">鏀惰捣鑿滃崟</span>
+          <span v-if="!isCollapse">收起菜单</span>
         </el-button>
       </div>
     </aside>
 
-    <!-- 涓诲唴瀹瑰尯 -->
+    <!-- 主内容区 -->
     <div class="main-content">
-      <!-- 椤堕儴瀵艰埅鏍?-->
+      <!-- 顶部导航栏 -->
       <header class="navbar">
         <div class="navbar-left">
           <el-breadcrumb separator="/">
-            <el-breadcrumb-item :to="{ path: '/' }">棣栭〉</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
             <el-breadcrumb-item v-for="item in breadcrumbs" :key="item.path">
               {{ item.title }}
             </el-breadcrumb-item>
@@ -60,22 +60,23 @@
               <el-dropdown-menu>
                 <el-dropdown-item command="profile">
                   <el-icon><UserFilled /></el-icon>
-                  涓汉璧勬枡
+                  个人资料
                 </el-dropdown-item>
                 <el-dropdown-item command="settings">
                   <el-icon><Setting /></el-icon>
-                  绯荤粺璁剧疆
+                  系统设置
                 </el-dropdown-item>
                 <el-dropdown-item divided command="logout">
                   <el-icon><SwitchButton /></el-icon>
-                  閫€鍑虹櫥褰?                </el-dropdown-item>
+                  退出登录
+                </el-dropdown-item>
               </el-dropdown-menu>
             </template>
           </el-dropdown>
         </div>
       </header>
 
-      <!-- 椤甸潰鍐呭 -->
+      <!-- 页面内容 -->
       <main class="content">
         <router-view v-slot="{ Component }">
           <transition name="fade" mode="out-in">
@@ -108,21 +109,23 @@ const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
 
-// 搴旂敤淇℃伅
+// 应用信息
 const appName = import.meta.env.VITE_APP_NAME
 const appVersion = import.meta.env.VITE_APP_VERSION
 
-// 渚ц竟鏍忕姸鎬?const isCollapse = ref(false)
+// 侧边栏状态
+const isCollapse = ref(false)
 
-// 鐢ㄦ埛淇℃伅
-const username = computed(() => authStore.username || '鐢ㄦ埛')
+// 用户信息
+const username = computed(() => authStore.username || '用户')
 const userAvatar = computed(() => authStore.user?.avatar_url || '')
 const userRole = computed(() => authStore.role)
 
-// 褰撳墠婵€娲荤殑鑿滃崟
+// 当前激活的菜单
 const activeMenu = computed(() => route.path)
 
-// 闈㈠寘灞戝鑸?const breadcrumbs = computed(() => {
+// 面包屑导航
+const breadcrumbs = computed(() => {
   const matched = route.matched.filter((item) => item.meta && item.meta.title)
   return matched.map((item) => ({
     path: item.path,
@@ -130,7 +133,8 @@ const activeMenu = computed(() => route.path)
   }))
 })
 
-// 鑿滃崟椤?const menuItems = computed(() => {
+// 菜单项
+const menuItems = computed(() => {
   const routes = router.getRoutes()
   const rootRoute = routes.find(route => route.path === '/')
   
@@ -138,15 +142,16 @@ const activeMenu = computed(() => route.path)
     return []
   }
   
-  // 杩囨护鍑洪渶瑕佹樉绀哄湪鑿滃崟涓殑璺敱
+  // 过滤出需要显示在菜单中的路由
   return rootRoute.children
     .filter(child => {
       const meta = child.meta || {}
-      // 闅愯棌鑿滃崟椤?      if (meta.hidden === true) {
+      // 隐藏菜单项
+      if (meta.hidden === true) {
         return false
       }
       
-      // 妫€鏌ユ槸鍚﹂渶瑕佺鐞嗗憳鏉冮檺
+      // 检查是否需要管理员权限
       if (meta.requiresAdmin === true) {
         const isAdmin = userRole.value === 'admin' || userRole.value === 'super_admin'
         return isAdmin
@@ -155,12 +160,14 @@ const activeMenu = computed(() => route.path)
       return true
     })
     .map(child => ({
-      // 鏋勯€犲畬鏁磋矾寰勶紙鐩稿浜庢牴璺敱锛?      path: child.path.startsWith('/') ? child.path : `/${child.path}`,
+      // 构造完整路径（相对于根路由）
+      path: child.path.startsWith('/') ? child.path : `/${child.path}`,
       title: (child.meta?.title as string) || child.name?.toString() || '',
       icon: (child.meta?.icon as string) || 'Menu'
     }))
-    .filter(item => item.title && item.path !== '/profile') // 鎺掗櫎涓汉璧勬枡锛屽崟鐙樉绀?    .sort((a, b) => {
-      // 绠€鍗曟帓搴忥細浠〃鏉垮湪鏈€鍓嶉潰锛屽叾浠栨寜瀛楁瘝椤哄簭
+    .filter(item => item.title && item.path !== '/profile') // 排除个人资料，单独显示
+    .sort((a, b) => {
+      // 简单排序：仪表板在最前面，其他按字母顺序
       if (a.path === '/dashboard') return -1
       if (b.path === '/dashboard') return 1
       return a.title.localeCompare(b.title)
@@ -169,25 +176,28 @@ const activeMenu = computed(() => route.path)
 
 
 
-// 鍒囨崲渚ц竟鏍?const toggleSidebar = () => {
+// 切换侧边栏
+const toggleSidebar = () => {
   isCollapse.value = !isCollapse.value
 }
 
-// 澶勭悊涓嬫媺鑿滃崟鍛戒护
+// 处理下拉菜单命令
 const handleCommand = (command: string) => {
   switch (command) {
     case 'profile':
       router.push('/profile')
       break
     case 'settings':
-      // TODO: 璺宠浆鍒拌缃〉闈?      break
+      // TODO: 跳转到设置页面
+      break
     case 'logout':
       handleLogout()
       break
   }
 }
 
-// 閫€鍑虹櫥褰?const handleLogout = async () => {
+// 退出登录
+const handleLogout = async () => {
   await authStore.userLogout()
   router.push('/login')
 }
@@ -200,7 +210,7 @@ const handleCommand = (command: string) => {
   overflow: hidden;
 }
 
-/* 渚ц竟鏍忔牱寮?*/
+/* 侧边栏样式 */
 .sidebar {
   width: 240px;
   background: linear-gradient(180deg, #304156 0%, #263445 100%);
@@ -285,7 +295,7 @@ const handleCommand = (command: string) => {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* 涓诲唴瀹瑰尯鏍峰紡 */
+/* 主内容区样式 */
 .main-content {
   flex: 1;
   display: flex;
@@ -334,7 +344,7 @@ const handleCommand = (command: string) => {
   color: #303133;
 }
 
-/* 鍐呭鍖烘牱寮?*/
+/* 内容区样式 */
 .content {
   flex: 1;
   padding: 24px;
@@ -342,7 +352,7 @@ const handleCommand = (command: string) => {
   background-color: #f0f2f5;
 }
 
-/* 杩囨浮鍔ㄧ敾 */
+/* 过渡动画 */
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.3s ease;
@@ -353,7 +363,7 @@ const handleCommand = (command: string) => {
   opacity: 0;
 }
 
-/* 鍝嶅簲寮忚璁?*/
+/* 响应式设计 */
 @media (max-width: 768px) {
   .sidebar {
     position: fixed;

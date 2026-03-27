@@ -1,22 +1,22 @@
-<template>
+﻿<template>
   <div class="task-list-container">
     <div class="task-header">
-      <h2 class="task-title">任务管理</h2>
-      <p class="task-subtitle">创建、分配和跟踪任务进度</p>
+      <h2 class="task-title">浠诲姟绠＄悊</h2>
+      <p class="task-subtitle">鍒涘缓銆佸垎閰嶅拰璺熻釜浠诲姟杩涘害</p>
 
       <div class="task-actions">
         <el-button type="primary" size="large" @click="showCreateDialog = true">
           <el-icon><Plus /></el-icon>
-          创建任务
+          鍒涘缓浠诲姟
         </el-button>
       </div>
     </div>
 
-    <!-- 过滤和搜索 -->
+    <!-- 杩囨护鍜屾悳绱?-->
     <div class="task-filters">
       <el-input
         v-model="searchText"
-        placeholder="搜索任务标题或描述"
+        placeholder="鎼滅储浠诲姟鏍囬鎴栨弿杩?
         clearable
         class="search-input"
         @clear="handleSearch"
@@ -29,31 +29,31 @@
 
       <el-select
         v-model="filterStatus"
-        placeholder="状态"
+        placeholder="鐘舵€?
         clearable
         @change="handleFilter"
         multiple
       >
-        <el-option label="待处理" value="todo" />
-        <el-option label="进行中" value="in_progress" />
-        <el-option label="审核中" value="review" />
-        <el-option label="已完成" value="done" />
+        <el-option label="寰呭鐞? value="todo" />
+        <el-option label="杩涜涓? value="in_progress" />
+        <el-option label="瀹℃牳涓? value="review" />
+        <el-option label="宸插畬鎴? value="done" />
       </el-select>
 
       <el-select
         v-model="filterPriority"
-        placeholder="优先级"
+        placeholder="浼樺厛绾?
         clearable
         @change="handleFilter"
         multiple
       >
-        <el-option label="低" value="low" />
-        <el-option label="中" value="medium" />
-        <el-option label="高" value="high" />
-        <el-option label="紧急" value="urgent" />
+        <el-option label="浣? value="low" />
+        <el-option label="涓? value="medium" />
+        <el-option label="楂? value="high" />
+        <el-option label="绱ф€? value="urgent" />
       </el-select>
 
-      <el-select v-model="filterAssignee" placeholder="负责人" clearable @change="handleFilter">
+      <el-select v-model="filterAssignee" placeholder="璐熻矗浜? clearable @change="handleFilter">
         <el-option
           v-for="user in availableUsers"
           :key="user.id"
@@ -62,7 +62,7 @@
         />
       </el-select>
 
-      <el-select v-model="filterProject" placeholder="项目" clearable @change="handleFilter">
+      <el-select v-model="filterProject" placeholder="椤圭洰" clearable @change="handleFilter">
         <el-option
           v-for="project in availableProjects"
           :key="project.id"
@@ -72,14 +72,14 @@
       </el-select>
     </div>
 
-    <!-- 任务列表 -->
+    <!-- 浠诲姟鍒楄〃 -->
     <div class="task-content">
-      <!-- 任务统计卡片 -->
+      <!-- 浠诲姟缁熻鍗＄墖 -->
       <div class="task-stats">
         <el-card class="stat-card" shadow="hover">
           <div class="stat-content">
             <span class="stat-number">{{ taskStatistics.total_tasks || 0 }}</span>
-            <span class="stat-label">总任务数</span>
+            <span class="stat-label">鎬讳换鍔℃暟</span>
           </div>
         </el-card>
         <el-card class="stat-card" shadow="hover">
@@ -87,7 +87,7 @@
             <span class="stat-number" style="color: #e6a23c">{{
               taskStatistics.todo_tasks || 0
             }}</span>
-            <span class="stat-label">待处理</span>
+            <span class="stat-label">寰呭鐞?/span>
           </div>
         </el-card>
         <el-card class="stat-card" shadow="hover">
@@ -95,7 +95,7 @@
             <span class="stat-number" style="color: #1989fa">{{
               taskStatistics.in_progress_tasks || 0
             }}</span>
-            <span class="stat-label">进行中</span>
+            <span class="stat-label">杩涜涓?/span>
           </div>
         </el-card>
         <el-card class="stat-card" shadow="hover">
@@ -103,25 +103,25 @@
             <span class="stat-number" style="color: #67c23a">{{
               taskStatistics.done_tasks || 0
             }}</span>
-            <span class="stat-label">已完成</span>
+            <span class="stat-label">宸插畬鎴?/span>
           </div>
         </el-card>
       </div>
 
-      <!-- 任务表格 -->
+      <!-- 浠诲姟琛ㄦ牸 -->
       <el-card class="task-table-card">
         <template #header>
           <div class="table-header">
-            <span class="table-title">任务列表</span>
+            <span class="table-title">浠诲姟鍒楄〃</span>
             <div class="table-actions">
-              <el-button :icon="Refresh" @click="refreshTasks">刷新</el-button>
+              <el-button :icon="Refresh" @click="refreshTasks">鍒锋柊</el-button>
               <el-dropdown @command="handleTableCommand">
-                <el-button :icon="Setting">视图</el-button>
+                <el-button :icon="Setting">瑙嗗浘</el-button>
                 <template #dropdown>
                   <el-dropdown-menu>
-                    <el-dropdown-item command="compact">紧凑视图</el-dropdown-item>
-                    <el-dropdown-item command="normal">标准视图</el-dropdown-item>
-                    <el-dropdown-item divided command="export">导出CSV</el-dropdown-item>
+                    <el-dropdown-item command="compact">绱у噾瑙嗗浘</el-dropdown-item>
+                    <el-dropdown-item command="normal">鏍囧噯瑙嗗浘</el-dropdown-item>
+                    <el-dropdown-item divided command="export">瀵煎嚭CSV</el-dropdown-item>
                   </el-dropdown-menu>
                 </template>
               </el-dropdown>
@@ -136,7 +136,7 @@
           style="width: 100%"
         >
           <el-table-column prop="id" label="ID" width="80" />
-          <el-table-column label="标题" min-width="200">
+          <el-table-column label="鏍囬" min-width="200">
             <template #default="{ row }">
               <div class="task-title-cell">
                 <span class="task-title-text">{{ row.title }}</span>
@@ -156,21 +156,21 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column label="状态" width="120">
+          <el-table-column label="鐘舵€? width="120">
             <template #default="{ row }">
               <el-tag :type="getStatusTagType(row.status)" size="small" effect="light">
                 {{ getStatusText(row.status) }}
               </el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="优先级" width="120">
+          <el-table-column label="浼樺厛绾? width="120">
             <template #default="{ row }">
               <el-tag :type="getPriorityTagType(row.priority)" size="small" effect="light">
                 {{ getPriorityText(row.priority) }}
               </el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="负责人" width="150">
+          <el-table-column label="璐熻矗浜? width="150">
             <template #default="{ row }">
               <div v-if="row.assignee" class="assignee-cell">
                 <el-avatar :size="24" :src="row.assignee.avatar_url">
@@ -184,36 +184,36 @@
                   row.assignee.fullname || row.assignee.username
                 }}</span>
               </div>
-              <span v-else class="no-assignee">未分配</span>
+              <span v-else class="no-assignee">鏈垎閰?/span>
             </template>
           </el-table-column>
-          <el-table-column label="项目" width="150">
+          <el-table-column label="椤圭洰" width="150">
             <template #default="{ row }">
               <span v-if="row.project">{{ row.project.name }}</span>
-              <span v-else class="no-project">无项目</span>
+              <span v-else class="no-project">鏃犻」鐩?/span>
             </template>
           </el-table-column>
-          <el-table-column label="截止日期" width="120">
+          <el-table-column label="鎴鏃ユ湡" width="120">
             <template #default="{ row }">
               <span :class="{ 'deadline-warning': isDeadlineNear(row.due_date) }">
-                {{ formatDate(row.due_date) || '无' }}
+                {{ formatDate(row.due_date) || '鏃? }}
               </span>
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="180" fixed="right">
+          <el-table-column label="鎿嶄綔" width="180" fixed="right">
             <template #default="{ row }">
               <el-button type="primary" link size="small" @click.stop="viewTask(row.id)"
-                >查看</el-button
+                >鏌ョ湅</el-button
               >
-              <el-button type="info" link size="small" @click.stop="editTask(row)">编辑</el-button>
+              <el-button type="info" link size="small" @click.stop="editTask(row)">缂栬緫</el-button>
               <el-button type="danger" link size="small" @click.stop="deleteTask(row)"
-                >删除</el-button
+                >鍒犻櫎</el-button
               >
             </template>
           </el-table-column>
         </el-table>
 
-        <!-- 分页 -->
+        <!-- 鍒嗛〉 -->
         <div class="pagination-container">
           <el-pagination
             v-model:current-page="currentPage"
@@ -228,29 +228,29 @@
       </el-card>
     </div>
 
-    <!-- 创建任务对话框 -->
+    <!-- 鍒涘缓浠诲姟瀵硅瘽妗?-->
     <el-dialog
       v-model="showCreateDialog"
-      title="创建任务"
+      title="鍒涘缓浠诲姟"
       width="600px"
       :before-close="handleDialogClose"
     >
       <el-form ref="createFormRef" :model="createForm" :rules="createRules" label-width="80px">
-        <el-form-item label="任务标题" prop="title">
+        <el-form-item label="浠诲姟鏍囬" prop="title">
           <el-input
             v-model="createForm.title"
-            placeholder="请输入任务标题"
+            placeholder="璇疯緭鍏ヤ换鍔℃爣棰?
             maxlength="100"
             show-word-limit
           />
         </el-form-item>
 
-        <el-form-item label="任务描述" prop="description">
+        <el-form-item label="浠诲姟鎻忚堪" prop="description">
           <el-input
             v-model="createForm.description"
             type="textarea"
             :rows="3"
-            placeholder="请输入任务描述"
+            placeholder="璇疯緭鍏ヤ换鍔℃弿杩?
             maxlength="500"
             show-word-limit
           />
@@ -258,27 +258,27 @@
 
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="优先级" prop="priority">
+            <el-form-item label="浼樺厛绾? prop="priority">
               <el-select
                 v-model="createForm.priority"
-                placeholder="请选择优先级"
+                placeholder="璇烽€夋嫨浼樺厛绾?
                 style="width: 100%"
               >
-                <el-option label="低" value="low" />
-                <el-option label="中" value="medium" />
-                <el-option label="高" value="high" />
-                <el-option label="紧急" value="urgent" />
+                <el-option label="浣? value="low" />
+                <el-option label="涓? value="medium" />
+                <el-option label="楂? value="high" />
+                <el-option label="绱ф€? value="urgent" />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="任务类型" prop="type">
-              <el-select v-model="createForm.type" placeholder="请选择类型" style="width: 100%">
-                <el-option label="功能" value="feature" />
-                <el-option label="缺陷" value="bug" />
-                <el-option label="改进" value="improvement" />
-                <el-option label="文档" value="documentation" />
-                <el-option label="其他" value="other" />
+            <el-form-item label="浠诲姟绫诲瀷" prop="type">
+              <el-select v-model="createForm.type" placeholder="璇烽€夋嫨绫诲瀷" style="width: 100%">
+                <el-option label="鍔熻兘" value="feature" />
+                <el-option label="缂洪櫡" value="bug" />
+                <el-option label="鏀硅繘" value="improvement" />
+                <el-option label="鏂囨。" value="documentation" />
+                <el-option label="鍏朵粬" value="other" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -286,10 +286,10 @@
 
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="负责人" prop="assignee_id">
+            <el-form-item label="璐熻矗浜? prop="assignee_id">
               <el-select
                 v-model="createForm.assignee_id"
-                placeholder="请选择负责人"
+                placeholder="璇烽€夋嫨璐熻矗浜?
                 style="width: 100%"
               >
                 <el-option
@@ -302,10 +302,10 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="项目" prop="project_id">
+            <el-form-item label="椤圭洰" prop="project_id">
               <el-select
                 v-model="createForm.project_id"
-                placeholder="请选择项目"
+                placeholder="璇烽€夋嫨椤圭洰"
                 style="width: 100%"
               >
                 <el-option
@@ -321,22 +321,22 @@
 
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="预计工时" prop="estimate_hours">
+            <el-form-item label="棰勮宸ユ椂" prop="estimate_hours">
               <el-input-number
                 v-model="createForm.estimate_hours"
                 :min="0"
                 :step="0.5"
                 style="width: 100%"
-                placeholder="请输入预计工时"
+                placeholder="璇疯緭鍏ラ璁″伐鏃?
               />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="截止日期" prop="due_date">
+            <el-form-item label="鎴鏃ユ湡" prop="due_date">
               <el-date-picker
                 v-model="createForm.due_date"
                 type="date"
-                placeholder="选择截止日期"
+                placeholder="閫夋嫨鎴鏃ユ湡"
                 style="width: 100%"
                 :disabled-date="disabledDate"
               />
@@ -344,14 +344,14 @@
           </el-col>
         </el-row>
 
-        <el-form-item label="标签" prop="tags">
+        <el-form-item label="鏍囩" prop="tags">
           <el-select
             v-model="createForm.tags"
             multiple
             filterable
             allow-create
             default-first-option
-            placeholder="请添加任务标签"
+            placeholder="璇锋坊鍔犱换鍔℃爣绛?
             style="width: 100%"
           >
             <el-option v-for="tag in availableTags" :key="tag" :label="tag" :value="tag" />
@@ -361,9 +361,9 @@
 
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="handleDialogClose">取消</el-button>
+          <el-button @click="handleDialogClose">鍙栨秷</el-button>
           <el-button type="primary" @click="handleCreateSubmit" :loading="creating">
-            创建
+            鍒涘缓
           </el-button>
         </span>
       </template>
@@ -383,12 +383,11 @@ import type { User as UserType } from '@/types/user'
 
 const router = useRouter()
 
-// 响应式数据
-const tasks = ref<Task[]>([
+// 鍝嶅簲寮忔暟鎹?const tasks = ref<Task[]>([
   {
     id: 1,
-    title: '设计登录页面',
-    description: '完成登录页面的UI设计，包括响应式布局',
+    title: '璁捐鐧诲綍椤甸潰',
+    description: '瀹屾垚鐧诲綍椤甸潰鐨刄I璁捐锛屽寘鎷搷搴斿紡甯冨眬',
     project_id: 1,
     assignee_id: 1,
     reporter_id: 2,
@@ -398,30 +397,30 @@ const tasks = ref<Task[]>([
     estimate_hours: 8,
     actual_hours: 4,
     due_date: '2026-03-25',
-    tags: ['前端', 'UI', '设计'],
+    tags: ['鍓嶇', 'UI', '璁捐'],
     created_at: '2026-03-20T10:00:00Z',
     assignee: {
       id: 1,
       username: 'designer',
-      fullname: '设计师',
-      bio: 'UI/UX设计师',
+      fullname: '璁捐甯?,
+      bio: 'UI/UX璁捐甯?,
       avatar_url: 'https://via.placeholder.com/50',
     },
     reporter: {
       id: 2,
       username: 'pm',
-      fullname: '产品经理',
-      bio: '产品经理',
+      fullname: '浜у搧缁忕悊',
+      bio: '浜у搧缁忕悊',
     },
     project: {
       id: 1,
-      name: '网站重构项目',
+      name: '缃戠珯閲嶆瀯椤圭洰',
     },
   },
   {
     id: 2,
-    title: '修复注册页面验证错误',
-    description: '解决注册表单的邮箱验证逻辑问题',
+    title: '淇娉ㄥ唽椤甸潰楠岃瘉閿欒',
+    description: '瑙ｅ喅娉ㄥ唽琛ㄥ崟鐨勯偖绠遍獙璇侀€昏緫闂',
     project_id: 1,
     assignee_id: 3,
     reporter_id: 2,
@@ -430,29 +429,29 @@ const tasks = ref<Task[]>([
     type: 'bug',
     estimate_hours: 4,
     due_date: '2026-03-22',
-    tags: ['后端', '验证', '修复'],
+    tags: ['鍚庣', '楠岃瘉', '淇'],
     created_at: '2026-03-20T09:30:00Z',
     assignee: {
       id: 3,
       username: 'developer',
-      fullname: '开发工程师',
-      bio: '后端开发工程师',
+      fullname: '寮€鍙戝伐绋嬪笀',
+      bio: '鍚庣寮€鍙戝伐绋嬪笀',
     },
     reporter: {
       id: 2,
       username: 'pm',
-      fullname: '产品经理',
-      bio: '产品经理',
+      fullname: '浜у搧缁忕悊',
+      bio: '浜у搧缁忕悊',
     },
     project: {
       id: 1,
-      name: '网站重构项目',
+      name: '缃戠珯閲嶆瀯椤圭洰',
     },
   },
   {
     id: 3,
-    title: '编写API文档',
-    description: '为用户认证API编写详细的使用文档',
+    title: '缂栧啓API鏂囨。',
+    description: '涓虹敤鎴疯璇丄PI缂栧啓璇︾粏鐨勪娇鐢ㄦ枃妗?,
     project_id: 2,
     assignee_id: 4,
     reporter_id: 1,
@@ -462,27 +461,27 @@ const tasks = ref<Task[]>([
     estimate_hours: 12,
     actual_hours: 10,
     due_date: '2026-03-28',
-    tags: ['文档', 'API'],
+    tags: ['鏂囨。', 'API'],
     created_at: '2026-03-19T14:20:00Z',
     assignee: {
       id: 4,
       username: 'techwriter',
-      fullname: '技术文档工程师',
+      fullname: '鎶€鏈枃妗ｅ伐绋嬪笀',
     },
     reporter: {
       id: 1,
       username: 'designer',
-      fullname: '设计师',
+      fullname: '璁捐甯?,
     },
     project: {
       id: 2,
-      name: '移动应用开发',
+      name: '绉诲姩搴旂敤寮€鍙?,
     },
   },
   {
     id: 4,
-    title: '数据库性能优化',
-    description: '优化用户查询的数据库索引',
+    title: '鏁版嵁搴撴€ц兘浼樺寲',
+    description: '浼樺寲鐢ㄦ埛鏌ヨ鐨勬暟鎹簱绱㈠紩',
     project_id: 1,
     assignee_id: 5,
     reporter_id: 2,
@@ -493,23 +492,23 @@ const tasks = ref<Task[]>([
     actual_hours: 20,
     due_date: '2026-03-18',
     completed_at: '2026-03-18T16:45:00Z',
-    tags: ['数据库', '优化', '性能'],
+    tags: ['鏁版嵁搴?, '浼樺寲', '鎬ц兘'],
     created_at: '2026-03-15T11:10:00Z',
     assignee: {
       id: 5,
       username: 'dba',
-      fullname: '数据库管理员',
-      bio: '数据库管理员',
+      fullname: '鏁版嵁搴撶鐞嗗憳',
+      bio: '鏁版嵁搴撶鐞嗗憳',
     },
     reporter: {
       id: 2,
       username: 'pm',
-      fullname: '产品经理',
-      bio: '产品经理',
+      fullname: '浜у搧缁忕悊',
+      bio: '浜у搧缁忕悊',
     },
     project: {
       id: 1,
-      name: '网站重构项目',
+      name: '缃戠珯閲嶆瀯椤圭洰',
     },
   },
 ])
@@ -518,35 +517,35 @@ const availableUsers = ref<UserType[]>([
   {
     id: 1,
     username: 'designer',
-    fullname: '设计师',
-    bio: 'UI/UX设计师',
+    fullname: '璁捐甯?,
+    bio: 'UI/UX璁捐甯?,
     email: 'designer@example.com',
     role: 'designer',
   },
-  { id: 2, username: 'pm', fullname: '产品经理', bio: '产品经理', email: 'pm@example.com', role: 'pm' },
+  { id: 2, username: 'pm', fullname: '浜у搧缁忕悊', bio: '浜у搧缁忕悊', email: 'pm@example.com', role: 'pm' },
   {
     id: 3,
     username: 'developer',
-    fullname: '开发工程师',
-    bio: '后端开发工程师',
+    fullname: '寮€鍙戝伐绋嬪笀',
+    bio: '鍚庣寮€鍙戝伐绋嬪笀',
     email: 'developer@example.com',
     role: 'developer',
   },
   {
     id: 4,
     username: 'techwriter',
-    fullname: '技术文档工程师',
-    bio: '技术文档工程师',
+    fullname: '鎶€鏈枃妗ｅ伐绋嬪笀',
+    bio: '鎶€鏈枃妗ｅ伐绋嬪笀',
     email: 'writer@example.com',
     role: 'writer',
   },
-  { id: 5, username: 'dba', fullname: '数据库管理员', bio: '数据库管理员', email: 'dba@example.com', role: 'dba' },
+  { id: 5, username: 'dba', fullname: '鏁版嵁搴撶鐞嗗憳', bio: '鏁版嵁搴撶鐞嗗憳', email: 'dba@example.com', role: 'dba' },
 ])
 
 const availableProjects = ref<Project[]>([
   {
     id: 1,
-    name: '网站重构项目',
+    name: '缃戠珯閲嶆瀯椤圭洰',
     description: '',
     owner_id: 1,
     status: 'active',
@@ -557,7 +556,7 @@ const availableProjects = ref<Project[]>([
   },
   {
     id: 2,
-    name: '移动应用开发',
+    name: '绉诲姩搴旂敤寮€鍙?,
     description: '',
     owner_id: 2,
     status: 'planning',
@@ -568,7 +567,7 @@ const availableProjects = ref<Project[]>([
   },
   {
     id: 3,
-    name: '数据迁移项目',
+    name: '鏁版嵁杩佺Щ椤圭洰',
     description: '',
     owner_id: 3,
     status: 'completed',
@@ -580,22 +579,22 @@ const availableProjects = ref<Project[]>([
 ])
 
 const availableTags = ref<string[]>([
-  '前端',
-  '后端',
+  '鍓嶇',
+  '鍚庣',
   'UI',
-  '设计',
-  '数据库',
+  '璁捐',
+  '鏁版嵁搴?,
   'API',
-  '文档',
-  '测试',
-  '优化',
-  '性能',
-  '安全',
-  '部署',
-  '移动端',
-  'Web端',
+  '鏂囨。',
+  '娴嬭瘯',
+  '浼樺寲',
+  '鎬ц兘',
+  '瀹夊叏',
+  '閮ㄧ讲',
+  '绉诲姩绔?,
+  'Web绔?,
   'Bug',
-  '功能',
+  '鍔熻兘',
 ])
 
 const searchText = ref('')
@@ -623,17 +622,16 @@ const createForm = ref({
 const createFormRef = ref<FormInstance>()
 const createRules: FormRules = {
   title: [
-    { required: true, message: '请输入任务标题', trigger: 'blur' },
-    { min: 2, max: 100, message: '长度在 2 到 100 个字符', trigger: 'blur' },
+    { required: true, message: '璇疯緭鍏ヤ换鍔℃爣棰?, trigger: 'blur' },
+    { min: 2, max: 100, message: '闀垮害鍦?2 鍒?100 涓瓧绗?, trigger: 'blur' },
   ],
-  priority: [{ required: true, message: '请选择优先级', trigger: 'change' }],
+  priority: [{ required: true, message: '璇烽€夋嫨浼樺厛绾?, trigger: 'change' }],
 }
 
-// 计算属性
-const filteredTasks = computed(() => {
+// 璁＄畻灞炴€?const filteredTasks = computed(() => {
   let result = tasks.value
 
-  // 搜索过滤
+  // 鎼滅储杩囨护
   if (searchText.value) {
     const search = searchText.value.toLowerCase()
     result = result.filter(
@@ -643,22 +641,19 @@ const filteredTasks = computed(() => {
     )
   }
 
-  // 状态过滤
-  if (filterStatus.value.length > 0) {
+  // 鐘舵€佽繃婊?  if (filterStatus.value.length > 0) {
     result = result.filter((task) => filterStatus.value.includes(task.status))
   }
 
-  // 优先级过滤
-  if (filterPriority.value.length > 0) {
+  // 浼樺厛绾ц繃婊?  if (filterPriority.value.length > 0) {
     result = result.filter((task) => filterPriority.value.includes(task.priority))
   }
 
-  // 负责人过滤
-  if (filterAssignee.value) {
+  // 璐熻矗浜鸿繃婊?  if (filterAssignee.value) {
     result = result.filter((task) => task.assignee_id === filterAssignee.value)
   }
 
-  // 项目过滤
+  // 椤圭洰杩囨护
   if (filterProject.value) {
     result = result.filter((task) => task.project_id === filterProject.value)
   }
@@ -673,7 +668,7 @@ const taskStatistics = computed<TaskStatistics>(() => {
   const review = tasks.value.filter((t) => t.status === 'review').length
   const done = tasks.value.filter((t) => t.status === 'done').length
 
-  // 计算逾期任务
+  // 璁＄畻閫炬湡浠诲姟
   const today = new Date()
   const overdue = tasks.value.filter((task) => {
     if (!task.due_date || task.status === 'done') return false
@@ -681,12 +676,11 @@ const taskStatistics = computed<TaskStatistics>(() => {
     return dueDate < today
   }).length
 
-  // 计算总预估和实际工时
+  // 璁＄畻鎬婚浼板拰瀹為檯宸ユ椂
   const totalEstimate = tasks.value.reduce((sum, task) => sum + (task.estimate_hours || 0), 0)
   const totalActual = tasks.value.reduce((sum, task) => sum + (task.actual_hours || 0), 0)
 
-  // 计算完成率
-  const completionRate = total > 0 ? Math.round((done / total) * 100) : 0
+  // 璁＄畻瀹屾垚鐜?  const completionRate = total > 0 ? Math.round((done / total) * 100) : 0
 
   return {
     total_tasks: total,
@@ -701,28 +695,25 @@ const taskStatistics = computed<TaskStatistics>(() => {
   }
 })
 
-// 方法
+// 鏂规硶
 const handleSearch = () => {
-  // 搜索逻辑已通过计算属性实现
-  currentPage.value = 1 // 重置到第一页
-}
+  // 鎼滅储閫昏緫宸查€氳繃璁＄畻灞炴€у疄鐜?  currentPage.value = 1 // 閲嶇疆鍒扮涓€椤?}
 
 const handleFilter = () => {
-  currentPage.value = 1 // 重置到第一页
-}
+  currentPage.value = 1 // 閲嶇疆鍒扮涓€椤?}
 
 const refreshTasks = () => {
-  ElMessage.success('任务列表已刷新')
-  // 这里应该调用API重新加载任务
+  ElMessage.success('浠诲姟鍒楄〃宸插埛鏂?)
+  // 杩欓噷搴旇璋冪敤API閲嶆柊鍔犺浇浠诲姟
 }
 
 const handleTableCommand = (command: string) => {
   switch (command) {
     case 'compact':
-      ElMessage.info('切换为紧凑视图')
+      ElMessage.info('鍒囨崲涓虹揣鍑戣鍥?)
       break
     case 'normal':
-      ElMessage.info('切换为标准视图')
+      ElMessage.info('鍒囨崲涓烘爣鍑嗚鍥?)
       break
     case 'export':
       exportTasks()
@@ -731,7 +722,7 @@ const handleTableCommand = (command: string) => {
 }
 
 const exportTasks = () => {
-  ElMessage.info('导出功能开发中...')
+  ElMessage.info('瀵煎嚭鍔熻兘寮€鍙戜腑...')
 }
 
 const viewTask = (task: Task | number) => {
@@ -740,17 +731,17 @@ const viewTask = (task: Task | number) => {
 }
 
 const editTask = (task: Task) => {
-  ElMessage.info(`编辑任务: ${task.title}`)
-  // TODO: 实现编辑功能
+  ElMessage.info(`缂栬緫浠诲姟: ${task.title}`)
+  // TODO: 瀹炵幇缂栬緫鍔熻兘
 }
 
 const deleteTask = (task: Task) => {
-  ElMessageBox.confirm(`确定要删除任务 "${task.title}" 吗？删除后数据将无法恢复。`, '确认删除', {
+  ElMessageBox.confirm(`纭畾瑕佸垹闄や换鍔?"${task.title}" 鍚楋紵鍒犻櫎鍚庢暟鎹皢鏃犳硶鎭㈠銆俙, '纭鍒犻櫎', {
     type: 'error',
-    confirmButtonText: '删除',
+    confirmButtonText: '鍒犻櫎',
   }).then(() => {
     tasks.value = tasks.value.filter((t) => t.id !== task.id)
-    ElMessage.success('任务已删除')
+    ElMessage.success('浠诲姟宸插垹闄?)
   })
 }
 
@@ -766,7 +757,7 @@ const handleCreateSubmit = () => {
     if (valid) {
       creating.value = true
 
-      // 模拟API调用延迟
+      // 妯℃嫙API璋冪敤寤惰繜
       setTimeout(() => {
         const newTask: Task = {
           id: tasks.value.length + 1,
@@ -774,7 +765,7 @@ const handleCreateSubmit = () => {
           description: createForm.value.description,
           project_id: createForm.value.project_id,
           assignee_id: createForm.value.assignee_id,
-          reporter_id: 1, // 当前用户ID
+          reporter_id: 1, // 褰撳墠鐢ㄦ埛ID
           status: 'todo',
           priority: createForm.value.priority as any,
           type: createForm.value.type as any,
@@ -791,7 +782,7 @@ const handleCreateSubmit = () => {
         creating.value = false
         showCreateDialog.value = false
         createFormRef.value?.resetFields()
-        ElMessage.success('任务创建成功')
+        ElMessage.success('浠诲姟鍒涘缓鎴愬姛')
       }, 1000)
     }
   })
@@ -815,8 +806,7 @@ const tableRowClassName = ({ row }: { row: Task }) => {
 }
 
 const disabledDate = (time: Date) => {
-  return time.getTime() < Date.now() - 24 * 60 * 60 * 1000 // 禁用今天之前的日期
-}
+  return time.getTime() < Date.now() - 24 * 60 * 60 * 1000 // 绂佺敤浠婂ぉ涔嬪墠鐨勬棩鏈?}
 
 const getStatusTagType = (status: string) => {
   const map: Record<string, string> = {
@@ -830,10 +820,10 @@ const getStatusTagType = (status: string) => {
 
 const getStatusText = (status: string) => {
   const map: Record<string, string> = {
-    todo: '待处理',
-    in_progress: '进行中',
-    review: '审核中',
-    done: '已完成',
+    todo: '寰呭鐞?,
+    in_progress: '杩涜涓?,
+    review: '瀹℃牳涓?,
+    done: '宸插畬鎴?,
   }
   return map[status] || status
 }
@@ -850,10 +840,10 @@ const getPriorityTagType = (priority: string) => {
 
 const getPriorityText = (priority: string) => {
   const map: Record<string, string> = {
-    low: '低',
-    medium: '中',
-    high: '高',
-    urgent: '紧急',
+    low: '浣?,
+    medium: '涓?,
+    high: '楂?,
+    urgent: '绱ф€?,
   }
   return map[priority] || priority
 }
@@ -874,8 +864,7 @@ const isDeadlineNear = (dateString?: string) => {
 }
 
 onMounted(() => {
-  // 可以在这里加载任务数据
-})
+  // 鍙互鍦ㄨ繖閲屽姞杞戒换鍔℃暟鎹?})
 </script>
 
 <style scoped>
@@ -1034,7 +1023,7 @@ onMounted(() => {
   justify-content: center;
 }
 
-/* 表格行样式 */
+/* 琛ㄦ牸琛屾牱寮?*/
 :deep(.task-row-done) {
   opacity: 0.7;
   background-color: var(--el-fill-color-lighter);

@@ -1,19 +1,19 @@
-<template>
+﻿<template>
   <div class="team-settings-tab">
-    <!-- 设置头部 -->
+    <!-- 璁剧疆澶撮儴 -->
     <div class="settings-header">
-      <h3>团队设置</h3>
-      <p class="settings-description">管理团队的基本设置、权限和高级选项</p>
+      <h3>鍥㈤槦璁剧疆</h3>
+      <p class="settings-description">绠＄悊鍥㈤槦鐨勫熀鏈缃€佹潈闄愬拰楂樼骇閫夐」</p>
     </div>
 
-    <!-- 设置内容 -->
+    <!-- 璁剧疆鍐呭 -->
     <div class="settings-content">
       <el-tabs v-model="activeSetting" class="settings-tabs">
-        <!-- 基本信息设置 -->
-        <el-tab-pane label="基本信息" name="basic">
+        <!-- 鍩烘湰淇℃伅璁剧疆 -->
+        <el-tab-pane label="鍩烘湰淇℃伅" name="basic">
           <div class="setting-section">
-            <h4 class="section-title">团队信息</h4>
-            <p class="section-description">更新团队的基本信息和描述</p>
+            <h4 class="section-title">鍥㈤槦淇℃伅</h4>
+            <p class="section-description">鏇存柊鍥㈤槦鐨勫熀鏈俊鎭拰鎻忚堪</p>
 
             <el-form
               ref="basicFormRef"
@@ -22,27 +22,27 @@
               label-width="120px"
               class="setting-form"
             >
-              <el-form-item label="团队名称" prop="name">
+              <el-form-item label="鍥㈤槦鍚嶇О" prop="name">
                 <el-input
                   v-model="basicForm.name"
-                  placeholder="请输入团队名称"
+                  placeholder="璇疯緭鍏ュ洟闃熷悕绉?
                   maxlength="50"
                   show-word-limit
                 />
               </el-form-item>
 
-              <el-form-item label="团队描述" prop="description">
+              <el-form-item label="鍥㈤槦鎻忚堪" prop="description">
                 <el-input
                   v-model="basicForm.description"
                   type="textarea"
                   :rows="4"
-                  placeholder="请输入团队描述"
+                  placeholder="璇疯緭鍏ュ洟闃熸弿杩?
                   maxlength="200"
                   show-word-limit
                 />
               </el-form-item>
 
-              <el-form-item label="团队头像" prop="avatar">
+              <el-form-item label="鍥㈤槦澶村儚" prop="avatar">
                 <div class="avatar-upload">
                   <el-upload
                     class="avatar-uploader"
@@ -61,26 +61,26 @@
                     </el-icon>
                   </el-upload>
                   <div class="avatar-upload-hint">
-                    <p>建议尺寸：200×200像素</p>
-                    <p>支持 JPG、PNG 格式，大小不超过2MB</p>
+                    <p>寤鸿灏哄锛?00脳200鍍忕礌</p>
+                    <p>鏀寔 JPG銆丳NG 鏍煎紡锛屽ぇ灏忎笉瓒呰繃2MB</p>
                   </div>
                 </div>
               </el-form-item>
 
               <el-form-item>
                 <el-button type="primary" :loading="updatingBasic" @click="handleUpdateBasic">
-                  保存修改
+                  淇濆瓨淇敼
                 </el-button>
               </el-form-item>
             </el-form>
           </div>
         </el-tab-pane>
 
-        <!-- 隐私设置 -->
-        <el-tab-pane label="隐私设置" name="privacy" v-if="userRole === 'owner'">
+        <!-- 闅愮璁剧疆 -->
+        <el-tab-pane label="闅愮璁剧疆" name="privacy" v-if="userRole === 'owner'">
           <div class="setting-section">
-            <h4 class="section-title">团队可见性</h4>
-            <p class="section-description">控制谁可以查看和加入你的团队</p>
+            <h4 class="section-title">鍥㈤槦鍙鎬?/h4>
+            <p class="section-description">鎺у埗璋佸彲浠ユ煡鐪嬪拰鍔犲叆浣犵殑鍥㈤槦</p>
 
             <div class="privacy-options">
               <el-radio-group v-model="privacyForm.privacy">
@@ -88,8 +88,8 @@
                   <div class="privacy-option-header">
                     <el-radio label="public" />
                     <div class="privacy-option-content">
-                      <h5>公开团队</h5>
-                      <p>所有人都可以查看团队信息和项目，但只有受邀成员可以加入</p>
+                      <h5>鍏紑鍥㈤槦</h5>
+                      <p>鎵€鏈変汉閮藉彲浠ユ煡鐪嬪洟闃熶俊鎭拰椤圭洰锛屼絾鍙湁鍙楅個鎴愬憳鍙互鍔犲叆</p>
                     </div>
                   </div>
                 </div>
@@ -98,8 +98,8 @@
                   <div class="privacy-option-header">
                     <el-radio label="private" />
                     <div class="privacy-option-content">
-                      <h5>私有团队</h5>
-                      <p>只有团队成员可以查看团队信息和项目</p>
+                      <h5>绉佹湁鍥㈤槦</h5>
+                      <p>鍙湁鍥㈤槦鎴愬憳鍙互鏌ョ湅鍥㈤槦淇℃伅鍜岄」鐩?/p>
                     </div>
                   </div>
                 </div>
@@ -108,64 +108,64 @@
 
             <div class="setting-actions">
               <el-button type="primary" :loading="updatingPrivacy" @click="handleUpdatePrivacy">
-                更新隐私设置
+                鏇存柊闅愮璁剧疆
               </el-button>
             </div>
           </div>
         </el-tab-pane>
 
-        <!-- 成员权限 -->
-        <el-tab-pane label="成员权限" name="permissions" v-if="userRole === 'owner'">
+        <!-- 鎴愬憳鏉冮檺 -->
+        <el-tab-pane label="鎴愬憳鏉冮檺" name="permissions" v-if="userRole === 'owner'">
           <div class="setting-section">
-            <h4 class="section-title">成员权限设置</h4>
-            <p class="section-description">配置团队成员可以执行的操作</p>
+            <h4 class="section-title">鎴愬憳鏉冮檺璁剧疆</h4>
+            <p class="section-description">閰嶇疆鍥㈤槦鎴愬憳鍙互鎵ц鐨勬搷浣?/p>
 
             <div class="permission-settings">
               <div class="permission-item">
                 <div class="permission-info">
-                  <h5>创建项目</h5>
-                  <p>允许成员在团队中创建新项目</p>
+                  <h5>鍒涘缓椤圭洰</h5>
+                  <p>鍏佽鎴愬憳鍦ㄥ洟闃熶腑鍒涘缓鏂伴」鐩?/p>
                 </div>
                 <el-switch
                   v-model="permissionForm.can_create_project"
-                  active-text="允许"
-                  inactive-text="禁止"
+                  active-text="鍏佽"
+                  inactive-text="绂佹"
                 />
               </div>
 
               <div class="permission-item">
                 <div class="permission-info">
-                  <h5>邀请成员</h5>
-                  <p>允许成员邀请新成员加入团队</p>
+                  <h5>閭€璇锋垚鍛?/h5>
+                  <p>鍏佽鎴愬憳閭€璇锋柊鎴愬憳鍔犲叆鍥㈤槦</p>
                 </div>
                 <el-switch
                   v-model="permissionForm.can_invite_member"
-                  active-text="允许"
-                  inactive-text="禁止"
+                  active-text="鍏佽"
+                  inactive-text="绂佹"
                 />
               </div>
 
               <div class="permission-item">
                 <div class="permission-info">
-                  <h5>删除项目</h5>
-                  <p>允许成员删除他们创建的项目</p>
+                  <h5>鍒犻櫎椤圭洰</h5>
+                  <p>鍏佽鎴愬憳鍒犻櫎浠栦滑鍒涘缓鐨勯」鐩?/p>
                 </div>
                 <el-switch
                   v-model="permissionForm.can_delete_project"
-                  active-text="允许"
-                  inactive-text="禁止"
+                  active-text="鍏佽"
+                  inactive-text="绂佹"
                 />
               </div>
 
               <div class="permission-item">
                 <div class="permission-info">
-                  <h5>编辑团队信息</h5>
-                  <p>允许成员编辑团队名称和描述</p>
+                  <h5>缂栬緫鍥㈤槦淇℃伅</h5>
+                  <p>鍏佽鎴愬憳缂栬緫鍥㈤槦鍚嶇О鍜屾弿杩?/p>
                 </div>
                 <el-switch
                   v-model="permissionForm.can_edit_team"
-                  active-text="允许"
-                  inactive-text="禁止"
+                  active-text="鍏佽"
+                  inactive-text="绂佹"
                 />
               </div>
             </div>
@@ -176,35 +176,35 @@
                 :loading="updatingPermissions"
                 @click="handleUpdatePermissions"
               >
-                更新权限设置
+                鏇存柊鏉冮檺璁剧疆
               </el-button>
             </div>
           </div>
         </el-tab-pane>
 
-        <!-- 危险区域 -->
-        <el-tab-pane label="危险区域" name="danger" v-if="userRole === 'owner'">
+        <!-- 鍗遍櫓鍖哄煙 -->
+        <el-tab-pane label="鍗遍櫓鍖哄煙" name="danger" v-if="userRole === 'owner'">
           <div class="setting-section danger-section">
-            <h4 class="section-title danger-title">⚠️ 危险操作</h4>
-            <p class="section-description">这些操作可能无法撤销，请谨慎操作</p>
+            <h4 class="section-title danger-title">鈿狅笍 鍗遍櫓鎿嶄綔</h4>
+            <p class="section-description">杩欎簺鎿嶄綔鍙兘鏃犳硶鎾ら攢锛岃璋ㄦ厧鎿嶄綔</p>
 
             <div class="danger-actions">
               <div class="danger-action">
                 <div class="danger-action-info">
-                  <h5>转让团队所有权</h5>
-                  <p>将团队所有权转让给其他成员。转让后你将变为管理员角色。</p>
+                  <h5>杞鍥㈤槦鎵€鏈夋潈</h5>
+                  <p>灏嗗洟闃熸墍鏈夋潈杞缁欏叾浠栨垚鍛樸€傝浆璁╁悗浣犲皢鍙樹负绠＄悊鍛樿鑹层€?/p>
                 </div>
                 <el-button type="warning" @click="showTransferDialog = true">
-                  转让所有权
+                  杞鎵€鏈夋潈
                 </el-button>
               </div>
 
               <div class="danger-action">
                 <div class="danger-action-info">
-                  <h5>解散团队</h5>
-                  <p>永久删除团队及其所有数据。此操作不可撤销。</p>
+                  <h5>瑙ｆ暎鍥㈤槦</h5>
+                  <p>姘镐箙鍒犻櫎鍥㈤槦鍙婂叾鎵€鏈夋暟鎹€傛鎿嶄綔涓嶅彲鎾ら攢銆?/p>
                 </div>
-                <el-button type="danger" @click="handleDeleteTeam"> 解散团队 </el-button>
+                <el-button type="danger" @click="handleDeleteTeam"> 瑙ｆ暎鍥㈤槦 </el-button>
               </div>
             </div>
           </div>
@@ -212,18 +212,18 @@
       </el-tabs>
     </div>
 
-    <!-- 转让所有权对话框 -->
-    <el-dialog v-model="showTransferDialog" title="转让团队所有权" width="500px">
+    <!-- 杞鎵€鏈夋潈瀵硅瘽妗?-->
+    <el-dialog v-model="showTransferDialog" title="杞鍥㈤槦鎵€鏈夋潈" width="500px">
       <el-form
         ref="transferFormRef"
         :model="transferForm"
         :rules="transferRules"
         label-width="100px"
       >
-        <el-form-item label="新所有者" prop="new_owner_id">
+        <el-form-item label="鏂版墍鏈夎€? prop="new_owner_id">
           <el-select
             v-model="transferForm.new_owner_id"
-            placeholder="请选择新所有者"
+            placeholder="璇烽€夋嫨鏂版墍鏈夎€?
             style="width: 100%"
           >
             <el-option
@@ -238,25 +238,24 @@
                 </el-avatar>
                 <span>{{ member.full_name || member.username }}</span>
                 <el-tag size="small" style="margin-left: 8px">
-                  {{ member.role === 'admin' ? '管理员' : '成员' }}
+                  {{ member.role === 'admin' ? '绠＄悊鍛? : '鎴愬憳' }}
                 </el-tag>
               </div>
             </el-option>
           </el-select>
         </el-form-item>
 
-        <el-form-item label="确认操作" prop="confirm">
+        <el-form-item label="纭鎿嶄綔" prop="confirm">
           <el-checkbox v-model="transferForm.confirm">
-            我确认要将团队所有权转让给该成员，转让后我将变为管理员角色
-          </el-checkbox>
+            鎴戠‘璁よ灏嗗洟闃熸墍鏈夋潈杞缁欒鎴愬憳锛岃浆璁╁悗鎴戝皢鍙樹负绠＄悊鍛樿鑹?          </el-checkbox>
         </el-form-item>
       </el-form>
 
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="showTransferDialog = false">取消</el-button>
+          <el-button @click="showTransferDialog = false">鍙栨秷</el-button>
           <el-button type="warning" :loading="transferring" @click="handleTransferOwnership">
-            确认转让
+            纭杞
           </el-button>
         </span>
       </template>
@@ -283,10 +282,10 @@ interface Emits {
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
-// 激活的设置标签
+// 婵€娲荤殑璁剧疆鏍囩
 const activeSetting = ref('basic')
 
-// 基本信息表单
+// 鍩烘湰淇℃伅琛ㄥ崟
 const basicForm = reactive({
   name: props.team.name,
   description: props.team.description,
@@ -295,26 +294,26 @@ const basicForm = reactive({
 
 const basicRules = {
   name: [
-    { required: true, message: '请输入团队名称', trigger: 'blur' },
-    { min: 2, max: 50, message: '团队名称长度在2到50个字符之间', trigger: 'blur' },
+    { required: true, message: '璇疯緭鍏ュ洟闃熷悕绉?, trigger: 'blur' },
+    { min: 2, max: 50, message: '鍥㈤槦鍚嶇О闀垮害鍦?鍒?0涓瓧绗︿箣闂?, trigger: 'blur' },
   ],
   description: [
-    { required: true, message: '请输入团队描述', trigger: 'blur' },
-    { max: 200, message: '团队描述不能超过200个字符', trigger: 'blur' },
+    { required: true, message: '璇疯緭鍏ュ洟闃熸弿杩?, trigger: 'blur' },
+    { max: 200, message: '鍥㈤槦鎻忚堪涓嶈兘瓒呰繃200涓瓧绗?, trigger: 'blur' },
   ],
 }
 
 const basicFormRef = ref()
 const updatingBasic = ref(false)
 
-// 隐私设置表单
+// 闅愮璁剧疆琛ㄥ崟
 const privacyForm = reactive({
   privacy: props.team.privacy || 'private',
 })
 
 const updatingPrivacy = ref(false)
 
-// 权限设置表单
+// 鏉冮檺璁剧疆琛ㄥ崟
 const permissionForm = reactive({
   can_create_project: true,
   can_invite_member: true,
@@ -324,7 +323,7 @@ const permissionForm = reactive({
 
 const updatingPermissions = ref(false)
 
-// 转让所有权表单
+// 杞鎵€鏈夋潈琛ㄥ崟
 const showTransferDialog = ref(false)
 const transferForm = reactive({
   new_owner_id: '',
@@ -332,12 +331,12 @@ const transferForm = reactive({
 })
 
 const transferRules = {
-  new_owner_id: [{ required: true, message: '请选择新所有者', trigger: 'change' }],
+  new_owner_id: [{ required: true, message: '璇烽€夋嫨鏂版墍鏈夎€?, trigger: 'change' }],
   confirm: [
     {
       validator: (_rule: any, value: boolean, callback: any) => {
         if (!value) {
-          callback(new Error('请确认转让操作'))
+          callback(new Error('璇风‘璁よ浆璁╂搷浣?))
         } else {
           callback()
         }
@@ -349,14 +348,14 @@ const transferRules = {
 
 const transferring = ref(false)
 
-// 成员数据（模拟）
+// 鎴愬憳鏁版嵁锛堟ā鎷燂級
 const members = ref<Member[]>([
   {
     id: 1,
     username: 'zhangsan',
     email: 'zhangsan@example.com',
-    fullname: '张三',
-    bio: '团队负责人',
+    fullname: '寮犱笁',
+    bio: '鍥㈤槦璐熻矗浜?,
     avatar_url: '',
     role: 'owner',
     joined_at: '2026-01-15T10:30:00Z',
@@ -365,8 +364,8 @@ const members = ref<Member[]>([
     id: 2,
     username: 'lisi',
     email: 'lisi@example.com',
-    fullname: '李四',
-    bio: '管理员',
+    fullname: '鏉庡洓',
+    bio: '绠＄悊鍛?,
     avatar_url: '',
     role: 'admin',
     joined_at: '2026-01-20T14:15:00Z',
@@ -375,41 +374,41 @@ const members = ref<Member[]>([
     id: 3,
     username: 'wangwu',
     email: 'wangwu@example.com',
-    fullname: '王五',
-    bio: '开发工程师',
+    fullname: '鐜嬩簲',
+    bio: '寮€鍙戝伐绋嬪笀',
     avatar_url: '',
     role: 'member',
     joined_at: '2026-02-01T09:00:00Z',
   },
 ])
 
-// 计算符合条件的成员（排除当前所有者）
+// 璁＄畻绗﹀悎鏉′欢鐨勬垚鍛橈紙鎺掗櫎褰撳墠鎵€鏈夎€咃級
 const eligibleMembers = computed(() => {
   return members.value.filter((member: Member) => member.role !== 'owner')
 })
 
-// 生命周期
+// 鐢熷懡鍛ㄦ湡
 onMounted(() => {
-  // 可以在这里加载实际的权限设置
+  // 鍙互鍦ㄨ繖閲屽姞杞藉疄闄呯殑鏉冮檺璁剧疆
   loadPermissionSettings()
 })
 
-// 加载权限设置
+// 鍔犺浇鏉冮檺璁剧疆
 const loadPermissionSettings = async () => {
   try {
-    // TODO: 调用API获取权限设置
-    console.log('加载权限设置')
+    // TODO: 璋冪敤API鑾峰彇鏉冮檺璁剧疆
+    console.log('鍔犺浇鏉冮檺璁剧疆')
   } catch (error) {
-    console.error('加载权限设置失败:', error)
+    console.error('鍔犺浇鏉冮檺璁剧疆澶辫触:', error)
   }
 }
 
-// 处理头像变更
+// 澶勭悊澶村儚鍙樻洿
 const handleAvatarChange = (file: any) => {
-  // TODO: 处理头像上传
-  console.log('头像文件:', file)
-  // 这里可以添加文件上传逻辑
-  // 暂时使用本地预览
+  // TODO: 澶勭悊澶村儚涓婁紶
+  console.log('澶村儚鏂囦欢:', file)
+  // 杩欓噷鍙互娣诲姞鏂囦欢涓婁紶閫昏緫
+  // 鏆傛椂浣跨敤鏈湴棰勮
   if (file.raw) {
     const reader = new FileReader()
     reader.onload = (e) => {
@@ -419,14 +418,14 @@ const handleAvatarChange = (file: any) => {
   }
 }
 
-// 更新基本信息
+// 鏇存柊鍩烘湰淇℃伅
 const handleUpdateBasic = async () => {
   try {
     await basicFormRef.value?.validate()
 
     updatingBasic.value = true
 
-    // TODO: 调用更新团队的API
+    // TODO: 璋冪敤鏇存柊鍥㈤槦鐨凙PI
     await new Promise((resolve) => setTimeout(resolve, 1000))
 
     emit('update-team', {
@@ -435,95 +434,95 @@ const handleUpdateBasic = async () => {
       avatar_url: basicForm.avatar_url,
     })
 
-    ElMessage.success('团队信息更新成功')
+    ElMessage.success('鍥㈤槦淇℃伅鏇存柊鎴愬姛')
   } catch (error) {
-    console.error('更新失败:', error)
-    ElMessage.error('更新失败，请重试')
+    console.error('鏇存柊澶辫触:', error)
+    ElMessage.error('鏇存柊澶辫触锛岃閲嶈瘯')
   } finally {
     updatingBasic.value = false
   }
 }
 
-// 更新隐私设置
+// 鏇存柊闅愮璁剧疆
 const handleUpdatePrivacy = async () => {
   updatingPrivacy.value = true
 
   try {
-    // TODO: 调用更新隐私设置的API
+    // TODO: 璋冪敤鏇存柊闅愮璁剧疆鐨凙PI
     await new Promise((resolve) => setTimeout(resolve, 1000))
 
     emit('update-team', { privacy: privacyForm.privacy })
 
-    ElMessage.success('隐私设置更新成功')
+    ElMessage.success('闅愮璁剧疆鏇存柊鎴愬姛')
   } catch (error) {
-    console.error('更新失败:', error)
-    ElMessage.error('更新失败，请重试')
+    console.error('鏇存柊澶辫触:', error)
+    ElMessage.error('鏇存柊澶辫触锛岃閲嶈瘯')
   } finally {
     updatingPrivacy.value = false
   }
 }
 
-// 更新权限设置
+// 鏇存柊鏉冮檺璁剧疆
 const handleUpdatePermissions = async () => {
   updatingPermissions.value = true
 
   try {
-    // TODO: 调用更新权限设置的API
+    // TODO: 璋冪敤鏇存柊鏉冮檺璁剧疆鐨凙PI
     await new Promise((resolve) => setTimeout(resolve, 1000))
 
-    ElMessage.success('权限设置更新成功')
+    ElMessage.success('鏉冮檺璁剧疆鏇存柊鎴愬姛')
   } catch (error) {
-    console.error('更新失败:', error)
-    ElMessage.error('更新失败，请重试')
+    console.error('鏇存柊澶辫触:', error)
+    ElMessage.error('鏇存柊澶辫触锛岃閲嶈瘯')
   } finally {
     updatingPermissions.value = false
   }
 }
 
-// 转让所有权
+// 杞鎵€鏈夋潈
 const handleTransferOwnership = async () => {
   transferring.value = true
 
   try {
-    // TODO: 调用转让所有权的API
+    // TODO: 璋冪敤杞鎵€鏈夋潈鐨凙PI
     await new Promise((resolve) => setTimeout(resolve, 1000))
 
-    ElMessage.success('团队所有权转让成功')
+    ElMessage.success('鍥㈤槦鎵€鏈夋潈杞鎴愬姛')
     showTransferDialog.value = false
     transferForm.new_owner_id = ''
     transferForm.confirm = false
 
-    // 更新本地数据
-    // 在实际应用中，这里可能需要重新加载页面或更新用户角色
+    // 鏇存柊鏈湴鏁版嵁
+    // 鍦ㄥ疄闄呭簲鐢ㄤ腑锛岃繖閲屽彲鑳介渶瑕侀噸鏂板姞杞介〉闈㈡垨鏇存柊鐢ㄦ埛瑙掕壊
   } catch (error) {
-    console.error('转让失败:', error)
-    ElMessage.error('转让失败，请重试')
+    console.error('杞澶辫触:', error)
+    ElMessage.error('杞澶辫触锛岃閲嶈瘯')
   } finally {
     transferring.value = false
   }
 }
 
-// 解散团队
+// 瑙ｆ暎鍥㈤槦
 const handleDeleteTeam = async () => {
   try {
     await ElMessageBox.confirm(
-      '确定要解散这个团队吗？此操作将永久删除团队及其所有数据，且不可恢复。',
-      '确认解散团队',
+      '纭畾瑕佽В鏁ｈ繖涓洟闃熷悧锛熸鎿嶄綔灏嗘案涔呭垹闄ゅ洟闃熷強鍏舵墍鏈夋暟鎹紝涓斾笉鍙仮澶嶃€?,
+      '纭瑙ｆ暎鍥㈤槦',
       {
-        confirmButtonText: '确定解散',
-        cancelButtonText: '取消',
+        confirmButtonText: '纭畾瑙ｆ暎',
+        cancelButtonText: '鍙栨秷',
         type: 'error',
         confirmButtonClass: 'el-button--danger',
       },
     )
 
-    // TODO: 调用解散团队的API
+    // TODO: 璋冪敤瑙ｆ暎鍥㈤槦鐨凙PI
     await new Promise((resolve) => setTimeout(resolve, 1000))
 
-    ElMessage.success('团队已解散')
-    // 在实际应用中，这里可能需要跳转到团队列表页面
+    ElMessage.success('鍥㈤槦宸茶В鏁?)
+    // 鍦ㄥ疄闄呭簲鐢ㄤ腑锛岃繖閲屽彲鑳介渶瑕佽烦杞埌鍥㈤槦鍒楄〃椤甸潰
   } catch {
-    // 用户取消
+    // 鐢ㄦ埛鍙栨秷
   }
 }
 </script>
@@ -721,7 +720,7 @@ const handleDeleteTeam = async () => {
   border-top: 1px solid #e4e7ed;
 }
 
-/* 响应式设计 */
+/* 鍝嶅簲寮忚璁?*/
 @media (max-width: 768px) {
   .settings-tabs {
     padding: 16px;

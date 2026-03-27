@@ -1,20 +1,19 @@
-<template>
+﻿<template>
   <div class="dashboard-container">
-    <!-- 欢迎横幅 -->
+    <!-- 娆㈣繋妯箙 -->
     <div class="welcome-banner">
       <div class="welcome-content">
-        <h1 class="welcome-title">欢迎回来，{{ username }}！</h1>
-        <p class="welcome-subtitle">今天是 {{ currentDate }}，祝您工作愉快</p>
+        <h1 class="welcome-title">娆㈣繋鍥炴潵锛寋{ username }}锛?/h1>
+        <p class="welcome-subtitle">浠婂ぉ鏄?{{ currentDate }}锛岀鎮ㄥ伐浣滄剦蹇?/p>
       </div>
       <div class="welcome-actions">
         <el-button type="primary" size="large" @click="handleCreateTask">
           <el-icon><Plus /></el-icon>
-          创建新任务
-        </el-button>
+          鍒涘缓鏂颁换鍔?        </el-button>
       </div>
     </div>
 
-    <!-- 统计卡片 -->
+    <!-- 缁熻鍗＄墖 -->
     <div class="stats-grid">
       <el-card class="stat-card" shadow="hover">
         <div class="stat-content">
@@ -23,7 +22,7 @@
           </div>
           <div class="stat-info">
             <div class="stat-value">{{ stats.teams || 0 }}</div>
-            <div class="stat-label">我的团队</div>
+            <div class="stat-label">鎴戠殑鍥㈤槦</div>
           </div>
         </div>
       </el-card>
@@ -35,7 +34,7 @@
           </div>
           <div class="stat-info">
             <div class="stat-value">{{ stats.projects || 0 }}</div>
-            <div class="stat-label">进行中的项目</div>
+            <div class="stat-label">杩涜涓殑椤圭洰</div>
           </div>
         </div>
       </el-card>
@@ -47,7 +46,7 @@
           </div>
           <div class="stat-info">
             <div class="stat-value">{{ stats.tasks || 0 }}</div>
-            <div class="stat-label">待办任务</div>
+            <div class="stat-label">寰呭姙浠诲姟</div>
           </div>
         </div>
       </el-card>
@@ -59,20 +58,20 @@
           </div>
           <div class="stat-info">
             <div class="stat-value">{{ stats.notifications || 0 }}</div>
-            <div class="stat-label">未读通知</div>
+            <div class="stat-label">鏈閫氱煡</div>
           </div>
         </div>
       </el-card>
     </div>
 
-    <!-- 主要内容区域 -->
+    <!-- 涓昏鍐呭鍖哄煙 -->
     <div class="main-grid">
-      <!-- 最近任务 -->
+      <!-- 鏈€杩戜换鍔?-->
       <el-card class="recent-tasks" shadow="never">
         <template #header>
           <div class="card-header">
-            <h3 class="card-title">最近任务</h3>
-            <el-button type="text" @click="goToTasks">查看全部</el-button>
+            <h3 class="card-title">鏈€杩戜换鍔?/h3>
+            <el-button type="text" @click="goToTasks">鏌ョ湅鍏ㄩ儴</el-button>
           </div>
         </template>
 
@@ -99,15 +98,15 @@
           </div>
         </div>
         <div v-else class="empty-state">
-          <el-empty description="暂无任务" />
+          <el-empty description="鏆傛棤浠诲姟" />
         </div>
       </el-card>
 
-      <!-- 活动时间线 -->
+      <!-- 娲诲姩鏃堕棿绾?-->
       <el-card class="activity-timeline" shadow="never">
         <template #header>
           <div class="card-header">
-            <h3 class="card-title">最近活动</h3>
+            <h3 class="card-title">鏈€杩戞椿鍔?/h3>
           </div>
         </template>
 
@@ -127,15 +126,15 @@
         </el-timeline>
 
         <div v-if="recentActivities.length === 0" class="empty-state">
-          <el-empty description="暂无活动记录" />
+          <el-empty description="鏆傛棤娲诲姩璁板綍" />
         </div>
       </el-card>
     </div>
 
-    <!-- 快速操作 -->
+    <!-- 蹇€熸搷浣?-->
     <el-card class="quick-actions" shadow="never">
       <template #header>
-        <h3 class="card-title">快速操作</h3>
+        <h3 class="card-title">蹇€熸搷浣?/h3>
       </template>
 
       <div class="actions-grid">
@@ -143,28 +142,28 @@
           <div class="action-icon" style="background: #e6f7ff">
             <el-icon color="#1890ff"><User /></el-icon>
           </div>
-          <div class="action-text">创建团队</div>
+          <div class="action-text">鍒涘缓鍥㈤槦</div>
         </div>
 
         <div class="action-item" @click="goToProjects">
           <div class="action-icon" style="background: #f6ffed">
             <el-icon color="#52c41a"><Folder /></el-icon>
           </div>
-          <div class="action-text">新建项目</div>
+          <div class="action-text">鏂板缓椤圭洰</div>
         </div>
 
         <div class="action-item" @click="goToTasks">
           <div class="action-icon" style="background: #fff7e6">
             <el-icon color="#fa8c16"><List /></el-icon>
           </div>
-          <div class="action-text">分配任务</div>
+          <div class="action-text">鍒嗛厤浠诲姟</div>
         </div>
 
         <div class="action-item" @click="goToProfile">
           <div class="action-icon" style="background: #f9f0ff">
             <el-icon color="#722ed1"><Setting /></el-icon>
           </div>
-          <div class="action-text">个人设置</div>
+          <div class="action-text">涓汉璁剧疆</div>
         </div>
       </div>
     </el-card>
@@ -191,10 +190,10 @@ import {
 const router = useRouter()
 const authStore = useAuthStore()
 
-// 用户信息
-const username = computed(() => authStore.username || '用户')
+// 鐢ㄦ埛淇℃伅
+const username = computed(() => authStore.username || '鐢ㄦ埛')
 
-// 当前日期
+// 褰撳墠鏃ユ湡
 const currentDate = computed(() => {
   const now = new Date()
   return now.toLocaleDateString('zh-CN', {
@@ -205,7 +204,7 @@ const currentDate = computed(() => {
   })
 })
 
-// 统计数据
+// 缁熻鏁版嵁
 const stats = ref({
   teams: 0,
   projects: 0,
@@ -213,71 +212,68 @@ const stats = ref({
   notifications: 0,
 })
 
-// 最近任务
-const recentTasks = ref([
+// 鏈€杩戜换鍔?const recentTasks = ref([
   {
     id: 1,
-    title: '设计用户界面原型',
-    project_name: 'TaskFlow 项目',
-    due_date: '明天',
-    status: '进行中',
+    title: '璁捐鐢ㄦ埛鐣岄潰鍘熷瀷',
+    project_name: 'TaskFlow 椤圭洰',
+    due_date: '鏄庡ぉ',
+    status: '杩涜涓?,
   },
   {
     id: 2,
-    title: '编写API文档',
-    project_name: '后端开发',
-    due_date: '3天后',
-    status: '待开始',
+    title: '缂栧啓API鏂囨。',
+    project_name: '鍚庣寮€鍙?,
+    due_date: '3澶╁悗',
+    status: '寰呭紑濮?,
   },
   {
     id: 3,
-    title: '测试用户认证流程',
-    project_name: '质量保证',
-    due_date: '已完成',
-    status: '已完成',
+    title: '娴嬭瘯鐢ㄦ埛璁よ瘉娴佺▼',
+    project_name: '璐ㄩ噺淇濊瘉',
+    due_date: '宸插畬鎴?,
+    status: '宸插畬鎴?,
   },
 ])
 
-// 最近活动
-const recentActivities = ref([
+// 鏈€杩戞椿鍔?const recentActivities = ref([
   {
     id: 1,
     type: 'success',
-    time: '10分钟前',
-    text: '完成了"设计用户界面原型"任务',
-    user: '张三',
+    time: '10鍒嗛挓鍓?,
+    text: '瀹屾垚浜?璁捐鐢ㄦ埛鐣岄潰鍘熷瀷"浠诲姟',
+    user: '寮犱笁',
   },
   {
     id: 2,
     type: 'primary',
-    time: '1小时前',
-    text: '创建了新项目"后端开发"',
-    user: '李四',
+    time: '1灏忔椂鍓?,
+    text: '鍒涘缓浜嗘柊椤圭洰"鍚庣寮€鍙?',
+    user: '鏉庡洓',
   },
   {
     id: 3,
     type: 'warning',
-    time: '2小时前',
-    text: '评论了"API设计讨论"',
-    user: '王五',
+    time: '2灏忔椂鍓?,
+    text: '璇勮浜?API璁捐璁ㄨ"',
+    user: '鐜嬩簲',
   },
 ])
 
-// 获取状态类型
-const getStatusType = (status: string) => {
+// 鑾峰彇鐘舵€佺被鍨?const getStatusType = (status: string) => {
   switch (status) {
-    case '已完成':
+    case '宸插畬鎴?:
       return 'success'
-    case '进行中':
+    case '杩涜涓?:
       return 'primary'
-    case '待开始':
+    case '寰呭紑濮?:
       return 'warning'
     default:
       return 'info'
   }
 }
 
-// 获取活动图标
+// 鑾峰彇娲诲姩鍥炬爣
 const getActivityIcon = (type: string) => {
   switch (type) {
     case 'success':
@@ -291,7 +287,7 @@ const getActivityIcon = (type: string) => {
   }
 }
 
-// 导航方法
+// 瀵艰埅鏂规硶
 const goToTeams = () => {
   router.push('/teams')
 }
@@ -309,17 +305,16 @@ const goToProfile = () => {
 }
 
 const handleCreateTask = () => {
-  // TODO: 打开创建任务对话框
-  console.log('创建新任务')
+  // TODO: 鎵撳紑鍒涘缓浠诲姟瀵硅瘽妗?  console.log('鍒涘缓鏂颁换鍔?)
 }
 
 const viewTask = (taskId: number) => {
   router.push(`/tasks/${taskId}`)
 }
 
-// 模拟加载数据
+// 妯℃嫙鍔犺浇鏁版嵁
 onMounted(() => {
-  // TODO: 从API加载真实数据
+  // TODO: 浠嶢PI鍔犺浇鐪熷疄鏁版嵁
   setTimeout(() => {
     stats.value = {
       teams: 3,
@@ -338,7 +333,7 @@ onMounted(() => {
   gap: 24px;
 }
 
-/* 欢迎横幅 */
+/* 娆㈣繋妯箙 */
 .welcome-banner {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border-radius: 12px;
@@ -361,7 +356,7 @@ onMounted(() => {
   opacity: 0.9;
 }
 
-/* 统计卡片 */
+/* 缁熻鍗＄墖 */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -406,7 +401,7 @@ onMounted(() => {
   margin-top: 4px;
 }
 
-/* 主要内容区域 */
+/* 涓昏鍐呭鍖哄煙 */
 .main-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -432,7 +427,7 @@ onMounted(() => {
   margin: 0;
 }
 
-/* 任务列表 */
+/* 浠诲姟鍒楄〃 */
 .task-item {
   display: flex;
   justify-content: space-between;
@@ -482,7 +477,7 @@ onMounted(() => {
   gap: 4px;
 }
 
-/* 活动时间线 */
+/* 娲诲姩鏃堕棿绾?*/
 .activity-content {
   background: #f5f7fa;
   padding: 12px;
@@ -501,7 +496,7 @@ onMounted(() => {
   color: #909399;
 }
 
-/* 快速操作 */
+/* 蹇€熸搷浣?*/
 .actions-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -541,12 +536,12 @@ onMounted(() => {
   color: #303133;
 }
 
-/* 空状态 */
+/* 绌虹姸鎬?*/
 .empty-state {
   padding: 40px 0;
 }
 
-/* 响应式设计 */
+/* 鍝嶅簲寮忚璁?*/
 @media (max-width: 768px) {
   .welcome-banner {
     flex-direction: column;

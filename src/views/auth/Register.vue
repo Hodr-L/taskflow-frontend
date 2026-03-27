@@ -1,9 +1,9 @@
-<template>
+﻿<template>
   <div class="register-container">
     <div class="register-card">
       <div class="register-header">
-        <h1 class="register-title">创建账户</h1>
-        <p class="register-subtitle">加入 {{ appName }}，开始高效协作</p>
+        <h1 class="register-title">鍒涘缓璐︽埛</h1>
+        <p class="register-subtitle">鍔犲叆 {{ appName }}锛屽紑濮嬮珮鏁堝崗浣?/p>
       </div>
 
       <el-form
@@ -16,7 +16,7 @@
         <el-form-item prop="username">
           <el-input
             v-model="registerForm.username"
-            placeholder="请输入用户名"
+            placeholder="璇疯緭鍏ョ敤鎴峰悕"
             size="large"
             :prefix-icon="User"
             autocomplete="username"
@@ -26,7 +26,7 @@
         <el-form-item prop="email">
           <el-input
             v-model="registerForm.email"
-            placeholder="请输入邮箱"
+            placeholder="璇疯緭鍏ラ偖绠?
             size="large"
             :prefix-icon="Message"
             autocomplete="email"
@@ -37,7 +37,7 @@
           <el-input
             v-model="registerForm.password"
             type="password"
-            placeholder="请输入密码"
+            placeholder="璇疯緭鍏ュ瘑鐮?
             size="large"
             :prefix-icon="Lock"
             autocomplete="new-password"
@@ -49,7 +49,7 @@
           <el-input
             v-model="registerForm.confirmPassword"
             type="password"
-            placeholder="请确认密码"
+            placeholder="璇风‘璁ゅ瘑鐮?
             size="large"
             :prefix-icon="Lock"
             autocomplete="new-password"
@@ -59,10 +59,8 @@
 
         <el-form-item>
           <el-checkbox v-model="agreeTerms">
-            我已阅读并同意
-            <router-link to="/terms" class="terms-link">服务条款</router-link>
-            和
-            <router-link to="/privacy" class="terms-link">隐私政策</router-link>
+            鎴戝凡闃呰骞跺悓鎰?            <router-link to="/terms" class="terms-link">鏈嶅姟鏉℃</router-link>
+            鍜?            <router-link to="/privacy" class="terms-link">闅愮鏀跨瓥</router-link>
           </el-checkbox>
         </el-form-item>
 
@@ -75,19 +73,18 @@
             :disabled="!agreeTerms"
             @click="handleRegister"
           >
-            {{ loading ? '注册中...' : '注册' }}
+            {{ loading ? '娉ㄥ唽涓?..' : '娉ㄥ唽' }}
           </el-button>
         </el-form-item>
 
         <div class="register-footer">
           <p class="login-link">
-            已有账户？
-            <router-link to="/login" class="login-button"> 立即登录 </router-link>
+            宸叉湁璐︽埛锛?            <router-link to="/login" class="login-button"> 绔嬪嵆鐧诲綍 </router-link>
           </p>
         </div>
       </el-form>
 
-      <!-- 错误提示 -->
+      <!-- 閿欒鎻愮ず -->
       <el-alert
         v-if="errorMessage"
         :title="errorMessage"
@@ -98,7 +95,7 @@
         class="error-alert"
       />
 
-      <!-- 成功提示 -->
+      <!-- 鎴愬姛鎻愮ず -->
       <el-alert
         v-if="successMessage"
         :title="successMessage"
@@ -111,7 +108,7 @@
     </div>
 
     <div class="register-footer-info">
-      <p>© 2026 {{ appName }}. All rights reserved.</p>
+      <p>漏 2026 {{ appName }}. All rights reserved.</p>
       <p>Version {{ appVersion }}</p>
     </div>
   </div>
@@ -127,11 +124,11 @@ import { useAuthStore } from '@/stores/auth'
 const router = useRouter()
 const authStore = useAuthStore()
 
-// 应用信息
+// 搴旂敤淇℃伅
 const appName = import.meta.env.VITE_APP_NAME
 const appVersion = import.meta.env.VITE_APP_VERSION
 
-// 表单数据
+// 琛ㄥ崟鏁版嵁
 const registerForm = reactive({
   username: '',
   email: '',
@@ -144,14 +141,14 @@ const loading = ref(false)
 const errorMessage = ref('')
 const successMessage = ref('')
 
-// 表单验证规则
+// 琛ㄥ崟楠岃瘉瑙勫垯
 const validateUsername = (_rule: any, value: string, callback: any) => {
   if (!value) {
-    callback(new Error('请输入用户名'))
+    callback(new Error('璇疯緭鍏ョ敤鎴峰悕'))
   } else if (value.length < 3) {
-    callback(new Error('用户名长度不能少于3个字符'))
+    callback(new Error('鐢ㄦ埛鍚嶉暱搴︿笉鑳藉皯浜?涓瓧绗?))
   } else if (value.length > 50) {
-    callback(new Error('用户名长度不能超过50个字符'))
+    callback(new Error('鐢ㄦ埛鍚嶉暱搴︿笉鑳借秴杩?0涓瓧绗?))
   } else {
     callback()
   }
@@ -159,9 +156,9 @@ const validateUsername = (_rule: any, value: string, callback: any) => {
 
 const validatePassword = (_rule: any, value: string, callback: any) => {
   if (!value) {
-    callback(new Error('请输入密码'))
+    callback(new Error('璇疯緭鍏ュ瘑鐮?))
   } else if (value.length < 6) {
-    callback(new Error('密码长度不能少于6个字符'))
+    callback(new Error('瀵嗙爜闀垮害涓嶈兘灏戜簬6涓瓧绗?))
   } else {
     callback()
   }
@@ -169,9 +166,9 @@ const validatePassword = (_rule: any, value: string, callback: any) => {
 
 const validateConfirmPassword = (_rule: any, value: string, callback: any) => {
   if (!value) {
-    callback(new Error('请确认密码'))
+    callback(new Error('璇风‘璁ゅ瘑鐮?))
   } else if (value !== registerForm.password) {
-    callback(new Error('两次输入的密码不一致'))
+    callback(new Error('涓ゆ杈撳叆鐨勫瘑鐮佷笉涓€鑷?))
   } else {
     callback()
   }
@@ -180,17 +177,17 @@ const validateConfirmPassword = (_rule: any, value: string, callback: any) => {
 const registerRules = {
   username: [{ required: true, validator: validateUsername, trigger: 'blur' }],
   email: [
-    { required: true, message: '请输入邮箱地址', trigger: 'blur' },
-    { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' },
+    { required: true, message: '璇疯緭鍏ラ偖绠卞湴鍧€', trigger: 'blur' },
+    { type: 'email', message: '璇疯緭鍏ユ纭殑閭鍦板潃', trigger: 'blur' },
   ],
   password: [{ required: true, validator: validatePassword, trigger: 'blur' }],
   confirmPassword: [{ required: true, validator: validateConfirmPassword, trigger: 'blur' }],
 }
 
-// 处理注册
+// 澶勭悊娉ㄥ唽
 const handleRegister = async () => {
   if (!agreeTerms.value) {
-    ElMessage.warning('请先同意服务条款和隐私政策')
+    ElMessage.warning('璇峰厛鍚屾剰鏈嶅姟鏉℃鍜岄殣绉佹斂绛?)
     return
   }
 
@@ -208,18 +205,18 @@ const handleRegister = async () => {
     )
 
     if (result.success) {
-      successMessage.value = '注册成功！正在跳转到仪表板...'
-      ElMessage.success('注册成功')
+      successMessage.value = '娉ㄥ唽鎴愬姛锛佹鍦ㄨ烦杞埌浠〃鏉?..'
+      ElMessage.success('娉ㄥ唽鎴愬姛')
 
-      // 延迟跳转，让用户看到成功消息
+      // 寤惰繜璺宠浆锛岃鐢ㄦ埛鐪嬪埌鎴愬姛娑堟伅
       setTimeout(() => {
         router.push('/dashboard')
       }, 1500)
     } else {
-      errorMessage.value = result.error || '注册失败'
+      errorMessage.value = result.error || '娉ㄥ唽澶辫触'
     }
   } catch (error: any) {
-    errorMessage.value = error.message || '注册失败，请检查网络连接'
+    errorMessage.value = error.message || '娉ㄥ唽澶辫触锛岃妫€鏌ョ綉缁滆繛鎺?
   } finally {
     loading.value = false
   }

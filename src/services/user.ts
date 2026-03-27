@@ -1,8 +1,7 @@
-import { http } from './api'
+﻿import { http } from './api'
 import type { User } from '@/types/user'
 
-// 获取用户列表（管理员）
-export interface GetUsersParams {
+// 鑾峰彇鐢ㄦ埛鍒楄〃锛堢鐞嗗憳锛?export interface GetUsersParams {
   page?: number
   limit?: number
   search?: string
@@ -11,10 +10,9 @@ export interface GetUsersParams {
   email_verified?: boolean
 }
 
-// getUsers现在直接返回数据部分（由于api.ts拦截器返回response.data.data）
-export interface UsersData {
-  users: User[]  // 根据API文档，返回的是"users"数组
-  pagination: {  // 根据API文档，返回的是"pagination"（小写）
+// getUsers鐜板湪鐩存帴杩斿洖鏁版嵁閮ㄥ垎锛堢敱浜巃pi.ts鎷︽埅鍣ㄨ繑鍥瀝esponse.data.data锛?export interface UsersData {
+  users: User[]  // 鏍规嵁API鏂囨。锛岃繑鍥炵殑鏄?users"鏁扮粍
+  pagination: {  // 鏍规嵁API鏂囨。锛岃繑鍥炵殑鏄?pagination"锛堝皬鍐欙級
     page: number
     limit: number
     total: number
@@ -24,9 +22,9 @@ export interface UsersData {
 
 export const getUsers = (params: GetUsersParams = {}): Promise<UsersData> => {
   return http.get('/users/admin', { params }).then(data => {
-    // 容错处理：data可能为null/undefined，或缺少所需字段
+    // 瀹归敊澶勭悊锛歞ata鍙兘涓簄ull/undefined锛屾垨缂哄皯鎵€闇€瀛楁
     if (!data || typeof data !== 'object') {
-      console.warn('用户列表接口返回无效数据，使用默认值:', data)
+      console.warn('鐢ㄦ埛鍒楄〃鎺ュ彛杩斿洖鏃犳晥鏁版嵁锛屼娇鐢ㄩ粯璁ゅ€?', data)
       return {
         users: [],
         pagination: {
@@ -38,8 +36,7 @@ export const getUsers = (params: GetUsersParams = {}): Promise<UsersData> => {
       }
     }
     
-    // 兼容不同的字段命名（user/users, Pagination/pagination）
-    const users = data.users || data.user || []
+    // 鍏煎涓嶅悓鐨勫瓧娈靛懡鍚嶏紙user/users, Pagination/pagination锛?    const users = data.users || data.user || []
     const pagination = data.Pagination || data.pagination || {
       page: 1,
       limit: 20,
@@ -57,7 +54,7 @@ export const getUsers = (params: GetUsersParams = {}): Promise<UsersData> => {
       }
     }
   }).catch(error => {
-    console.warn('获取用户列表失败，使用默认值:', error.message || error)
+    console.warn('鑾峰彇鐢ㄦ埛鍒楄〃澶辫触锛屼娇鐢ㄩ粯璁ゅ€?', error.message || error)
     return {
       users: [],
       pagination: {
@@ -70,13 +67,11 @@ export const getUsers = (params: GetUsersParams = {}): Promise<UsersData> => {
   })
 }
 
-// 获取单个用户信息（管理员）
-export const getUserById = (id: number): Promise<User> => {
+// 鑾峰彇鍗曚釜鐢ㄦ埛淇℃伅锛堢鐞嗗憳锛?export const getUserById = (id: number): Promise<User> => {
   return http.get(`/users/admin/${id}`)
 }
 
-// 创建用户（管理员）
-export interface CreateUserData {
+// 鍒涘缓鐢ㄦ埛锛堢鐞嗗憳锛?export interface CreateUserData {
   username: string
   email: string
   password: string
@@ -92,8 +87,7 @@ export const createUser = (data: CreateUserData): Promise<User> => {
   return http.post('/users/admin', data)
 }
 
-// 更新用户信息（管理员）
-export interface UpdateUserData {
+// 鏇存柊鐢ㄦ埛淇℃伅锛堢鐞嗗憳锛?export interface UpdateUserData {
   username?: string
   email?: string
   fullname?: string
@@ -108,13 +102,11 @@ export const updateUser = (id: number, data: UpdateUserData): Promise<User> => {
   return http.put(`/users/admin/${id}`, data)
 }
 
-// 删除用户（管理员）
-export const deleteUser = (id: number): Promise<void> => {
+// 鍒犻櫎鐢ㄦ埛锛堢鐞嗗憳锛?export const deleteUser = (id: number): Promise<void> => {
   return http.delete(`/users/admin/${id}`)
 }
 
-// 重置用户密码（管理员）
-export interface ResetPasswordData {
+// 閲嶇疆鐢ㄦ埛瀵嗙爜锛堢鐞嗗憳锛?export interface ResetPasswordData {
   new_password: string
 }
 
@@ -122,17 +114,17 @@ export const resetUserPassword = (id: number, data: ResetPasswordData): Promise<
   return http.post(`/users/admin/${id}/reset-password`, data)
 }
 
-// 获取当前用户信息（个人）
+// 鑾峰彇褰撳墠鐢ㄦ埛淇℃伅锛堜釜浜猴級
 export const getCurrentUser = (): Promise<User> => {
   return http.get('/users/profile')
 }
 
-// 更新当前用户信息（个人）
+// 鏇存柊褰撳墠鐢ㄦ埛淇℃伅锛堜釜浜猴級
 export const updateCurrentUser = (data: UpdateUserData): Promise<User> => {
   return http.put('/users/profile', data)
 }
 
-// 修改当前用户密码（个人）
+// 淇敼褰撳墠鐢ㄦ埛瀵嗙爜锛堜釜浜猴級
 export interface ChangePasswordData {
   old_password: string
   new_password: string
@@ -142,8 +134,7 @@ export const changeCurrentUserPassword = (data: ChangePasswordData): Promise<voi
   return http.put('/users/password', data)
 }
 
-// 获取用户统计信息（管理员）
-export interface UserStats {
+// 鑾峰彇鐢ㄦ埛缁熻淇℃伅锛堢鐞嗗憳锛?export interface UserStats {
   total: number
   active: number
   inactive: number
@@ -153,12 +144,10 @@ export interface UserStats {
   unverified: number
 }
 
-// getUserStats现在直接返回UserStats对象（由于api.ts拦截器返回response.data.data）
-export const getUserStats = (): Promise<UserStats> => {
+// getUserStats鐜板湪鐩存帴杩斿洖UserStats瀵硅薄锛堢敱浜巃pi.ts鎷︽埅鍣ㄨ繑鍥瀝esponse.data.data锛?export const getUserStats = (): Promise<UserStats> => {
   return http.get('/users/admin/stats').then(result => {
-    // 处理API返回null或undefined的情况
-    if (!result) {
-      console.warn('用户统计接口返回空数据，使用默认值')
+    // 澶勭悊API杩斿洖null鎴杣ndefined鐨勬儏鍐?    if (!result) {
+      console.warn('鐢ㄦ埛缁熻鎺ュ彛杩斿洖绌烘暟鎹紝浣跨敤榛樿鍊?)
       return {
         total: 0,
         active: 0,
@@ -170,7 +159,7 @@ export const getUserStats = (): Promise<UserStats> => {
       }
     }
     
-    // 确保返回的数据符合UserStats格式
+    // 纭繚杩斿洖鐨勬暟鎹鍚圲serStats鏍煎紡
     const stats = {
       total: typeof result.total === 'number' ? result.total : 0,
       active: typeof result.active === 'number' ? result.active : 0,
@@ -183,8 +172,7 @@ export const getUserStats = (): Promise<UserStats> => {
     
     return stats
   }).catch(error => {
-    // 如果API不可用，返回默认值
-    console.warn('获取用户统计失败，使用默认值:', error.message || error)
+    // 濡傛灉API涓嶅彲鐢紝杩斿洖榛樿鍊?    console.warn('鑾峰彇鐢ㄦ埛缁熻澶辫触锛屼娇鐢ㄩ粯璁ゅ€?', error.message || error)
     return {
       total: 0,
       active: 0,

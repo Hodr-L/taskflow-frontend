@@ -1,4 +1,4 @@
-/* 全局样式重置 */
+﻿/* 鍏ㄥ眬鏍峰紡閲嶇疆 */
 * {
   margin: 0;
   padding: 0;
@@ -12,7 +12,7 @@ html {
 
 body {
   font-family:
-    'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑',
+    'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '寰蒋闆呴粦',
     Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -26,7 +26,7 @@ body {
   height: 100%;
 }
 
-/* 滚动条样式 */
+/* 婊氬姩鏉℃牱寮?*/
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -46,7 +46,7 @@ body {
   background: #a8a8a8;
 }
 
-/* 链接样式 */
+/* 閾炬帴鏍峰紡 */
 a {
   color: #409eff;
   text-decoration: none;
@@ -58,7 +58,7 @@ a:hover {
   text-decoration: underline;
 }
 
-/* 工具类 */
+/* 宸ュ叿绫?*/
 .text-center {
   text-align: center;
 }
@@ -160,7 +160,7 @@ a:hover {
   padding: 24px;
 }
 
-/* 动画 */
+/* 鍔ㄧ敾 */
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.3s ease;
@@ -182,7 +182,7 @@ a:hover {
   transform: translateY(20px);
 }
 
-/* 卡片阴影 */
+/* 鍗＄墖闃村奖 */
 .card-shadow {
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 }
@@ -195,7 +195,7 @@ a:hover {
   box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.15);
 }
 
-/* 响应式断点 */
+/* 鍝嶅簲寮忔柇鐐?*/
 @media (max-width: 1200px) {
   .container {
     max-width: 960px;
@@ -225,7 +225,7 @@ a:hover {
   }
 }
 
-/* 打印样式 */
+/* 鎵撳嵃鏍峰紡 */
 @media print {
   .no-print {
     display: none !important;

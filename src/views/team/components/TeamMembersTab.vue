@@ -1,25 +1,24 @@
-<template>
+﻿<template>
   <div class="team-members-tab">
-    <!-- 成员管理头部 -->
+    <!-- 鎴愬憳绠＄悊澶撮儴 -->
     <div class="members-header">
       <div class="header-left">
-        <h3>团队成员</h3>
-        <p class="member-count">共 {{ members.length }} 名成员</p>
+        <h3>鍥㈤槦鎴愬憳</h3>
+        <p class="member-count">鍏?{{ members.length }} 鍚嶆垚鍛?/p>
       </div>
 
       <div class="header-right" v-if="userRole === 'owner' || userRole === 'admin'">
         <el-button type="primary" @click="$emit('invite')">
           <el-icon><Plus /></el-icon>
-          邀请成员
-        </el-button>
+          閭€璇锋垚鍛?        </el-button>
       </div>
     </div>
 
-    <!-- 成员搜索和筛选 -->
+    <!-- 鎴愬憳鎼滅储鍜岀瓫閫?-->
     <div class="members-filter">
       <el-input
         v-model="searchKeyword"
-        placeholder="搜索成员姓名或邮箱"
+        placeholder="鎼滅储鎴愬憳濮撳悕鎴栭偖绠?
         class="search-input"
         clearable
       >
@@ -28,18 +27,18 @@
         </template>
       </el-input>
 
-      <el-select v-model="filterRole" placeholder="筛选角色" class="role-filter" clearable>
-        <el-option label="全部" value="" />
-        <el-option label="创建者" value="owner" />
-        <el-option label="管理员" value="admin" />
-        <el-option label="成员" value="member" />
+      <el-select v-model="filterRole" placeholder="绛涢€夎鑹? class="role-filter" clearable>
+        <el-option label="鍏ㄩ儴" value="" />
+        <el-option label="鍒涘缓鑰? value="owner" />
+        <el-option label="绠＄悊鍛? value="admin" />
+        <el-option label="鎴愬憳" value="member" />
       </el-select>
     </div>
 
-    <!-- 成员列表 -->
+    <!-- 鎴愬憳鍒楄〃 -->
     <div class="members-list">
-      <el-table :data="filteredMembers" style="width: 100%" empty-text="暂无成员">
-        <el-table-column label="成员" width="300">
+      <el-table :data="filteredMembers" style="width: 100%" empty-text="鏆傛棤鎴愬憳">
+        <el-table-column label="鎴愬憳" width="300">
           <template #default="{ row }">
             <div class="member-info">
               <el-avatar :size="40" :src="row.avatar_url">
@@ -53,7 +52,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="角色" width="120">
+        <el-table-column label="瑙掕壊" width="120">
           <template #default="{ row }">
             <el-tag :type="getRoleTagType(row.role)" size="small">
               {{ getRoleText(row.role) }}
@@ -61,14 +60,14 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="加入时间" width="180">
+        <el-table-column label="鍔犲叆鏃堕棿" width="180">
           <template #default="{ row }">
             {{ formatDate(row.joined_at) }}
           </template>
         </el-table-column>
 
         <el-table-column
-          label="操作"
+          label="鎿嶄綔"
           width="200"
           v-if="userRole === 'owner' || userRole === 'admin'"
         >
@@ -82,13 +81,13 @@
                 @command="(command: string) => handleMemberCommand(command, row)"
               >
                 <el-button type="text" size="small">
-                  管理
+                  绠＄悊
                   <el-icon><ArrowDown /></el-icon>
                 </el-button>
                 <template #dropdown>
                   <el-dropdown-menu>
-                    <el-dropdown-item command="change-role">更改角色</el-dropdown-item>
-                    <el-dropdown-item divided command="remove">移除成员</el-dropdown-item>
+                    <el-dropdown-item command="change-role">鏇存敼瑙掕壊</el-dropdown-item>
+                    <el-dropdown-item divided command="remove">绉婚櫎鎴愬憳</el-dropdown-item>
                   </el-dropdown-menu>
                 </template>
               </el-dropdown>
@@ -99,8 +98,8 @@
       </el-table>
     </div>
 
-    <!-- 更改角色对话框 -->
-    <el-dialog v-model="showRoleDialog" title="更改成员角色" width="400px">
+    <!-- 鏇存敼瑙掕壊瀵硅瘽妗?-->
+    <el-dialog v-model="showRoleDialog" title="鏇存敼鎴愬憳瑙掕壊" width="400px">
       <div class="role-dialog-content">
         <div class="member-info">
           <el-avatar :size="48" :src="selectedMember?.avatar_url">
@@ -114,8 +113,8 @@
 
         <div class="role-selection">
           <el-radio-group v-model="newRole">
-            <el-radio label="admin">管理员</el-radio>
-            <el-radio label="member">普通成员</el-radio>
+            <el-radio label="admin">绠＄悊鍛?/el-radio>
+            <el-radio label="member">鏅€氭垚鍛?/el-radio>
           </el-radio-group>
           <p class="role-description">
             {{ getRoleDescription(newRole) }}
@@ -125,9 +124,9 @@
 
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="showRoleDialog = false">取消</el-button>
+          <el-button @click="showRoleDialog = false">鍙栨秷</el-button>
           <el-button type="primary" :loading="changingRole" @click="handleChangeRole">
-            确认更改
+            纭鏇存敼
           </el-button>
         </span>
       </template>
@@ -150,32 +149,31 @@ interface Props {
 const props = defineProps<Props>()
 const emit = defineEmits(['refresh', 'invite'])
 
-// 状态
-const searchKeyword = ref('')
+// 鐘舵€?const searchKeyword = ref('')
 const filterRole = ref('')
 const showRoleDialog = ref(false)
 const changingRole = ref(false)
 const selectedMember = ref<Member | null>(null)
 const newRole = ref<'admin' | 'member'>('member')
 
-// 过滤后的成员列表
+// 杩囨护鍚庣殑鎴愬憳鍒楄〃
 const filteredMembers = computed(() => {
   return props.members.filter((member) => {
-    // 搜索过滤
+    // 鎼滅储杩囨护
     const keyword = searchKeyword.value.toLowerCase()
     const matchesSearch =
       !keyword ||
       member.full_name?.toLowerCase().includes(keyword) ||
       member.email.toLowerCase().includes(keyword)
 
-    // 角色过滤
+    // 瑙掕壊杩囨护
     const matchesRole = !filterRole.value || member.role === filterRole.value
 
     return matchesSearch && matchesRole
   })
 })
 
-// 获取角色标签类型
+// 鑾峰彇瑙掕壊鏍囩绫诲瀷
 const getRoleTagType = (role: string) => {
   switch (role) {
     case 'owner':
@@ -187,37 +185,36 @@ const getRoleTagType = (role: string) => {
   }
 }
 
-// 获取角色文本
+// 鑾峰彇瑙掕壊鏂囨湰
 const getRoleText = (role: string) => {
   switch (role) {
     case 'owner':
-      return '创建者'
+      return '鍒涘缓鑰?
     case 'admin':
-      return '管理员'
+      return '绠＄悊鍛?
     default:
-      return '成员'
+      return '鎴愬憳'
   }
 }
 
-// 获取角色描述
+// 鑾峰彇瑙掕壊鎻忚堪
 const getRoleDescription = (role: string) => {
   switch (role) {
     case 'owner':
-      return '拥有团队所有权限，包括解散团队'
+      return '鎷ユ湁鍥㈤槦鎵€鏈夋潈闄愶紝鍖呮嫭瑙ｆ暎鍥㈤槦'
     case 'admin':
-      return '可以管理团队成员和项目，但不能解散团队'
+      return '鍙互绠＄悊鍥㈤槦鎴愬憳鍜岄」鐩紝浣嗕笉鑳借В鏁ｅ洟闃?
     default:
-      return '可以查看团队信息，参与项目协作'
+      return '鍙互鏌ョ湅鍥㈤槦淇℃伅锛屽弬涓庨」鐩崗浣?
   }
 }
 
-// 格式化日期
-const formatDate = (dateString: string) => {
+// 鏍煎紡鍖栨棩鏈?const formatDate = (dateString: string) => {
   const date = new Date(dateString)
   return date.toLocaleDateString('zh-CN')
 }
 
-// 处理成员命令
+// 澶勭悊鎴愬憳鍛戒护
 const handleMemberCommand = (command: string, member: Member) => {
   selectedMember.value = member
 
@@ -232,54 +229,54 @@ const handleMemberCommand = (command: string, member: Member) => {
   }
 }
 
-// 更改成员角色
+// 鏇存敼鎴愬憳瑙掕壊
 const handleChangeRole = async () => {
   if (!selectedMember.value) return
 
   changingRole.value = true
 
   try {
-    // TODO: 调用API更改成员角色
+    // TODO: 璋冪敤API鏇存敼鎴愬憳瑙掕壊
     await new Promise((resolve) => setTimeout(resolve, 1000))
 
-    // 更新本地数据
+    // 鏇存柊鏈湴鏁版嵁
     const memberIndex = props.members.findIndex((m) => m.id === selectedMember.value!.id)
     if (memberIndex !== -1) {
       props.members[memberIndex].role = newRole.value as 'admin' | 'member' | 'owner'
     }
 
-    ElMessage.success('角色更改成功')
+    ElMessage.success('瑙掕壊鏇存敼鎴愬姛')
     showRoleDialog.value = false
     emit('refresh')
   } catch (error) {
-    ElMessage.error('更改失败，请重试')
+    ElMessage.error('鏇存敼澶辫触锛岃閲嶈瘯')
   } finally {
     changingRole.value = false
   }
 }
 
-// 移除成员
+// 绉婚櫎鎴愬憳
 const handleRemoveMember = async (member: Member) => {
   try {
-    await ElMessageBox.confirm(`确定要将 ${member.full_name} 从团队中移除吗？`, '确认移除', {
-      confirmButtonText: '确定移除',
-      cancelButtonText: '取消',
+    await ElMessageBox.confirm(`纭畾瑕佸皢 ${member.full_name} 浠庡洟闃熶腑绉婚櫎鍚楋紵`, '纭绉婚櫎', {
+      confirmButtonText: '纭畾绉婚櫎',
+      cancelButtonText: '鍙栨秷',
       type: 'warning',
     })
 
-    // TODO: 调用API移除成员
+    // TODO: 璋冪敤API绉婚櫎鎴愬憳
     await new Promise((resolve) => setTimeout(resolve, 1000))
 
-    // 更新本地数据
+    // 鏇存柊鏈湴鏁版嵁
     const memberIndex = props.members.findIndex((m) => m.id === member.id)
     if (memberIndex !== -1) {
       props.members.splice(memberIndex, 1)
     }
 
-    ElMessage.success('成员移除成功')
+    ElMessage.success('鎴愬憳绉婚櫎鎴愬姛')
     emit('refresh')
   } catch {
-    // 用户取消
+    // 鐢ㄦ埛鍙栨秷
   }
 }
 </script>
@@ -360,7 +357,7 @@ const handleRemoveMember = async (member: Member) => {
   font-size: 14px;
 }
 
-/* 角色对话框内容 */
+/* 瑙掕壊瀵硅瘽妗嗗唴瀹?*/
 .role-dialog-content {
   padding: 20px 0;
 }
@@ -383,7 +380,7 @@ const handleRemoveMember = async (member: Member) => {
   line-height: 1.5;
 }
 
-/* 表格样式 */
+/* 琛ㄦ牸鏍峰紡 */
 :deep(.el-table) {
   border-radius: 8px;
 }
@@ -398,7 +395,7 @@ const handleRemoveMember = async (member: Member) => {
   color: #303133;
 }
 
-/* 响应式设计 */
+/* 鍝嶅簲寮忚璁?*/
 @media (max-width: 768px) {
   .members-filter {
     flex-direction: column;

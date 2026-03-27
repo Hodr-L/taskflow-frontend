@@ -1,15 +1,15 @@
-import axios from 'axios'
+﻿import axios from 'axios'
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { useAuthStore } from '@/stores/auth'
 
-// 标准API响应格式
+// 鏍囧噯API鍝嶅簲鏍煎紡
 export interface ApiResponse<T = any> {
   code: number
   message: string
   data?: T
 }
 
-// 创建axios实例
+// 鍒涘缓axios瀹炰緥
 const api: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   timeout: 10000,
@@ -18,8 +18,7 @@ const api: AxiosInstance = axios.create({
   },
 })
 
-// 请求拦截器
-api.interceptors.request.use(
+// 璇锋眰鎷︽埅鍣?api.interceptors.request.use(
   (config) => {
     const authStore = useAuthStore()
     const token = authStore.token
@@ -35,66 +34,62 @@ api.interceptors.request.use(
   },
 )
 
-// 响应拦截器 - 更健壮的处理
+// 鍝嶅簲鎷︽埅鍣?- 鏇村仴澹殑澶勭悊
 api.interceptors.response.use(
   (response: AxiosResponse<ApiResponse>) => {
     const responseData = response.data
     
-    // 检查响应格式是否符合API标准
+    // 妫€鏌ュ搷搴旀牸寮忔槸鍚︾鍚圓PI鏍囧噯
     if (!responseData || typeof responseData !== 'object') {
-      console.warn('API返回非JSON格式响应:', responseData)
+      console.warn('API杩斿洖闈濲SON鏍煎紡鍝嶅簲:', responseData)
       return responseData
     }
     
-    // 检查是否有code字段（标准API响应格式）
-    if (typeof responseData.code !== 'number') {
-      console.warn('API响应缺少code字段，返回原始数据:', responseData)
+    // 妫€鏌ユ槸鍚︽湁code瀛楁锛堟爣鍑咥PI鍝嶅簲鏍煎紡锛?    if (typeof responseData.code !== 'number') {
+      console.warn('API鍝嶅簲缂哄皯code瀛楁锛岃繑鍥炲師濮嬫暟鎹?', responseData)
       return responseData
     }
     
-    // 处理成功响应 (200-299)
+    // 澶勭悊鎴愬姛鍝嶅簲 (200-299)
     if (responseData.code >= 200 && responseData.code < 300) {
-      // 容错处理：data字段可能不存在
-      if ('data' in responseData) {
+      // 瀹归敊澶勭悊锛歞ata瀛楁鍙兘涓嶅瓨鍦?      if ('data' in responseData) {
         return responseData.data
       } else {
-        // 没有data字段，返回整个响应对象，但过滤掉code和message
+        // 娌℃湁data瀛楁锛岃繑鍥炴暣涓搷搴斿璞★紝浣嗚繃婊ゆ帀code鍜宮essage
         const { code, message, ...rest } = responseData
-        // 如果rest为空，返回null（表示成功但无数据）
+        // 濡傛灉rest涓虹┖锛岃繑鍥瀗ull锛堣〃绀烘垚鍔熶絾鏃犳暟鎹級
         return Object.keys(rest).length > 0 ? rest : null
       }
     } else {
-      // 业务逻辑错误
-      console.warn('API业务逻辑错误:', responseData.code, responseData.message)
+      // 涓氬姟閫昏緫閿欒
+      console.warn('API涓氬姟閫昏緫閿欒:', responseData.code, responseData.message)
       return Promise.reject({
         ...responseData,
-        // 保持向后兼容：确保有message字段
-        message: responseData.message || `业务错误: ${responseData.code}`
+        // 淇濇寔鍚戝悗鍏煎锛氱‘淇濇湁message瀛楁
+        message: responseData.message || `涓氬姟閿欒: ${responseData.code}`
       })
     }
   },
   (error) => {
-    // 处理HTTP错误
+    // 澶勭悊HTTP閿欒
     if (error.response) {
       const { status, data } = error.response
-      const url = error.config?.url || '未知URL'
+      const url = error.config?.url || '鏈煡URL'
 
       switch (status) {
         case 401:
-          // 未授权，清除token并跳转到登录页
-          // 但对于某些特定的API（如/users/stats），不跳转登录页
+          // 鏈巿鏉冿紝娓呴櫎token骞惰烦杞埌鐧诲綍椤?          // 浣嗗浜庢煇浜涚壒瀹氱殑API锛堝/users/stats锛夛紝涓嶈烦杞櫥褰曢〉
           if (url.includes('/users/stats')) {
-            console.warn('用户统计API返回401，但保持登录状态:', url)
-            // 返回一个特殊的错误对象，让调用方知道是401但不需要跳转
-            return Promise.reject({
+            console.warn('鐢ㄦ埛缁熻API杩斿洖401锛屼絾淇濇寔鐧诲綍鐘舵€?', url)
+            // 杩斿洖涓€涓壒娈婄殑閿欒瀵硅薄锛岃璋冪敤鏂圭煡閬撴槸401浣嗕笉闇€瑕佽烦杞?            return Promise.reject({
               code: 401,
-              message: '未授权访问用户统计',
+              message: '鏈巿鏉冭闂敤鎴风粺璁?,
               status: 401,
               url
             })
           }
           
-          console.warn('认证过期，清除token并跳转到登录页:', url)
+          console.warn('璁よ瘉杩囨湡锛屾竻闄oken骞惰烦杞埌鐧诲綍椤?', url)
           const authStore = useAuthStore()
           authStore.clearToken()
           authStore.clearUser()
@@ -102,54 +97,52 @@ api.interceptors.response.use(
           break
 
         case 403:
-          // 权限不足
-          console.error('权限不足:', url, data?.message || '无权限')
+          // 鏉冮檺涓嶈冻
+          console.error('鏉冮檺涓嶈冻:', url, data?.message || '鏃犳潈闄?)
           break
 
         case 404:
-          // 资源不存在
-          console.error('资源不存在:', url, data?.message || '未找到')
+          // 璧勬簮涓嶅瓨鍦?          console.error('璧勬簮涓嶅瓨鍦?', url, data?.message || '鏈壘鍒?)
           break
 
         case 500:
-          // 服务器错误
-          console.error('服务器错误:', url, data?.message || '服务器内部错误')
+          // 鏈嶅姟鍣ㄩ敊璇?          console.error('鏈嶅姟鍣ㄩ敊璇?', url, data?.message || '鏈嶅姟鍣ㄥ唴閮ㄩ敊璇?)
           break
 
         default:
-          console.error('请求错误:', url, `状态码: ${status}`, data?.message || '未知错误')
+          console.error('璇锋眰閿欒:', url, `鐘舵€佺爜: ${status}`, data?.message || '鏈煡閿欒')
       }
       
-      // 返回格式化的错误对象
+      // 杩斿洖鏍煎紡鍖栫殑閿欒瀵硅薄
       return Promise.reject({
         code: status,
-        message: data?.message || `HTTP错误: ${status}`,
+        message: data?.message || `HTTP閿欒: ${status}`,
         status,
         url,
         data: data
       })
     } else if (error.request) {
-      // 请求已发出但没有收到响应
-      console.error('网络错误，请检查网络连接:', error.config?.url || '未知URL')
+      // 璇锋眰宸插彂鍑轰絾娌℃湁鏀跺埌鍝嶅簲
+      console.error('缃戠粶閿欒锛岃妫€鏌ョ綉缁滆繛鎺?', error.config?.url || '鏈煡URL')
       return Promise.reject({
         code: 0,
-        message: '网络错误，请检查网络连接',
+        message: '缃戠粶閿欒锛岃妫€鏌ョ綉缁滆繛鎺?,
         status: 0,
         url: error.config?.url
       })
     } else {
-      // 请求配置错误
-      console.error('请求配置错误:', error.message)
+      // 璇锋眰閰嶇疆閿欒
+      console.error('璇锋眰閰嶇疆閿欒:', error.message)
       return Promise.reject({
         code: -1,
-        message: `请求配置错误: ${error.message}`,
+        message: `璇锋眰閰嶇疆閿欒: ${error.message}`,
         status: -1
       })
     }
   },
 )
 
-// 导出常用的HTTP方法
+// 瀵煎嚭甯哥敤鐨凥TTP鏂规硶
 export const http = {
   get: <T = any>(url: string, config?: AxiosRequestConfig): Promise<T> => api.get(url, config),
 
@@ -166,7 +159,7 @@ export const http = {
     api.delete(url, config),
 }
 
-// 辅助函数：安全地处理API响应
+// 杈呭姪鍑芥暟锛氬畨鍏ㄥ湴澶勭悊API鍝嶅簲
 export const safeApiCall = async <T = any>(
   promise: Promise<T>,
   defaultValue?: T
@@ -174,12 +167,12 @@ export const safeApiCall = async <T = any>(
   try {
     return await promise
   } catch (error: any) {
-    console.warn('API调用失败，使用默认值:', error.message || error)
+    console.warn('API璋冪敤澶辫触锛屼娇鐢ㄩ粯璁ゅ€?', error.message || error)
     return defaultValue as T
   }
 }
 
-// 辅助函数：检查API响应是否成功
+// 杈呭姪鍑芥暟锛氭鏌PI鍝嶅簲鏄惁鎴愬姛
 export const isApiSuccess = (response: any): boolean => {
   return response && typeof response === 'object' && 
          response.code >= 200 && response.code < 300

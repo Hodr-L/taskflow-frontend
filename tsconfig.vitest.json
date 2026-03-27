@@ -1,4 +1,4 @@
-{
+﻿{
   "extends": "./tsconfig.app.json",
 
   // Override to include only test files and clear exclusions.

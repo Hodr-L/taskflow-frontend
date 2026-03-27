@@ -1,20 +1,20 @@
-import { createApp } from 'vue'
+﻿import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
 import App from './App.vue'
 import router from './router'
 
-// 引入Element Plus
+// 寮曞叆Element Plus
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
-// 引入全局样式
+// 寮曞叆鍏ㄥ眬鏍峰紡
 import './assets/main.css'
 
 const app = createApp(App)
 
-// 注册Element Plus图标
+// 娉ㄥ唽Element Plus鍥炬爣
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
 }

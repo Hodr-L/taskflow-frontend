@@ -1,9 +1,9 @@
-<template>
+﻿<template>
   <div class="login-container">
     <div class="login-card">
       <div class="login-header">
         <h1 class="login-title">{{ appName }}</h1>
-        <p class="login-subtitle">欢迎回来，请登录您的账户</p>
+        <p class="login-subtitle">娆㈣繋鍥炴潵锛岃鐧诲綍鎮ㄧ殑璐︽埛</p>
       </div>
 
       <el-form
@@ -16,7 +16,7 @@
         <el-form-item prop="email">
           <el-input
             v-model="loginForm.email"
-            placeholder="请输入邮箱"
+            placeholder="璇疯緭鍏ラ偖绠?
             size="large"
             :prefix-icon="Message"
             autocomplete="username"
@@ -27,7 +27,7 @@
           <el-input
             v-model="loginForm.password"
             type="password"
-            placeholder="请输入密码"
+            placeholder="璇疯緭鍏ュ瘑鐮?
             size="large"
             :prefix-icon="Lock"
             autocomplete="current-password"
@@ -37,8 +37,8 @@
 
         <el-form-item>
           <div class="login-options">
-            <el-checkbox v-model="rememberMe">记住我</el-checkbox>
-            <router-link to="/forgot-password" class="forgot-password"> 忘记密码？ </router-link>
+            <el-checkbox v-model="rememberMe">璁颁綇鎴?/el-checkbox>
+            <router-link to="/forgot-password" class="forgot-password"> 蹇樿瀵嗙爜锛?</router-link>
           </div>
         </el-form-item>
 
@@ -50,19 +50,19 @@
             :loading="loading"
             @click="handleLogin"
           >
-            {{ loading ? '登录中...' : '登录' }}
+            {{ loading ? '鐧诲綍涓?..' : '鐧诲綍' }}
           </el-button>
         </el-form-item>
 
         <div class="login-footer">
           <p class="register-link">
-            还没有账户？
-            <router-link to="/register" class="register-button"> 立即注册 </router-link>
+            杩樻病鏈夎处鎴凤紵
+            <router-link to="/register" class="register-button"> 绔嬪嵆娉ㄥ唽 </router-link>
           </p>
         </div>
       </el-form>
 
-      <!-- 错误提示 -->
+      <!-- 閿欒鎻愮ず -->
       <el-alert
         v-if="errorMessage"
         :title="errorMessage"
@@ -75,7 +75,7 @@
     </div>
 
     <div class="login-footer-info">
-      <p>© 2026 {{ appName }}. All rights reserved.</p>
+      <p>漏 2026 {{ appName }}. All rights reserved.</p>
       <p>Version {{ appVersion }}</p>
     </div>
   </div>
@@ -91,11 +91,11 @@ import { useAuthStore } from '@/stores/auth'
 const router = useRouter()
 const authStore = useAuthStore()
 
-// 应用信息
+// 搴旂敤淇℃伅
 const appName = import.meta.env.VITE_APP_NAME
 const appVersion = import.meta.env.VITE_APP_VERSION
 
-// 表单数据
+// 琛ㄥ崟鏁版嵁
 const loginForm = reactive({
   email: '',
   password: '',
@@ -105,19 +105,19 @@ const rememberMe = ref(false)
 const loading = ref(false)
 const errorMessage = ref('')
 
-// 表单验证规则
+// 琛ㄥ崟楠岃瘉瑙勫垯
 const loginRules = {
   email: [
-    { required: true, message: '请输入邮箱地址', trigger: 'blur' },
-    { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' },
+    { required: true, message: '璇疯緭鍏ラ偖绠卞湴鍧€', trigger: 'blur' },
+    { type: 'email', message: '璇疯緭鍏ユ纭殑閭鍦板潃', trigger: 'blur' },
   ],
   password: [
-    { required: true, message: '请输入密码', trigger: 'blur' },
-    { min: 6, message: '密码长度不能少于6个字符', trigger: 'blur' },
+    { required: true, message: '璇疯緭鍏ュ瘑鐮?, trigger: 'blur' },
+    { min: 6, message: '瀵嗙爜闀垮害涓嶈兘灏戜簬6涓瓧绗?, trigger: 'blur' },
   ],
 }
 
-// 处理登录
+// 澶勭悊鐧诲綍
 const handleLogin = async () => {
   if (loading.value) return
 
@@ -128,19 +128,19 @@ const handleLogin = async () => {
     const result = await authStore.userLogin(loginForm.email, loginForm.password)
 
     if (result.success) {
-      ElMessage.success('登录成功')
+      ElMessage.success('鐧诲綍鎴愬姛')
       router.push('/dashboard')
     } else {
-      errorMessage.value = result.error || '登录失败'
+      errorMessage.value = result.error || '鐧诲綍澶辫触'
     }
   } catch (error: any) {
-    errorMessage.value = error.message || '登录失败，请检查网络连接'
+    errorMessage.value = error.message || '鐧诲綍澶辫触锛岃妫€鏌ョ綉缁滆繛鎺?
   } finally {
     loading.value = false
   }
 }
 
-// 从本地存储恢复记住的登录信息
+// 浠庢湰鍦板瓨鍌ㄦ仮澶嶈浣忕殑鐧诲綍淇℃伅
 const loadRememberedCredentials = () => {
   if (localStorage.getItem('rememberMe') === 'true') {
     const savedEmail = localStorage.getItem('savedEmail')
@@ -152,8 +152,7 @@ const loadRememberedCredentials = () => {
   }
 }
 
-// 保存登录信息（暂时注释掉，因为未使用）
-// const saveCredentials = () => {
+// 淇濆瓨鐧诲綍淇℃伅锛堟殏鏃舵敞閲婃帀锛屽洜涓烘湭浣跨敤锛?// const saveCredentials = () => {
 //   if (rememberMe.value) {
 //     localStorage.setItem('rememberMe', 'true')
 //     localStorage.setItem('savedEmail', loginForm.email)
@@ -165,8 +164,7 @@ const loadRememberedCredentials = () => {
 //   }
 // }
 
-// 初始化时加载记住的登录信息
-loadRememberedCredentials()
+// 鍒濆鍖栨椂鍔犺浇璁颁綇鐨勭櫥褰曚俊鎭?loadRememberedCredentials()
 </script>
 
 <style scoped>

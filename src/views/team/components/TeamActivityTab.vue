@@ -1,38 +1,38 @@
-<template>
+﻿<template>
   <div class="team-activity-tab">
-    <!-- 活动头部 -->
+    <!-- 娲诲姩澶撮儴 -->
     <div class="activity-header">
-      <h3>团队活动日志</h3>
-      <p class="activity-description">查看团队的所有操作记录和活动历史</p>
+      <h3>鍥㈤槦娲诲姩鏃ュ織</h3>
+      <p class="activity-description">鏌ョ湅鍥㈤槦鐨勬墍鏈夋搷浣滆褰曞拰娲诲姩鍘嗗彶</p>
     </div>
 
-    <!-- 活动筛选 -->
+    <!-- 娲诲姩绛涢€?-->
     <div class="activity-filter">
-      <el-input v-model="searchKeyword" placeholder="搜索活动内容" class="search-input" clearable>
+      <el-input v-model="searchKeyword" placeholder="鎼滅储娲诲姩鍐呭" class="search-input" clearable>
         <template #prefix>
           <el-icon><Search /></el-icon>
         </template>
       </el-input>
 
-      <el-select v-model="filterType" placeholder="筛选活动类型" class="type-filter" clearable>
-        <el-option label="全部" value="" />
-        <el-option label="成员管理" value="member" />
-        <el-option label="项目管理" value="project" />
-        <el-option label="团队设置" value="team" />
-        <el-option label="任务操作" value="task" />
+      <el-select v-model="filterType" placeholder="绛涢€夋椿鍔ㄧ被鍨? class="type-filter" clearable>
+        <el-option label="鍏ㄩ儴" value="" />
+        <el-option label="鎴愬憳绠＄悊" value="member" />
+        <el-option label="椤圭洰绠＄悊" value="project" />
+        <el-option label="鍥㈤槦璁剧疆" value="team" />
+        <el-option label="浠诲姟鎿嶄綔" value="task" />
       </el-select>
 
       <el-date-picker
         v-model="dateRange"
         type="daterange"
-        range-separator="至"
-        start-placeholder="开始日期"
-        end-placeholder="结束日期"
+        range-separator="鑷?
+        start-placeholder="寮€濮嬫棩鏈?
+        end-placeholder="缁撴潫鏃ユ湡"
         class="date-filter"
       />
     </div>
 
-    <!-- 活动列表 -->
+    <!-- 娲诲姩鍒楄〃 -->
     <div class="activity-list">
       <el-timeline>
         <el-timeline-item
@@ -85,15 +85,15 @@
         </el-timeline-item>
       </el-timeline>
 
-      <!-- 空状态 -->
+      <!-- 绌虹姸鎬?-->
       <div v-if="filteredActivities.length === 0" class="empty-activity">
-        <el-empty description="暂无活动记录" />
+        <el-empty description="鏆傛棤娲诲姩璁板綍" />
       </div>
 
-      <!-- 加载更多 -->
+      <!-- 鍔犺浇鏇村 -->
       <div class="load-more" v-if="hasMoreActivities">
         <el-button type="text" :loading="loadingMore" @click="loadMoreActivities">
-          加载更多活动记录
+          鍔犺浇鏇村娲诲姩璁板綍
         </el-button>
       </div>
     </div>
@@ -130,128 +130,124 @@ interface Activity {
 
 const props = defineProps<Props>()
 
-// 搜索和筛选
-const searchKeyword = ref('')
+// 鎼滅储鍜岀瓫閫?const searchKeyword = ref('')
 const filterType = ref('')
 const dateRange = ref<[Date, Date] | null>(null)
 
-// 活动数据
+// 娲诲姩鏁版嵁
 const activities = ref<Activity[]>([
   {
     id: 1,
     type: 'member',
-    title: '新成员加入',
-    description: '加入了团队',
+    title: '鏂版垚鍛樺姞鍏?,
+    description: '鍔犲叆浜嗗洟闃?,
     timestamp: '2026-03-19T14:30:00Z',
     user: {
       id: 3,
-      name: '王五',
+      name: '鐜嬩簲',
       avatar_url: '',
     },
     details: {
-      member_name: '王五',
+      member_name: '鐜嬩簲',
     },
   },
   {
     id: 2,
     type: 'project',
-    title: '创建新项目',
-    description: '创建了项目',
+    title: '鍒涘缓鏂伴」鐩?,
+    description: '鍒涘缓浜嗛」鐩?,
     timestamp: '2026-03-18T10:15:00Z',
     user: {
       id: 2,
-      name: '李四',
+      name: '鏉庡洓',
       avatar_url: '',
     },
     details: {
-      project_name: '用户中心重构',
+      project_name: '鐢ㄦ埛涓績閲嶆瀯',
     },
   },
   {
     id: 3,
     type: 'team',
-    title: '团队信息更新',
-    description: '更新了团队描述',
+    title: '鍥㈤槦淇℃伅鏇存柊',
+    description: '鏇存柊浜嗗洟闃熸弿杩?,
     timestamp: '2026-03-17T16:45:00Z',
     user: {
       id: 1,
-      name: '张三',
+      name: '寮犱笁',
       avatar_url: '',
     },
     details: {
-      old_value: '前端开发团队',
-      new_value: '负责前端界面开发和用户体验优化',
+      old_value: '鍓嶇寮€鍙戝洟闃?,
+      new_value: '璐熻矗鍓嶇鐣岄潰寮€鍙戝拰鐢ㄦ埛浣撻獙浼樺寲',
     },
   },
   {
     id: 4,
     type: 'task',
-    title: '完成任务',
-    description: '完成了任务',
+    title: '瀹屾垚浠诲姟',
+    description: '瀹屾垚浜嗕换鍔?,
     timestamp: '2026-03-16T09:20:00Z',
     user: {
       id: 3,
-      name: '王五',
+      name: '鐜嬩簲',
       avatar_url: '',
     },
     details: {
-      task_title: '设计用户中心界面',
-      project_name: '用户中心重构',
+      task_title: '璁捐鐢ㄦ埛涓績鐣岄潰',
+      project_name: '鐢ㄦ埛涓績閲嶆瀯',
     },
   },
   {
     id: 5,
     type: 'member',
-    title: '角色变更',
-    description: '的角色变更为管理员',
+    title: '瑙掕壊鍙樻洿',
+    description: '鐨勮鑹插彉鏇翠负绠＄悊鍛?,
     timestamp: '2026-03-15T14:10:00Z',
     user: {
       id: 2,
-      name: '李四',
+      name: '鏉庡洓',
       avatar_url: '',
     },
     details: {
-      member_name: '李四',
-      old_value: '成员',
-      new_value: '管理员',
+      member_name: '鏉庡洓',
+      old_value: '鎴愬憳',
+      new_value: '绠＄悊鍛?,
     },
   },
   {
     id: 6,
     type: 'project',
-    title: '项目状态更新',
-    description: '更新了项目状态',
+    title: '椤圭洰鐘舵€佹洿鏂?,
+    description: '鏇存柊浜嗛」鐩姸鎬?,
     timestamp: '2026-03-14T11:30:00Z',
     user: {
       id: 1,
-      name: '张三',
+      name: '寮犱笁',
       avatar_url: '',
     },
     details: {
-      project_name: 'TaskFlow 前端开发',
-      old_value: '进行中',
-      new_value: '已完成',
+      project_name: 'TaskFlow 鍓嶇寮€鍙?,
+      old_value: '杩涜涓?,
+      new_value: '宸插畬鎴?,
     },
   },
 ])
 
-// 分页
+// 鍒嗛〉
 const pageSize = 10
 const currentPage = ref(1)
 const loadingMore = ref(false)
 const hasMoreActivities = ref(true)
 
-// 计算属性：筛选后的活动
-const filteredActivities = computed(() => {
+// 璁＄畻灞炴€э細绛涢€夊悗鐨勬椿鍔?const filteredActivities = computed(() => {
   let filtered = activities.value
 
-  // 按类型筛选
-  if (filterType.value) {
+  // 鎸夌被鍨嬬瓫閫?  if (filterType.value) {
     filtered = filtered.filter((activity) => activity.type === filterType.value)
   }
 
-  // 按搜索关键词筛选
-  if (searchKeyword.value) {
+  // 鎸夋悳绱㈠叧閿瘝绛涢€?  if (searchKeyword.value) {
     const keyword = searchKeyword.value.toLowerCase()
     filtered = filtered.filter(
       (activity) =>
@@ -261,8 +257,7 @@ const filteredActivities = computed(() => {
     )
   }
 
-  // 按日期范围筛选
-  if (dateRange.value) {
+  // 鎸夋棩鏈熻寖鍥寸瓫閫?  if (dateRange.value) {
     const [start, end] = dateRange.value
     filtered = filtered.filter((activity) => {
       const activityDate = new Date(activity.timestamp)
@@ -270,64 +265,64 @@ const filteredActivities = computed(() => {
     })
   }
 
-  // 分页
+  // 鍒嗛〉
   return filtered.slice(0, pageSize * currentPage.value)
 })
 
-// 生命周期
+// 鐢熷懡鍛ㄦ湡
 onMounted(() => {
   loadActivities()
 })
 
-// 加载活动数据
+// 鍔犺浇娲诲姩鏁版嵁
 const loadActivities = async () => {
   try {
-    // TODO: 调用API获取活动数据
-    console.log('加载团队活动数据，团队ID:', props.teamId)
+    // TODO: 璋冪敤API鑾峰彇娲诲姩鏁版嵁
+    console.log('鍔犺浇鍥㈤槦娲诲姩鏁版嵁锛屽洟闃烮D:', props.teamId)
   } catch (error) {
-    console.error('加载活动数据失败:', error)
+    console.error('鍔犺浇娲诲姩鏁版嵁澶辫触:', error)
   }
 }
 
-// 加载更多活动
+// 鍔犺浇鏇村娲诲姩
 const loadMoreActivities = async () => {
   loadingMore.value = true
 
   try {
-    // TODO: 调用API加载更多活动数据
+    // TODO: 璋冪敤API鍔犺浇鏇村娲诲姩鏁版嵁
     await new Promise((resolve) => setTimeout(resolve, 1000))
 
-    // 模拟添加更多数据
+    // 妯℃嫙娣诲姞鏇村鏁版嵁
     const newActivities: Activity[] = [
       {
         id: activities.value.length + 1,
         type: 'task',
-        title: '创建新任务',
-        description: '创建了任务',
+        title: '鍒涘缓鏂颁换鍔?,
+        description: '鍒涘缓浜嗕换鍔?,
         timestamp: '2026-03-13T09:00:00Z',
         user: {
           id: 3,
-          name: '王五',
+          name: '鐜嬩簲',
           avatar_url: '',
         },
         details: {
-          task_title: '优化页面加载性能',
-          project_name: 'TaskFlow 前端开发',
+          task_title: '浼樺寲椤甸潰鍔犺浇鎬ц兘',
+          project_name: 'TaskFlow 鍓嶇寮€鍙?,
         },
       },
       {
         id: activities.value.length + 2,
         type: 'member',
-        title: '成员离开',
-        description: '离开了团队',
+        title: '鎴愬憳绂诲紑',
+        description: '绂诲紑浜嗗洟闃?,
         timestamp: '2026-03-12T16:30:00Z',
         user: {
           id: 4,
-          name: '赵六',
+          name: '璧靛叚',
           avatar_url: '',
         },
         details: {
-          member_name: '赵六',
+          member_name: '璧靛叚',
         },
       },
     ]
@@ -335,45 +330,38 @@ const loadMoreActivities = async () => {
     activities.value.push(...newActivities)
     currentPage.value += 1
 
-    // 检查是否还有更多数据
-    hasMoreActivities.value = activities.value.length < 50 // 假设总共有50条数据
-  } catch (error) {
-    console.error('加载更多活动失败:', error)
+    // 妫€鏌ユ槸鍚﹁繕鏈夋洿澶氭暟鎹?    hasMoreActivities.value = activities.value.length < 50 // 鍋囪鎬诲叡鏈?0鏉℃暟鎹?  } catch (error) {
+    console.error('鍔犺浇鏇村娲诲姩澶辫触:', error)
   } finally {
     loadingMore.value = false
   }
 }
 
-// 格式化时间
-const formatTime = (timestamp: string) => {
+// 鏍煎紡鍖栨椂闂?const formatTime = (timestamp: string) => {
   const date = new Date(timestamp)
   const now = new Date()
   const diffMs = now.getTime() - date.getTime()
 
-  // 如果是今天
-  if (date.toDateString() === now.toDateString()) {
+  // 濡傛灉鏄粖澶?  if (date.toDateString() === now.toDateString()) {
     return date.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })
   }
 
-  // 如果是昨天
-  const yesterday = new Date(now)
+  // 濡傛灉鏄槰澶?  const yesterday = new Date(now)
   yesterday.setDate(yesterday.getDate() - 1)
   if (date.toDateString() === yesterday.toDateString()) {
-    return '昨天 ' + date.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })
+    return '鏄ㄥぉ ' + date.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })
   }
 
-  // 一周内
+  // 涓€鍛ㄥ唴
   if (diffMs < 7 * 24 * 60 * 60 * 1000) {
     const days = Math.floor(diffMs / (24 * 60 * 60 * 1000))
-    return `${days}天前`
+    return `${days}澶╁墠`
   }
 
-  // 更早的时间
-  return date.toLocaleDateString('zh-CN')
+  // 鏇存棭鐨勬椂闂?  return date.toLocaleDateString('zh-CN')
 }
 
-// 获取活动类型（用于Timeline样式）
-const getActivityType = (type: Activity['type']) => {
+// 鑾峰彇娲诲姩绫诲瀷锛堢敤浜嶵imeline鏍峰紡锛?const getActivityType = (type: Activity['type']) => {
   switch (type) {
     case 'member':
       return 'primary'
@@ -388,7 +376,7 @@ const getActivityType = (type: Activity['type']) => {
   }
 }
 
-// 获取活动标签类型
+// 鑾峰彇娲诲姩鏍囩绫诲瀷
 const getActivityTagType = (type: Activity['type']) => {
   switch (type) {
     case 'member':
@@ -404,19 +392,19 @@ const getActivityTagType = (type: Activity['type']) => {
   }
 }
 
-// 获取活动类型标签
+// 鑾峰彇娲诲姩绫诲瀷鏍囩
 const getActivityTypeLabel = (type: Activity['type']) => {
   switch (type) {
     case 'member':
-      return '成员管理'
+      return '鎴愬憳绠＄悊'
     case 'project':
-      return '项目管理'
+      return '椤圭洰绠＄悊'
     case 'team':
-      return '团队设置'
+      return '鍥㈤槦璁剧疆'
     case 'task':
-      return '任务操作'
+      return '浠诲姟鎿嶄綔'
     default:
-      return '其他'
+      return '鍏朵粬'
   }
 }
 </script>
@@ -542,7 +530,7 @@ const getActivityTypeLabel = (type: Activity['type']) => {
   border-top: 1px solid #e4e7ed;
 }
 
-/* 响应式设计 */
+/* 鍝嶅簲寮忚璁?*/
 @media (max-width: 768px) {
   .activity-filter {
     flex-direction: column;

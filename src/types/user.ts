@@ -1,4 +1,4 @@
-// 用户类型定义
+﻿// 鐢ㄦ埛绫诲瀷瀹氫箟
 export interface User {
   id: number
   username: string
@@ -14,26 +14,25 @@ export interface User {
   updated_at?: string
 }
 
-// 用户角色文本映射
+// 鐢ㄦ埛瑙掕壊鏂囨湰鏄犲皠
 export const USER_ROLE_TEXT: Record<string, string> = {
-  'super_admin': '超级管理员',
-  'admin': '管理员',
-  'user': '普通用户',
-  'pm': '项目经理',
-  'designer': '设计师',
-  'developer': '开发工程师',
-  'writer': '文案',
-  'dba': '数据库管理员'
+  'super_admin': '瓒呯骇绠＄悊鍛?,
+  'admin': '绠＄悊鍛?,
+  'user': '鏅€氱敤鎴?,
+  'pm': '椤圭洰缁忕悊',
+  'designer': '璁捐甯?,
+  'developer': '寮€鍙戝伐绋嬪笀',
+  'writer': '鏂囨',
+  'dba': '鏁版嵁搴撶鐞嗗憳'
 }
 
-// 用户状态文本映射
-export const USER_STATUS_TEXT: Record<string, string> = {
-  'active': '活跃',
-  'inactive': '未激活',
-  'banned': '禁用'
+// 鐢ㄦ埛鐘舵€佹枃鏈槧灏?export const USER_STATUS_TEXT: Record<string, string> = {
+  'active': '娲昏穬',
+  'inactive': '鏈縺娲?,
+  'banned': '绂佺敤'
 }
 
-// 用户角色标签类型映射
+// 鐢ㄦ埛瑙掕壊鏍囩绫诲瀷鏄犲皠
 export const USER_ROLE_TAG_TYPE: Record<string, string> = {
   'super_admin': 'danger',
   'admin': 'warning',
@@ -45,8 +44,7 @@ export const USER_ROLE_TAG_TYPE: Record<string, string> = {
   'dba': 'info'
 }
 
-// 用户状态标签类型映射
-export const USER_STATUS_TAG_TYPE: Record<string, string> = {
+// 鐢ㄦ埛鐘舵€佹爣绛剧被鍨嬫槧灏?export const USER_STATUS_TAG_TYPE: Record<string, string> = {
   'active': 'success',
   'inactive': 'info',
   'banned': 'danger'

@@ -1,4 +1,4 @@
-name: Frontend CI
+﻿name: Frontend CI
 
 on:
   push:
@@ -39,10 +39,10 @@ jobs:
 
       - name: Success summary
         run: |
-          echo "✅ 前端CI检查全部通过"
-          echo "✓ 类型检查完成"
-          echo "✓ 代码规范检查完成"
-          echo "✓ 构建完成"
+          echo "鉁?鍓嶇CI妫€鏌ュ叏閮ㄩ€氳繃"
+          echo "鉁?绫诲瀷妫€鏌ュ畬鎴?
+          echo "鉁?浠ｇ爜瑙勮寖妫€鏌ュ畬鎴?
+          echo "鉁?鏋勫缓瀹屾垚"
           echo ""
-          echo "项目状态：正常"
-          echo "可安全部署"
+          echo "椤圭洰鐘舵€侊細姝ｅ父"
+          echo "鍙畨鍏ㄩ儴缃?

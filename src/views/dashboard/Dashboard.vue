@@ -72,7 +72,7 @@
         <template #header>
           <div class="card-header">
             <h3 class="card-title">最近任务</h3>
-            <el-button type="text" @click="goToTasks">查看全部</el-button>
+            <el-button type="link" @click="goToTasks">查看全部</el-button>
           </div>
         </template>
 

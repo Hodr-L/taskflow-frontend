@@ -1,16 +1,16 @@
 export interface Project {
-  id: number
+  id: string
   name: string
   description: string
-  team_id?: number
+  team_id?: string
   team?: {
-    id: number
+    id: string
     name: string
     avatar_url?: string
   }
-  owner_id: number
+  owner_id: string
   owner?: {
-    id: number
+    id: string
     username: string
     fullname?: string
     bio?: string
@@ -33,13 +33,13 @@ export interface Project {
 }
 
 export interface ProjectMember {
-  id: number
-  project_id: number
-  user_id: number
+  id: string
+  project_id: string
+  user_id: string
   role: 'manager' | 'developer' | 'designer' | 'tester' | 'viewer'
   joined_at: string
   user?: {
-    id: number
+    id: string
     username: string
     email: string
     fullname?: string
@@ -59,14 +59,14 @@ export interface ProjectStatistics {
 }
 
 export interface ProjectMilestone {
-  id: number
-  project_id: number
+  id: string
+  project_id: string
   title: string
   description?: string
   due_date: string
   completed: boolean
   completed_at?: string
-  completed_by?: number
+  completed_by?: string
   tasks_count?: number
   completed_tasks_count?: number
   created_at: string
@@ -74,9 +74,9 @@ export interface ProjectMilestone {
 }
 
 export interface ProjectUpdate {
-  id: number
-  project_id: number
-  author_id: number
+  id: string
+  project_id: string
+  author_id: string
   title: string
   content: string
   attachments?: string[]
@@ -84,7 +84,7 @@ export interface ProjectUpdate {
   created_at: string
   updated_at?: string
   author?: {
-    id: number
+    id: string
     username: string
     fullname?: string
     bio?: string

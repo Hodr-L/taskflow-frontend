@@ -1,6 +1,6 @@
 // 用户类型定义
 export interface User {
-  id: number
+  id: string
   username: string
   email: string
   fullname?: string

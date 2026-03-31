@@ -71,7 +71,7 @@ export const getUsers = (params: GetUsersParams = {}): Promise<UsersData> => {
 }
 
 // 获取单个用户信息（管理员）
-export const getUserById = (id: number): Promise<User> => {
+export const getUserById = (id: string): Promise<User> => {
   return http.get(`/users/admin/${id}`)
 }
 
@@ -104,12 +104,12 @@ export interface UpdateUserData {
   email_verified?: boolean
 }
 
-export const updateUser = (id: number, data: UpdateUserData): Promise<User> => {
+export const updateUser = (id: string, data: UpdateUserData): Promise<User> => {
   return http.put(`/users/admin/${id}`, data)
 }
 
 // 删除用户（管理员）
-export const deleteUser = (id: number): Promise<void> => {
+export const deleteUser = (id: string): Promise<void> => {
   return http.delete(`/users/admin/${id}`)
 }
 
@@ -118,7 +118,7 @@ export interface ResetPasswordData {
   new_password: string
 }
 
-export const resetUserPassword = (id: number, data: ResetPasswordData): Promise<void> => {
+export const resetUserPassword = (id: string, data: ResetPasswordData): Promise<void> => {
   return http.post(`/users/admin/${id}/reset-password`, data)
 }
 

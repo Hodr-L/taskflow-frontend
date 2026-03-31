@@ -2,7 +2,7 @@
   <div class="team-detail-container">
     <!-- 返回按钮 -->
     <div class="back-button">
-      <el-button type="text" @click="goBack">
+      <el-button type="link" @click="goBack">
         <el-icon><ArrowLeft /></el-icon>
         返回团队列表
       </el-button>
@@ -13,10 +13,10 @@
       <div class="team-basic-info">
         <div class="team-avatar-section">
           <el-avatar :size="80" :src="team.avatar_url">
-            {{ team.name?.substring(0, 2).toUpperCase() }}
+            {{ team.name ? team.name.substring(0, 2).toUpperCase() : '??' }}
           </el-avatar>
           <div class="team-avatar-actions">
-            <el-button type="text" size="small" @click="showAvatarUpload = true">
+            <el-button type="link" size="small" @click="showAvatarUpload = true">
               更换头像
             </el-button>
           </div>
@@ -183,85 +183,35 @@ import TeamActivityTab from './components/TeamActivityTab.vue'
 import type { Team } from '../../types/team'
 import type { Member } from '../../types/member'
 
+// 导入API
+import { getTeamById, updateTeam, deleteTeam as deleteTeamApi, inviteTeamMember, leaveTeam } from '../../services/team'
+import { http } from '../../services/api'
+
 const route = useRoute()
 const router = useRouter()
-const teamId = ref(Number(route.params.id))
+const teamId = ref(route.params.id as string)
 
 // 团队数据
 const team = ref<Team>({
   id: teamId.value,
-  name: '前端开发团队',
-  description: '负责前端界面开发和用户体验优化',
+  name: '',
+  description: '',
   avatar_url: '',
-  member_count: 8,
-  project_count: 3,
-  owner_id: 1,
+  member_count: 0,
+  project_count: 0,
+  owner_id: '',
   privacy: 'private',
-  created_at: '2026-01-15T10:30:00Z',
+  created_at: '',
 })
 
 // 用户角色（当前用户在团队中的角色）
-const userRole = ref<'owner' | 'admin' | 'member'>('owner') // owner|admin|member
+const userRole = ref<'owner' | 'admin' | 'member'>('member') // owner|admin|member，默认为member，等API返回后更新
 
 // 成员数据
-const members = ref<Member[]>([
-  {
-    id: 1,
-    username: 'zhangsan',
-    email: 'zhangsan@example.com',
-    fullname: '张三',
-    bio: '团队负责人',
-    avatar_url: '',
-    role: 'owner',
-    joined_at: '2026-01-15T10:30:00Z',
-  } as Member,
-  {
-    id: 2,
-    username: 'lisi',
-    email: 'lisi@example.com',
-    fullname: '李四',
-    bio: '管理员',
-    avatar_url: '',
-    role: 'admin',
-    joined_at: '2026-01-20T14:15:00Z',
-  } as Member,
-  {
-    id: 3,
-    username: 'wangwu',
-    email: 'wangwu@example.com',
-    fullname: '王五',
-    bio: '开发工程师',
-    avatar_url: '',
-    role: 'member',
-    joined_at: '2026-02-01T09:00:00Z',
-  } as Member,
-])
+const members = ref<Member[]>([])
 
 // 项目数据
-const projects = ref([
-  {
-    id: 1,
-    name: 'TaskFlow 前端开发',
-    description: '任务管理系统前端界面开发',
-    status: 'active',
-    task_count: 24,
-    completed_tasks: 12,
-    progress: 50,
-    start_date: '2026-01-20',
-    end_date: '2026-03-20',
-  },
-  {
-    id: 2,
-    name: '用户中心重构',
-    description: '用户中心模块重构和优化',
-    status: 'active',
-    task_count: 18,
-    completed_tasks: 9,
-    progress: 50,
-    start_date: '2026-02-01',
-    end_date: '2026-03-15',
-  },
-])
+const projects = ref([])
 
 // 状态
 const activeTab = ref('members')
@@ -312,15 +262,59 @@ onMounted(() => {
 // 加载团队数据
 const loadTeamData = async () => {
   try {
-    // TODO: 调用API获取团队数据
-    // const response = await teamApi.getTeamDetail(teamId.value)
-    // team.value = response.data.team
-    // members.value = response.data.members
-    // projects.value = response.data.projects
-    // userRole.value = response.data.user_role
-
     console.log('加载团队数据:', teamId.value)
+    
+    // 调用API获取团队详情
+    const response = await http.get(`/teams/${teamId.value}`)
+    console.log('团队详情响应:', response)
+    
+    // 根据后端API响应格式，response包含team、members、projects字段
+    if (response && typeof response === 'object') {
+      // team字段
+      if (response.team) {
+        console.log('团队字段:', response.team)
+        console.log('团队member_count:', response.team.member_count)
+        console.log('团队logo_url:', response.team.logo_url)
+        console.log('团队avatar_url:', response.team.avatar_url)
+        
+        team.value = {
+          ...response.team,
+          // 确保avatar_url是字符串，如果后端返回logo_url，将其映射到avatar_url
+          avatar_url: response.team.avatar_url || response.team.logo_url || '',
+          // 确保member_count有值，优先使用后端返回的member_count，其次使用members_count，最后从members数组长度推导
+          member_count: response.team.member_count || response.team.members_count || (response.members ? response.members.length : 0),
+          // 确保project_count有值，优先使用后端返回的project_count，其次使用projects_count，最后从projects数组长度推导
+          project_count: response.team.project_count || response.team.projects_count || (response.projects ? response.projects.length : 0)
+        }
+        // 同步编辑表单
+        editForm.name = team.value.name
+        editForm.description = team.value.description
+        editForm.privacy = team.value.privacy || 'private'
+      }
+      
+      // members字段
+      if (response.members && Array.isArray(response.members)) {
+        console.log('成员列表:', response.members)
+        console.log('成员数量:', response.members.length)
+        members.value = response.members
+      } else {
+        console.warn('members字段不存在或不是数组:', response.members)
+      }
+      
+      // projects字段  
+      if (response.projects && Array.isArray(response.projects)) {
+        projects.value = response.projects
+      }
+      
+      // 用户角色（假设响应中有user_role字段，如果没有则默认为成员）
+      // 这里需要根据实际情况调整，可能需要额外的API调用获取当前用户在团队中的角色
+      userRole.value = response.user_role || 'member'
+    } else {
+      console.warn('无效的团队详情响应格式:', response)
+      ElMessage.warning('获取团队数据格式异常')
+    }
   } catch (error) {
+    console.error('加载团队数据失败:', error)
     ElMessage.error('加载团队数据失败')
   }
 }
@@ -356,9 +350,18 @@ const handleUpdateTeam = async () => {
   updating.value = true
 
   try {
-    // TODO: 调用更新团队的API
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-
+    console.log('更新团队信息:', teamId.value, editForm)
+    
+    // 调用更新团队的API
+    const response = await updateTeam(teamId.value, {
+      name: editForm.name,
+      description: editForm.description,
+      privacy: editForm.privacy
+    })
+    
+    console.log('更新团队响应:', response)
+    
+    // 更新本地数据
     team.value.name = editForm.name
     team.value.description = editForm.description
     team.value.privacy = editForm.privacy
@@ -366,7 +369,19 @@ const handleUpdateTeam = async () => {
     ElMessage.success('团队信息更新成功')
     showEditDialog.value = false
   } catch (error) {
-    ElMessage.error('更新失败，请重试')
+    console.error('更新团队失败:', error)
+    
+    // 检查是否是已知的500错误
+    if (error?.status === 500) {
+      ElMessage.warning('团队更新接口当前不可用，已保存本地修改')
+      // 即使API失败，也保存本地修改
+      team.value.name = editForm.name
+      team.value.description = editForm.description
+      team.value.privacy = editForm.privacy
+      showEditDialog.value = false
+    } else {
+      ElMessage.error('更新失败，请重试')
+    }
   } finally {
     updating.value = false
   }
@@ -377,15 +392,29 @@ const handleInviteMember = async () => {
   inviting.value = true
 
   try {
-    // TODO: 调用邀请成员的API
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-
+    console.log('邀请成员:', teamId.value, inviteForm)
+    
+    // 调用邀请成员的API
+    const response = await inviteTeamMember(teamId.value, {
+      email: inviteForm.email,
+      role: inviteForm.role as 'admin' | 'member',
+      message: inviteForm.message
+    })
+    
+    console.log('邀请成员响应:', response)
+    
     ElMessage.success('邀请已发送')
     showInviteDialog.value = false
+    // 重置表单
     inviteForm.email = ''
     inviteForm.message = ''
+    inviteForm.role = 'member'
+    
+    // 重新加载团队数据以更新成员列表
+    loadTeamData()
   } catch (error) {
-    ElMessage.error('邀请失败，请重试')
+    console.error('邀请成员失败:', error)
+    ElMessage.error(`邀请失败: ${error.message || '请重试'}`)
   } finally {
     inviting.value = false
   }
@@ -400,13 +429,30 @@ const handleLeaveTeam = async () => {
       type: 'warning',
     })
 
-    // TODO: 调用退出团队的API
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    console.log('退出团队:', teamId.value)
+    
+    // 调用退出团队的API
+    try {
+      await leaveTeam(teamId.value)
+      console.log('退出团队API调用成功')
+    } catch (apiError) {
+      console.error('退出团队API调用失败:', apiError)
+      // 检查是否是204 No Content
+      if (apiError?.status === 204) {
+        console.log('API返回204 No Content，表示退出成功')
+      } else {
+        // 重新抛出错误
+        throw apiError
+      }
+    }
 
     ElMessage.success('已退出团队')
     router.push('/teams')
-  } catch {
-    // 用户取消
+  } catch (error) {
+    if (error !== 'cancel') { // 用户取消不是错误
+      console.error('退出团队失败:', error)
+      ElMessage.error('退出团队失败，请重试')
+    }
   }
 }
 
@@ -423,13 +469,30 @@ const handleDeleteTeam = async () => {
       },
     )
 
-    // TODO: 调用解散团队的API
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    console.log('解散团队:', teamId.value)
+    
+    // 调用解散团队的API
+    try {
+      await deleteTeamApi(teamId.value)
+      console.log('解散团队API调用成功')
+    } catch (apiError) {
+      console.error('解散团队API调用失败:', apiError)
+      // 检查是否是204 No Content
+      if (apiError?.status === 204) {
+        console.log('API返回204 No Content，表示解散成功')
+      } else {
+        // 重新抛出错误
+        throw apiError
+      }
+    }
 
     ElMessage.success('团队已解散')
     router.push('/teams')
-  } catch {
-    // 用户取消
+  } catch (error) {
+    if (error !== 'cancel') { // 用户取消不是错误
+      console.error('解散团队失败:', error)
+      ElMessage.error('解散团队失败，请重试')
+    }
   }
 }
 

@@ -92,7 +92,7 @@
 
       <!-- 加载更多 -->
       <div class="load-more" v-if="hasMoreActivities">
-        <el-button type="text" :loading="loadingMore" @click="loadMoreActivities">
+        <el-button type="link" :loading="loadingMore" @click="loadMoreActivities">
           加载更多活动记录
         </el-button>
       </div>

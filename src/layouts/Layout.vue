@@ -28,7 +28,7 @@
       </el-menu>
 
       <div class="sidebar-footer">
-        <el-button type="text" @click="toggleSidebar" class="collapse-button">
+        <el-button type="link" @click="toggleSidebar" class="collapse-button">
           <el-icon v-if="isCollapse"><Expand /></el-icon>
           <el-icon v-else><Fold /></el-icon>
           <span v-if="!isCollapse">收起菜单</span>

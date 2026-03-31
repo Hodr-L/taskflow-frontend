@@ -81,7 +81,7 @@
                 "
                 @command="(command: string) => handleMemberCommand(command, row)"
               >
-                <el-button type="text" size="small">
+                <el-button type="link" size="small">
                   管理
                   <el-icon><ArrowDown /></el-icon>
                 </el-button>

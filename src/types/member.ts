@@ -1,5 +1,5 @@
 export interface Member {
-  id: number
+  id: string
   username: string
   email: string
   fullname?: string
@@ -12,25 +12,25 @@ export interface Member {
 }
 
 export interface MemberWithTeam extends Member {
-  team_id: number
+  team_id: string
   team_name?: string
   team_role?: string
 }
 
 export interface MemberInvitation {
-  id: number
+  id: string
   email: string
   role: 'admin' | 'member'
   status: 'pending' | 'accepted' | 'expired'
-  invited_by: number
+  invited_by: string
   invited_by_name?: string
   expires_at: string
   created_at: string
 }
 
 export interface MemberActivity {
-  id: number
-  member_id: number
+  id: string
+  member_id: string
   type: 'login' | 'project' | 'task' | 'team' | 'profile'
   action: string
   description: string

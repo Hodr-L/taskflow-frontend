@@ -25,7 +25,7 @@ export const getTeams = (params: GetTeamsParams = {}): Promise<TeamsData> => {
 }
 
 // 获取单个团队信息
-export const getTeamById = (id: number): Promise<Team> => {
+export const getTeamById = (id: string): Promise<Team> => {
   return http.get(`/teams/${id}`)
 }
 
@@ -33,9 +33,7 @@ export const getTeamById = (id: number): Promise<Team> => {
 export interface CreateTeamData {
   name: string
   description: string
-  type?: string
-  privacy?: 'public' | 'private'
-  avatar_url?: string
+  logo_url?: string
 }
 
 export const createTeam = (data: CreateTeamData): Promise<Team> => {
@@ -50,12 +48,12 @@ export interface UpdateTeamData {
   avatar_url?: string
 }
 
-export const updateTeam = (id: number, data: UpdateTeamData): Promise<Team> => {
+export const updateTeam = (id: string, data: UpdateTeamData): Promise<Team> => {
   return http.put(`/teams/${id}`, data)
 }
 
 // 删除团队
-export const deleteTeam = (id: number): Promise<void> => {
+export const deleteTeam = (id: string): Promise<void> => {
   return http.delete(`/teams/${id}`)
 }
 
@@ -77,7 +75,7 @@ export interface TeamMembersData {
   }
 }
 
-export const getTeamMembers = (teamId: number, params: GetTeamMembersParams = {}): Promise<TeamMembersData> => {
+export const getTeamMembers = (teamId: string, params: GetTeamMembersParams = {}): Promise<TeamMembersData> => {
   return http.get(`/teams/${teamId}/members`, { params })
 }
 
@@ -88,7 +86,7 @@ export interface InviteMemberData {
   message?: string
 }
 
-export const inviteTeamMember = (teamId: number, data: InviteMemberData): Promise<TeamInvitation> => {
+export const inviteTeamMember = (teamId: string, data: InviteMemberData): Promise<TeamInvitation> => {
   return http.post(`/teams/${teamId}/invitations`, data)
 }
 
@@ -97,12 +95,12 @@ export interface UpdateMemberRoleData {
   role: 'admin' | 'member'
 }
 
-export const updateTeamMemberRole = (teamId: number, userId: number, data: UpdateMemberRoleData): Promise<TeamMember> => {
+export const updateTeamMemberRole = (teamId: string, userId: string, data: UpdateMemberRoleData): Promise<TeamMember> => {
   return http.put(`/teams/${teamId}/members/${userId}`, data)
 }
 
 // 移除团队成员
-export const removeTeamMember = (teamId: number, userId: number): Promise<void> => {
+export const removeTeamMember = (teamId: string, userId: string): Promise<void> => {
   return http.delete(`/teams/${teamId}/members/${userId}`)
 }
 
@@ -124,7 +122,7 @@ export interface TeamProjectsData {
   }
 }
 
-export const getTeamProjects = (teamId: number, params: GetTeamProjectsParams = {}): Promise<TeamProjectsData> => {
+export const getTeamProjects = (teamId: string, params: GetTeamProjectsParams = {}): Promise<TeamProjectsData> => {
   return http.get(`/teams/${teamId}/projects`, { params })
 }
 
@@ -147,31 +145,31 @@ export interface TeamActivitiesData {
   }
 }
 
-export const getTeamActivities = (teamId: number, params: GetTeamActivitiesParams = {}): Promise<TeamActivitiesData> => {
+export const getTeamActivities = (teamId: string, params: GetTeamActivitiesParams = {}): Promise<TeamActivitiesData> => {
   return http.get(`/teams/${teamId}/activities`, { params })
 }
 
 // 获取团队权限设置
-export const getTeamPermissions = (teamId: number): Promise<TeamPermission> => {
+export const getTeamPermissions = (teamId: string): Promise<TeamPermission> => {
   return http.get(`/teams/${teamId}/permissions`)
 }
 
 // 更新团队权限设置
-export const updateTeamPermissions = (teamId: number, data: TeamPermission): Promise<TeamPermission> => {
+export const updateTeamPermissions = (teamId: string, data: TeamPermission): Promise<TeamPermission> => {
   return http.put(`/teams/${teamId}/permissions`, data)
 }
 
 // 退出团队
-export const leaveTeam = (teamId: number): Promise<void> => {
+export const leaveTeam = (teamId: string): Promise<void> => {
   return http.post(`/teams/${teamId}/leave`)
 }
 
 // 转让团队所有权
 export interface TransferOwnershipData {
-  new_owner_id: number
+  new_owner_id: string
 }
 
-export const transferTeamOwnership = (teamId: number, data: TransferOwnershipData): Promise<Team> => {
+export const transferTeamOwnership = (teamId: string, data: TransferOwnershipData): Promise<Team> => {
   return http.post(`/teams/${teamId}/transfer`, data)
 }
 
@@ -186,6 +184,6 @@ export interface TeamStats {
   average_progress: number
 }
 
-export const getTeamStats = (teamId: number): Promise<TeamStats> => {
+export const getTeamStats = (teamId: string): Promise<TeamStats> => {
   return http.get(`/teams/${teamId}/stats`)
 }

@@ -226,7 +226,7 @@ const router = useRouter()
 
 // 响应式数据
 const project = ref<Project>({
-  id: Number(route.params.id) || 1,
+  id: route.params.id as string || '',
   name: '网站重构项目',
   description:
     '对现有网站进行现代化重构，提升用户体验。包括前端界面更新、后端性能优化和数据库迁移。',

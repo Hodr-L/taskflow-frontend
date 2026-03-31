@@ -1,24 +1,28 @@
 export interface Team {
-  id: number
+  id: string
   name: string
   description: string
   avatar_url?: string
-  owner_id: number
+  owner_id: string
   privacy: 'public' | 'private'
   member_count?: number
   project_count?: number
   created_at: string
   updated_at?: string
+  // 兼容后端返回的字段名
+  members_count?: number
+  projects_count?: number
+  logo_url?: string
 }
 
 export interface TeamMember {
-  id: number
-  team_id: number
-  user_id: number
+  id: string
+  team_id: string
+  user_id: string
   role: 'owner' | 'admin' | 'member'
   joined_at: string
   user?: {
-    id: number
+    id: string
     username: string
     email: string
     fullname?: string
@@ -28,8 +32,8 @@ export interface TeamMember {
 }
 
 export interface TeamProject {
-  id: number
-  team_id: number
+  id: string
+  team_id: string
   name: string
   description: string
   status: 'active' | 'archived' | 'completed'
@@ -43,27 +47,27 @@ export interface TeamProject {
 }
 
 export interface TeamInvitation {
-  id: number
-  team_id: number
+  id: string
+  team_id: string
   email: string
   role: 'admin' | 'member'
   status: 'pending' | 'accepted' | 'expired'
-  invited_by: number
+  invited_by: string
   expires_at: string
   created_at: string
 }
 
 export interface TeamActivity {
-  id: number
-  team_id: number
-  user_id: number
+  id: string
+  team_id: string
+  user_id: string
   type: 'member' | 'project' | 'team' | 'task' | 'other'
   action: string
   description: string
   details?: Record<string, any>
   created_at: string
   user?: {
-    id: number
+    id: string
     username: string
     fullname?: string
     bio?: string

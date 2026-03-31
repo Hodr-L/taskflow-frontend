@@ -1,6 +1,6 @@
 // 用户类型
 export interface User {
-  id: number
+  id: string
   username: string
   fullname?: string
   bio?: string

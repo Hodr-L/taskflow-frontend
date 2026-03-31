@@ -1,23 +1,23 @@
 export interface Task {
-  id: number
+  id: string
   title: string
   description?: string
-  project_id?: number
+  project_id?: string
   project?: {
-    id: number
+    id: string
     name: string
   }
-  assignee_id?: number
+  assignee_id?: string
   assignee?: {
-    id: number
+    id: string
     username: string
     fullname?: string
     bio?: string
     avatar_url?: string
   }
-  reporter_id?: number
+  reporter_id?: string
   reporter?: {
-    id: number
+    id: string
     username: string
     fullname?: string
     bio?: string
@@ -41,13 +41,13 @@ export interface Task {
 }
 
 export interface Subtask {
-  id: number
-  task_id: number
+  id: string
+  task_id: string
   title: string
   description?: string
-  assignee_id?: number
+  assignee_id?: string
   assignee?: {
-    id: number
+    id: string
     username: string
     fullname?: string
     bio?: string
@@ -62,17 +62,17 @@ export interface Subtask {
 }
 
 export interface TaskComment {
-  id: number
-  task_id: number
-  user_id: number
+  id: string
+  task_id: string
+  user_id: string
   content: string
   attachments?: string[]
-  parent_id?: number
+  parent_id?: string
   is_edited: boolean
   created_at: string
   updated_at?: string
   user?: {
-    id: number
+    id: string
     username: string
     fullname?: string
     bio?: string
@@ -82,17 +82,17 @@ export interface TaskComment {
 }
 
 export interface TaskAttachment {
-  id: number
-  task_id: number
+  id: string
+  task_id: string
   filename: string
   original_name: string
   mime_type: string
   size: number
   url: string
-  uploaded_by: number
+  uploaded_by: string
   uploaded_at: string
   uploaded_by_user?: {
-    id: number
+    id: string
     username: string
     fullname?: string
     bio?: string
@@ -101,9 +101,9 @@ export interface TaskAttachment {
 }
 
 export interface TaskActivity {
-  id: number
-  task_id: number
-  user_id: number
+  id: string
+  task_id: string
+  user_id: string
   type: 'create' | 'update' | 'assign' | 'status_change' | 'comment' | 'attachment'
   action: string
   description: string
@@ -111,7 +111,7 @@ export interface TaskActivity {
   new_value?: any
   created_at: string
   user?: {
-    id: number
+    id: string
     username: string
     fullname?: string
     bio?: string
@@ -122,9 +122,9 @@ export interface TaskActivity {
 export interface TaskFilter {
   status?: string[]
   priority?: string[]
-  assignee_id?: number
-  reporter_id?: number
-  project_id?: number
+  assignee_id?: string
+  reporter_id?: string
+  project_id?: string
   due_date_from?: string
   due_date_to?: string
   tags?: string[]

@@ -293,7 +293,7 @@ const router = useRouter()
 
 // 响应式数据
 const user = ref<UserType>({
-  id: Number(route.params.id) || 1,
+  id: route.params.id as string || '',
   username: 'developer',
   email: 'dev@example.com',
   fullname: '开发工程师',
@@ -313,7 +313,7 @@ const loading = ref(false)
 const loadUser = async () => {
   loading.value = true
   try {
-    const userId = Number(route.params.id)
+    const userId = route.params.id as string
     if (!userId) {
       ElMessage.error('用户ID无效')
       return
